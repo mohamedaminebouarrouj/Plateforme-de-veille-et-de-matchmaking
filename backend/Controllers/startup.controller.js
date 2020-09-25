@@ -3,15 +3,15 @@ var Startups= require('../Models/startup.model');
 exports.startup_create_post = function (req,res) {
     const nom = req.body.nom;
     const description = req.body.description;
-    const fondateur = req.body.fondateur;
-    const dateCreation = req.body.dateCreation;
+    const fondateurs = req.body.fondateurs;
+    const dateCreation = Date.parse(req.body.dateCreation);
     const logo = req.body.logo;
     const domainesId= req.body.domainesId;
 
     const newStartup = new Startups({
         nom,
         description,
-        fondateur,
+        fondateurs,
         dateCreation,
         logo,
         domainesId,
@@ -39,8 +39,8 @@ exports.startup_update_post= function (req,res){
         .then(startup => {
             startup.nom = req.body.nom;
             startup.description = req.body.description;
-            startup.fondateur = req.body.fondateur;
-            startup.dateCreation = req.body.dateCreation;
+            startup.fondateurs = req.body.fondateurs;
+            startup.dateCreation = Date.parse(req.body.dateCreation);
             startup.logo = req.body.logo;
             startup.domainesId= req.body.domainesId;
 

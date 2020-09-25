@@ -1,10 +1,12 @@
 import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 import {
     Button, Form,
     FormGroup, Label,
-    Input, FormText,
+    Input,
     Row, Col,
     Card, CardBody,
     CardTitle, CustomInput,
@@ -18,14 +20,16 @@ export default class CreateStartup extends Component {
         this.onChangeNom = this.onChangeNom.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangeDomaine = this.onChangeDomaine.bind(this);
-        this.onChangeType = this.onChangeType.bind(this);
+        this.onChangeFondateurs = this.onChangeFondateurs.bind(this);
+        this.onChangeDate= this.onChangeDate.bind(this);
+        this.onChangeLogo=this.onChangeLogo.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             nom: '',
             description: '',
-            fondateur : '',
-            dateCreation: '',
+            fondateurs : [],
+            dateCreation: new Date(),
             logo: '',
             domaines:[],
             dom : []
@@ -60,10 +64,22 @@ export default class CreateStartup extends Component {
         })
     }
 
+    onChangeFondateurs(e) {
+        this.setState({
+            fondateurs: e.target.value
+        })
+    }
+
+
+    onChangeDate(date) {
+        this.setState({
+            dateCreation: date
+        })
+        console.log(date)
+    }
+
     onChangeDomaine(e) {
-        //let value = Array.of(e.target.value);
-        //console.log(e.target.value)
-        if(e.target.checked == true){
+        if(e.target.checked){
 
             this.setState({
                 domaines: [...this.state.domaines, e.target.value]
@@ -81,9 +97,9 @@ export default class CreateStartup extends Component {
         //console.log(value)
     }
 
-    onChangeType(e) {
+    onChangeLogo(e) {
         this.setState({
-            type: e.target.value
+            logo: e.target.value
         })
     }
 
@@ -93,7 +109,9 @@ export default class CreateStartup extends Component {
         const startup = {
             nom: this.state.nom,
             description: this.state.description,
-            type: this.state.type,
+            fondateurs: this.state.fondateurs,
+            dateCreation: this.state.dateCreation,
+            logo: this.state.logo,
             domainesId: this.state.domaines
         }
 
@@ -124,7 +142,7 @@ export default class CreateStartup extends Component {
                                         <CardTitle>Ajouter Startup</CardTitle>
                                         <Form onSubmit={this.onSubmit}>
                                             <FormGroup>
-                                                <Label for="Nom"><b>Nom</b></Label>
+                                                <Label for="Nom"><b>Nom de la startup</b></Label>
                                                 <Input type="text" name="nom" id="Nom"
                                                        required
                                                        value={this.state.nom}
@@ -137,24 +155,34 @@ export default class CreateStartup extends Component {
                                                        value={this.state.description}
                                                        onChange={this.onChangeDescription}/>
                                             </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="exampleText"><b>Date de création</b></Label>
+                                                <DatePicker
+                                                    dateFormat="MM/yyyy"
+                                                    selected={this.state.dateCreation}
+                                                    onChange={this.onChangeDate}
+                                                />
+                                            </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="exampleText"><b>Fondateurs</b></Label>
+                                                <Input type="textarea" name="description" id="description"
+                                                       required
+                                                       value={this.state.description}
+                                                       onChange={this.onChangeDescription}/>
+                                            </FormGroup>
+
                                             <FormGroup>
                                                 <Label for="exampleText"><b>Domaines reliés</b></Label>
                                                 <div>
                                                     {this.domaineList()}
                                                 </div>
                                             </FormGroup>
-
                                             <FormGroup>
-                                                <Label for="exampleCustomSelect"><b>Type</b></Label>
-                                                <CustomInput type="select" id="Type"
-                                                             name="type"
-                                                             value={this.state.type}
-                                                             onChange={this.onChangeType}
-                                                             required>
-                                                    <option>Selectionner un Type</option>
-                                                    <option value="Business">Business</option>
-                                                    <option value="Général">Général</option>
-                                                </CustomInput>
+                                                <Label><b>Logo</b></Label>
+                                                <Input type="file" name="logo" id="logo"
+                                                onChange={this.onChangeLogo}>Parcourir</Input>
                                             </FormGroup>
                                             <Button color="primary" className="mt-1">Submit</Button>
                                         </Form>

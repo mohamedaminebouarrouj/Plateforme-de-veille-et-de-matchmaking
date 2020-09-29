@@ -1,6 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import DatePicker from 'react-datepicker';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 import "react-datepicker/dist/react-datepicker.css";
 
 import {
@@ -9,9 +11,11 @@ import {
     Input,
     Row, Col,
     Card, CardBody,
-    CardTitle, CustomInput,
+    CardTitle, CustomInput, InputGroupAddon, InputGroup,
 } from 'reactstrap';
 import axios from "axios";
+
+const animatedComponents = makeAnimated();
 
 export default class CreateStartup extends Component {
     constructor(props) {
@@ -21,14 +25,18 @@ export default class CreateStartup extends Component {
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangeDomaine = this.onChangeDomaine.bind(this);
         this.onChangeFondateurs = this.onChangeFondateurs.bind(this);
+        this.onDeleteFondateur= this.onDeleteFondateur.bind(this);
+        this.onAjouterFondateur= this.onAjouterFondateur.bind(this);
         this.onChangeDate= this.onChangeDate.bind(this);
         this.onChangeLogo=this.onChangeLogo.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleChange=this.handleChange.bind(this);
 
         this.state = {
             nom: '',
             description: '',
             fondateurs : [],
+            fond:[],
             dateCreation: new Date(),
             logo: '',
             domaines:[],
@@ -47,9 +55,23 @@ export default class CreateStartup extends Component {
     }
 
     domaineList() {
-        return this.state.dom.map(currentDomaine => {
-            return <CustomInput type="checkbox" label={currentDomaine.nom} value={currentDomaine._id} id={currentDomaine._id} key={currentDomaine._id} onChange={this.onChangeDomaine}/>;
-        })
+            const options= this.state.dom.map(currentDomaine => ({value: currentDomaine._id, label:currentDomaine.nom}))
+        return (
+            <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                options={options}
+                onChange={this.onChangeDomaine}
+            > </Select>
+        )
+    }
+
+    handleChange(event) {
+        this.setState({
+            domaines : Array.from(event.target.selectedOptions, item => item.value)
+        });
+
     }
 
     onChangeNom(e) {
@@ -65,9 +87,39 @@ export default class CreateStartup extends Component {
     }
 
     onChangeFondateurs(e) {
-        this.setState({
-            fondateurs: e.target.value
-        })
+        //console.log(e.target.value)
+        if(this.state.fond.length<=0){
+            this.setState({
+                fondateurs: [e.target.value]
+            })
+        }
+        else{
+            this.setState({
+                fondateurs: [...this.state.fondateurs,e.target.value]
+            })
+        }
+        console.log(this.state.fondateurs)
+    }
+
+    onDeleteFondateur(e){
+        if (this.state.fond.length<=0)
+        {
+
+        }
+        else{
+
+            this.state.fond.pop(e.target.value)
+            this.setState({
+                fond:  this.state.fond
+            })
+        }
+
+
+    }
+
+    onAjouterFondateur(e){
+        console.log(this.state.fondateurs)
+        this.setState({fond:[...this.state.fond,""]})
     }
 
 
@@ -79,28 +131,30 @@ export default class CreateStartup extends Component {
     }
 
     onChangeDomaine(e) {
-        if(e.target.checked){
-
+        if (e!=null){
             this.setState({
-                domaines: [...this.state.domaines, e.target.value]
+                domaines: e.map((o)=>o.value)
             })
-
         }
         else{
-            this.state.domaines.pop(e.target.value)
             this.setState({
-                domaines:  this.state.domaines
+                domaines: []
             })
         }
-
-
-        //console.log(value)
     }
 
     onChangeLogo(e) {
-        this.setState({
-            logo: e.target.value
-        })
+        const selectedFile = e.target.files[0] // accessing file
+        const formData = new FormData()
+        formData.append('multi-files', selectedFile)
+
+        axios.post('http://localhost:5000/startups/upload', formData)
+            .then(response => {
+                this.setState({logo: response.data.file[0].filename})
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     onSubmit(e) {
@@ -165,23 +219,35 @@ export default class CreateStartup extends Component {
                                                 />
                                             </FormGroup>
 
-                                            <FormGroup>
-                                                <Label for="exampleText"><b>Fondateurs</b></Label>
-                                                <Input type="textarea" name="description" id="description"
-                                                       required
-                                                       value={this.state.description}
-                                                       onChange={this.onChangeDescription}/>
-                                            </FormGroup>
-
+                                            <Label for="exampleText"><b>Fondateurs</b></Label>
+                                            <InputGroup>
+                                                <Input nom="fondateurs" onChange={this.onChangeFondateurs} />
+                                                <InputGroupAddon addonType="append">
+                                                    <Button color="success" onClick={(e)=>this.onAjouterFondateur(e)}>Ajouter un autre fondateur</Button>
+                                                </InputGroupAddon>
+                                            </InputGroup>
+                                            {
+                                                this.state.fond.map((key)=>{
+                                                    return(<InputGroup id={key}>
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <Button color="danger" onClick={this.onDeleteFondateur}>Supprimer</Button>
+                                                        </InputGroupAddon>
+                                                        <Input placeholder="and..." onChange={this.onChangeFondateurs}/>
+                                                    </InputGroup>)
+                                                })
+                                            }
                                             <FormGroup>
                                                 <Label for="exampleText"><b>Domaines reliés</b></Label>
                                                 <div>
                                                     {this.domaineList()}
                                                 </div>
                                             </FormGroup>
+
+
+
                                             <FormGroup>
                                                 <Label><b>Logo</b></Label>
-                                                <Input type="file" name="logo" id="logo"
+                                                <Input type="file" name="multi-files" id="logo"
                                                 onChange={this.onChangeLogo}>Parcourir</Input>
                                             </FormGroup>
                                             <Button color="primary" className="mt-1">Submit</Button>

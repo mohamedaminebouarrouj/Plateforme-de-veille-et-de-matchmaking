@@ -28,6 +28,21 @@ exports.tendances_list = function (req,res) {
         .catch(err => res.status(400).json('Error: '+err));
 };
 
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('f3f0a9a1fbe74c8ba9d3c143212f4ca0');
+
+exports.get_news = function (req,res){
+    newsapi.v2.everything({
+        source: '',
+        q: 'blockchain',
+        language:'en',
+        from: '2020-08-29',
+        sortBy: 'relevancy'
+    }).then(response => {
+        res.json(response)
+    });
+}
+
 exports.tendance_update_get = function (req,res) {
     Tendances.find()
         .then(startup => res.json(startup))

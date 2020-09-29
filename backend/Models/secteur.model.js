@@ -11,6 +11,7 @@ const secteurSchema = new Schema({
         default: 'Autre',
         required: true,
     },
+    domainesId : [{ type: Schema.ObjectId, ref: 'Domaine' }]
 },
     {
         timestamp:true,

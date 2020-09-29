@@ -1,11 +1,15 @@
 var Domaines= require('../Models/domaine.model');
 var Challenges= require('../Models/challenge.model');
+var Secteurs= require('../Models/secteur.model');
 
-exports.domaine_create_post = function (req,res) {
+exports.domaine_create_post = async (req,res) => {
     const nom = req.body.nom;
     const description = req.body.description;
     const categorie = req.body.categorie;
     const secteursId= req.body.secteursId;
+
+
+
 
     const newDomaine = new Domaines({
         nom,
@@ -17,6 +21,14 @@ exports.domaine_create_post = function (req,res) {
     newDomaine.save()
         .then(()=> res.json('Domaine ajouté!'))
         .catch(err=> res.status(400).json('Error: '+err))
+
+    for (const secteurId in secteursId){
+        Secteurs.findById(secteurId)
+            .then(secteur=>{
+                secteur.domainesId=newDomaine.get()._id
+            })
+
+    }
 };
 
 exports.domaine_list = function (req,res) {
@@ -52,12 +64,12 @@ exports.domaine_find = function (req,res){
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
-/*exports.domaine_delete = function (req,res){
+exports.domaine_delete = function (req,res){
     Domaines.findByIdAndDelete(req.params.id)
         .then(() => res.json('Domaine deleted.'))
         .catch(err => res.status(400).json('Error: ' + err));
 }
-*/
+
 exports.domaine_find_one = function (req,res){
     Domaines.findOneAndUpdate({ _id: req.params.id}, (err, challenge) => {
         Challenges.deleteMany({

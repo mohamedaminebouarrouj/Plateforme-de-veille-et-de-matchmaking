@@ -1,15 +1,18 @@
 import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 import {
     Button, Form,
     FormGroup, Label,
-    Input, FormText,
+    Input,
     Row, Col,
     Card, CardBody,
     CardTitle, CustomInput,
 } from 'reactstrap';
 import axios from "axios";
+const animatedComponents = makeAnimated();
 
 export default class CreateSecteur extends Component {
     constructor(props) {
@@ -20,6 +23,8 @@ export default class CreateSecteur extends Component {
         this.onChangeSecteur = this.onChangeSecteur.bind(this);
         this.onChangeCategorie = this.onChangeCategorie.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleChange=this.handleChange.bind(this);
+
 
         this.state = {
             nom: '',
@@ -28,6 +33,8 @@ export default class CreateSecteur extends Component {
             secteurs:[],
             sect : []
         }
+      //  this.classes = useStyles();
+       // this.theme = useTheme();
     }
 
     componentDidMount() {
@@ -41,9 +48,23 @@ export default class CreateSecteur extends Component {
     }
 
     secteurList() {
-        return this.state.sect.map(currentSecteur => {
-            return <CustomInput type="checkbox" label={currentSecteur.nom} value={currentSecteur._id} id={currentSecteur._id} key={currentSecteur._id} onChange={this.onChangeSecteur}/>;
-        })
+        const options= this.state.sect.map(currentSecteur => ({value: currentSecteur._id, label:currentSecteur.nom}))
+        return (
+            <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                options={options}
+                onChange={this.onChangeSecteur}
+            > </Select>
+        )
+    }
+
+    handleChange(event) {
+        this.setState({
+            secteurs : Array.from(event.target.selectedOptions, item => item.value)
+        });
+
     }
 
     onChangeNom(e) {
@@ -59,25 +80,22 @@ export default class CreateSecteur extends Component {
     }
 
     onChangeSecteur(e) {
-        //let value = Array.of(e.target.value);
-        //console.log(e.target.value)
-        if(e.target.checked == true){
-
+        if (e!=null){
             this.setState({
-                secteurs: [...this.state.secteurs, e.target.value]
+                secteurs: e.map((o)=>o.value)
             })
-
         }
         else{
-            this.state.secteurs.pop(e.target.value)
             this.setState({
-                secteurs:  this.state.secteurs
+                secteurs: []
             })
         }
 
+        console.log(this.state.secteurs)
 
-        //console.log(value)
+
     }
+
 
     onChangeCategorie(e) {
         this.setState({

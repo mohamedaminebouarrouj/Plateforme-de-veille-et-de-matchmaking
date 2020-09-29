@@ -1,6 +1,7 @@
 import React, { Component , Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import axios from 'axios';
+import Select from "react-select";
 
 import {
     Button, Form,
@@ -10,6 +11,9 @@ import {
     Card, CardBody,
     CardTitle, CustomInput,
 } from 'reactstrap';
+
+import makeAnimated from "react-select/animated/dist/react-select.esm";
+const animatedComponents = makeAnimated();
 
 export default class UpdateChallenge extends Component {
     constructor(props) {
@@ -53,27 +57,44 @@ export default class UpdateChallenge extends Component {
             })
     }
     onChangeDomaine(e) {
-        //let value = Array.of(e.target.value);
-        //console.log(e.target.value)
-        if (e.target.checked == true) {
-
+        if (e!=null){
             this.setState({
-                domaines: [...this.state.domaines, e.target.value]
-            })
-
-        } else {
-            this.state.domaines.pop(e.target.value)
-            this.setState({
-                domaines: this.state.domaines
+                domaines: e.map((o)=>o.value)
             })
         }
+        else{
+            this.setState({
+                domaines: []
+            })
+        }
+        console.log(this.state.domaines)
     }
 
 
     domaineList() {
-        return this.state.dom.map(currentDomaine => {
-            return <CustomInput type="checkbox" checked= {this.state.domaines.includes(currentDomaine._id)} label={currentDomaine.nom} value={currentDomaine._id} id={currentDomaine._id} key={currentDomaine._id} onChange={this.onChangeDomaine}/>;
+        const selected= []
+        const options= this.state.dom.map(currentDomaine => ({value: currentDomaine._id, label:currentDomaine.nom}))
+        this.state.dom.map(currentDomaine =>{
+            if (this.state.domaines.includes(currentDomaine._id)){
+                selected.push({value:currentDomaine._id, label:currentDomaine.nom})
+            }
         })
+        console.log("selected:",selected)
+        console.log([options[0],options[1]])
+        return (
+            <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                defaultValue={selected}
+                isMulti
+                options={options}
+                onChange={this.onChangeDomaine}
+            > </Select>
+        )
+
+      /*  return this.state.dom.map(currentDomaine => {
+            return <CustomInput type="checkbox" checked= {this.state.domaines.includes(currentDomaine._id)} label={currentDomaine.nom} value={currentDomaine._id} id={currentDomaine._id} key={currentDomaine._id} onChange={this.onChangeDomaine}/>;
+        }) */
     }
 
 

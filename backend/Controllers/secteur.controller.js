@@ -35,6 +35,7 @@ exports.secteur_update_post= function (req,res){
             secteur.nom = req.body.nom;
             secteur.description = req.body.description;
             secteur.categorie = req.body.categorie;
+            secteur.domainesId=[]
 
             secteur.save()
                 .then(() => res.json('Secteur updated!'))

@@ -1,6 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+
 import {
     Button, Form,
     FormGroup, Label,
@@ -11,6 +14,8 @@ import {
 } from 'reactstrap';
 import axios from "axios";
 
+const animatedComponents = makeAnimated();
+
 export default class CreateChallenge extends Component {
     constructor(props) {
         super(props);
@@ -20,6 +25,8 @@ export default class CreateChallenge extends Component {
         this.onChangeDomaine = this.onChangeDomaine.bind(this);
         this.onChangeType = this.onChangeType.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleChange=this.handleChange.bind(this);
+
 
         this.state = {
             nom: '',
@@ -41,9 +48,23 @@ export default class CreateChallenge extends Component {
     }
 
     domaineList() {
-        return this.state.dom.map(currentDomaine => {
-            return <CustomInput type="checkbox" label={currentDomaine.nom} value={currentDomaine._id} id={currentDomaine._id} key={currentDomaine._id} onChange={this.onChangeDomaine}/>;
-        })
+        const options= this.state.dom.map(currentDomaine => ({value: currentDomaine._id, label:currentDomaine.nom}))
+        return (
+            <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                options={options}
+                onChange={this.onChangeDomaine}
+            > </Select>
+        )
+    }
+
+    handleChange(event) {
+        this.setState({
+            domaines : Array.from(event.target.selectedOptions, item => item.value)
+        });
+
     }
 
     onChangeNom(e) {
@@ -59,24 +80,16 @@ export default class CreateChallenge extends Component {
     }
 
     onChangeDomaine(e) {
-        //let value = Array.of(e.target.value);
-        //console.log(e.target.value)
-        if(e.target.checked == true){
-
+        if (e!=null){
             this.setState({
-                domaines: [...this.state.domaines, e.target.value]
+                domaines: e.map((o)=>o.value)
             })
-
         }
         else{
-            this.state.domaines.pop(e.target.value)
             this.setState({
-                domaines:  this.state.domaines
+                domaines: []
             })
         }
-
-
-        //console.log(value)
     }
 
     onChangeType(e) {

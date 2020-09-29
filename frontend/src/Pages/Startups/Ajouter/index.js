@@ -24,7 +24,7 @@ const FormElementsControls = (props) => {
 
             <Fragment>
                 <PageTitle
-                    heading="Startup"
+                    heading="Startups"
                     icon="pe-7s-star icon-gradient bg-happy-itmeo"
                 />
                 <ReactCSSTransitionGroup

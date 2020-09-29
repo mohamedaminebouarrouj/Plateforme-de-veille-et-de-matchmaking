@@ -28,15 +28,13 @@ const startupRouter = require('./Routes/startups');
 const tendanceRouter = require('./Routes/tendances');
 
 
-
-
-
 app.use('/secteurs',secteursRouter);
 app.use('/users',usersRouter);
 app.use('/domaines',domaineRouter);
 app.use('/challenges',challengeRouter);
 app.use('/startups',startupRouter);
 app.use('/tendances',tendanceRouter);
+
 
 
 

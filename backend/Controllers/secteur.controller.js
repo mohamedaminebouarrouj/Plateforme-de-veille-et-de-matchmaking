@@ -1,5 +1,4 @@
 var Secteurs = require('../Models/secteur.model');
-var Domaines = require('../Models/domaine.model');
 
 exports.secteur_create_post = function (req,res) {
     const nom = req.body.nom;

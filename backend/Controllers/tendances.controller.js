@@ -32,11 +32,13 @@ const NewsAPI = require('newsapi');
 const newsapi = new NewsAPI('f3f0a9a1fbe74c8ba9d3c143212f4ca0');
 
 exports.get_news = function (req,res){
+    const date = new Date()
+    const lastMonth = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()
     newsapi.v2.everything({
         source: '',
-        q: 'blockchain',
-        language:'en',
-        from: '2020-08-29',
+        q: req.params.veille,
+        language:req.params.language,
+        from: lastMonth,
         sortBy: 'relevancy'
     }).then(response => {
         res.json(response)

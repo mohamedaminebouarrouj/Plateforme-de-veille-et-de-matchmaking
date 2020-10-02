@@ -1,6 +1,7 @@
 var Domaines= require('../Models/domaine.model');
 var Challenges= require('../Models/challenge.model');
 var Secteurs= require('../Models/secteur.model');
+var Startups = require('../Models/startup.model')
 
 exports.domaine_create_post = async (req,res) => {
     const nom = req.body.nom;
@@ -19,20 +20,22 @@ exports.domaine_create_post = async (req,res) => {
     })
 
     newDomaine.save()
-        .then(()=> res.json('Domaine ajouté!'))
-        .catch(err=> res.status(400).json('Error: '+err))
-
-    for (const secteurId in secteursId){
-        Secteurs.findById(secteurId)
-            .then(secteur=>{
-                secteur.domainesId=newDomaine.get()._id
+        .then((domaine)=> {
+            domaine.secteursId.map((sectId)=>{
+                Secteurs.findByIdAndUpdate(sectId,
+                    {$push: {domainesId : domaine._id}},
+                    { new: true, useFindAndModify: false })
+                    .then((secteur)=>res.json(secteur))
             })
 
-    }
+        })
+        .catch(err=> res.status(400).json('Error: '+err))
 };
 
 exports.domaine_list = function (req,res) {
     Domaines.find()
+        .populate('secteursId')
+        .exec()
         .then(domaines => res.json(domaines))
         .catch(err => res.status(400).json('Error: '+err));
 };
@@ -66,7 +69,27 @@ exports.domaine_find = function (req,res){
 
 exports.domaine_delete = function (req,res){
     Domaines.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Domaine deleted.'))
+        .then((domaine)=> {
+            domaine.secteursId.map((sectId) => {
+                Secteurs.findByIdAndUpdate(sectId,
+                    {$pull: {domainesId: domaine._id}},
+                    {new: true, useFindAndModify: false})
+                    .then((secteur) => res.json(secteur))
+                domaine.startupsId.map((startId) => {
+                    Startups.findByIdAndUpdate(startId,
+                        {$pull: {domainesId: domaine._id}},
+                        {new: true, useFindAndModify: false})
+                        .then()
+                })
+                domaine.challengesId.map((challId) => {
+                    Challenges.findByIdAndUpdate(challId,
+                        {$pull: {domainesId: domaine._id}},
+                        {new: true, useFindAndModify: false})
+                        .then()
+                })
+
+            })
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 }
 

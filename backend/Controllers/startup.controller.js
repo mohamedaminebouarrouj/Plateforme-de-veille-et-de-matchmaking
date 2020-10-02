@@ -1,4 +1,5 @@
 var Startups= require('../Models/startup.model');
+var Domaines =require('../Models/domaine.model');
 const upload = require("../middleware/upload");
 
 
@@ -20,21 +21,33 @@ exports.startup_create_post = function (req,res) {
     })
 
     newStartup.save()
-        .then(()=> res.json('Startup ajouté!'))
+        .then((startup)=> {
+            startup.domainesId.map((domId)=>{
+                Domaines.findByIdAndUpdate(domId,
+                    {$push: {startupsId : domId._id}},
+                    { new: true , useFindAndModify: false })
+                    .then((domaine)=>res.json(domaine))
+            })
+
+        })
         .catch(err=> res.status(400).json('Error: '+err))
 };
 
 exports.startup_list = function (req,res) {
     Startups.find()
+        .populate({
+            path: 'domainesId',
+            model: 'Domaine',
+            populate : {
+                path:'secteursId',
+                model: 'Secteur'
+            }
+        })
+        .exec()
         .then(startup => res.json(startup))
         .catch(err => res.status(400).json('Error: '+err));
 };
 
-exports.startup_update_get = function (req,res) {
-    Startups.find()
-        .then(startup => res.json(startup))
-        .catch(err => res.status(400).json('Error: '+err));
-};
 
 exports.startup_update_post= function (req,res){
     Startups.findById(req.params.id)
@@ -61,7 +74,15 @@ exports.startup_find = function (req,res){
 
 exports.startup_delete = function (req,res){
     Startups.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Startup deleted.'))
+        .then((startup)=> {
+            startup.domainesId.map((domId)=>{
+                Domaines.findByIdAndUpdate(domId,
+                    {$pull: {startupsId : domId._id}},
+                    { new: true , useFindAndModify: false })
+                    .then()
+            })
+
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 }
 

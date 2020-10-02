@@ -9,7 +9,21 @@ const domaineSchema = new Schema({
             type: String,
             required: true,
         },
-        secteursId: [{ type: Schema.ObjectId, ref: 'Secteur' }]
+        secteursId:
+            [
+            { type: Schema.ObjectId,
+            ref: 'Secteur' }
+            ],
+
+        startupsId:[{
+            type: Schema.ObjectId,
+            ref : 'Startup'
+        }],
+
+        challengesId:[{
+            type : Schema.ObjectId,
+            ref: 'Challenge'
+        }]
     },
     {
         timestamp:true,

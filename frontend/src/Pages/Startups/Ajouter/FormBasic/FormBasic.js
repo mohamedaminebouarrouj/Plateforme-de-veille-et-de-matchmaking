@@ -40,7 +40,8 @@ export default class CreateStartup extends Component {
             dateCreation: new Date(),
             logo: '',
             domaines:[],
-            dom : []
+            dom : [],
+            nomfond : ''
         }
     }
 
@@ -88,7 +89,7 @@ export default class CreateStartup extends Component {
 
     onChangeFondateurs(e) {
         //console.log(e.target.value)
-        if(this.state.fond.length<=0){
+        /*if(this.state.fond.length<=0){
             this.setState({
                 fondateurs: [e.target.value]
             })
@@ -97,29 +98,27 @@ export default class CreateStartup extends Component {
             this.setState({
                 fondateurs: [...this.state.fondateurs,e.target.value]
             })
-        }
-        console.log(this.state.fondateurs)
+        }*/
+        this.setState({
+            nomfond: e.target.value
+        })
+        console.log(this.state.nomfond)
     }
 
     onDeleteFondateur(e){
-        if (this.state.fond.length<=0)
-        {
 
-        }
-        else{
-
-            this.state.fond.pop(e.target.value)
-            this.setState({
-                fond:  this.state.fond
-            })
-        }
-
-
+        this.state.fond.pop(e.target.value)
+        this.setState({
+            fond: this.state.fond
+        })
     }
 
     onAjouterFondateur(e){
-        console.log(this.state.fondateurs)
-        this.setState({fond:[...this.state.fond,""]})
+
+        this.setState({fond:[...this.state.fond, this.state.nomfond]})
+        this.setState({
+            nomfond: ''
+        })
     }
 
 
@@ -221,18 +220,18 @@ export default class CreateStartup extends Component {
 
                                             <Label for="exampleText"><b>Fondateurs</b></Label>
                                             <InputGroup>
-                                                <Input nom="fondateurs" onChange={this.onChangeFondateurs} />
+                                                <Input nom="fondateurs" value={this.state.nomfond} onChange={this.onChangeFondateurs} />
                                                 <InputGroupAddon addonType="append">
                                                     <Button color="success" onClick={(e)=>this.onAjouterFondateur(e)}>Ajouter un autre fondateur</Button>
                                                 </InputGroupAddon>
                                             </InputGroup>
                                             {
-                                                this.state.fond.map((key)=>{
+                                                this.state.fond.map((key, value)=>{
                                                     return(<InputGroup id={key}>
                                                         <InputGroupAddon addonType="prepend">
                                                             <Button color="danger" onClick={this.onDeleteFondateur}>Supprimer</Button>
                                                         </InputGroupAddon>
-                                                        <Input placeholder="and..." onChange={this.onChangeFondateurs}/>
+                                                        <Input disabled value={this.state.fond[value]} placeholder="and..." onChange={this.onChangeFondateurs}/>
                                                     </InputGroup>)
                                                 })
                                             }

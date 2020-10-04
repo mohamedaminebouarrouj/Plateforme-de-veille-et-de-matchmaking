@@ -1,6 +1,8 @@
 var Startups= require('../Models/startup.model');
 var Domaines =require('../Models/domaine.model');
 const upload = require("../middleware/upload");
+let {PythonShell} = require('python-shell');
+const {spawn} = require('child_process');
 
 
 exports.startup_create_post = function (req,res) {
@@ -24,9 +26,9 @@ exports.startup_create_post = function (req,res) {
         .then((startup)=> {
             startup.domainesId.map((domId)=>{
                 Domaines.findByIdAndUpdate(domId,
-                    {$push: {startupsId : domId._id}},
+                    {$push: {startupsId : startup._id}},
                     { new: true , useFindAndModify: false })
-                    .then((domaine)=>res.json(domaine))
+                    .then()
             })
 
         })
@@ -107,4 +109,14 @@ exports.upload_logo = async (req,res) =>{
         }
         return res.send(`Error when trying upload many files: ${error}`);
     }
+}
+
+exports.startup_scraping =async (req,res) =>{
+    var spawn = require("child_process").spawn;
+    var process = spawn('python', ["./scraping_startup_act.py"]);
+    console.log(process)
+
+    process.stdout.on("data", function (data) {
+        res.send(data.toString());
+    });
 }

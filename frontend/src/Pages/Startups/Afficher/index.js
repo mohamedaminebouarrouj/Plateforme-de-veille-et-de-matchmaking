@@ -3,11 +3,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     Row, Col,
     Card, CardBody,
-    CardTitle
+    CardTitle,Button
 } from 'reactstrap';
 
 import PageTitle from '../../../Layout/AppMain/PageTitle';
 import TableHover from './Examples/TableHover';
+import axios from 'axios';
 
 
 const AffichageTable = (props) => {
@@ -17,6 +18,11 @@ const AffichageTable = (props) => {
                 heading="Startups"
                 icon="pe-7s-star icon-gradient bg-happy-itmeo"
             />
+
+            <Button>Ajouter les startups</Button>
+            <br></br>
+            <br></br>
+
             <ReactCSSTransitionGroup
                 component="div"
                 transitionName="TabsAnimation"

@@ -8,9 +8,9 @@ export default class TableHover extends React.Component {
         <thead>
           <tr>
             <th>#</th>
-            <th>Nom du Thèmes</th>
-            <th>Description</th>
-            <th>Nombre de secteurs affectés</th>
+            <th>Titre de l'article</th>
+            <th>Résumé de l'article</th>
+            <th></th>
             <th>Modifier</th>
             <th>Supprimer</th>
           </tr>

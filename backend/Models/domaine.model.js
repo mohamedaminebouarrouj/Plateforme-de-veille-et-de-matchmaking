@@ -23,6 +23,10 @@ const domaineSchema = new Schema({
         challengesId:[{
             type : Schema.ObjectId,
             ref: 'Challenge'
+        }],
+        tendancesId:[{
+            type : Schema.ObjectId,
+            ref: 'Tendance'
         }]
     },
     {

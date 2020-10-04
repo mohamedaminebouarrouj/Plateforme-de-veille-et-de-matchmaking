@@ -142,7 +142,7 @@ export default class startupsList extends Component {
   render() {
     return (
         <Table hover className="mb-0">
-          <TableHead>
+            <TableHead>
           <TableRow>
             <TableCell><b>Nom de la Startup</b></TableCell>
             <TableCell><b>Description</b></TableCell>

@@ -105,3 +105,12 @@ exports.domaine_find_one = function (req,res){
         })
     })
 }
+
+exports.domaine_find_byName = async (req,res) =>{
+
+    Domaines.findOne({nom: req.params.nom})
+        .exec()
+        .then((response)=>{
+           response._id
+        })
+}

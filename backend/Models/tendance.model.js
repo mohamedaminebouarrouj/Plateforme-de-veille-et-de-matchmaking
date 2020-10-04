@@ -8,7 +8,9 @@ const tendanceSchema = new Schema({
         datePublication: {type: Date},
         resume: {type:String},
         url:{type: String},
-        domainesId:[{type: Schema.ObjectId,ref : 'Domaine'}]
+        urlToImage:{type:String},
+        source:{type:String},
+        domainesId:{type: Schema.ObjectId,ref : 'Domaine'}
     },
     {
         timestamp:true,

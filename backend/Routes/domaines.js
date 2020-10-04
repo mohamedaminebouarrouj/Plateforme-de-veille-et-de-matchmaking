@@ -7,6 +7,8 @@ router.get('/',domaineController.domaine_list);
 //Create Domaine
 router.post('/add',domaineController.domaine_create_post);
 
+router.get('/find_by_name/:nom',domaineController.domaine_find_byName)
+
 router.delete('/:id',domaineController.domaine_delete);
 
 router.post('/update/:id',domaineController.domaine_update_post);

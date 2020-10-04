@@ -9,8 +9,12 @@ router.delete('/:id',startupController.startup_delete);
 
 router.post('/update/:id',startupController.startup_update_post);
 
+router.get('/scraping/',startupController.startup_scraping);
+
 router.get('/:id',startupController.startup_find);
 
 router.post('/upload',startupController.upload_logo);
+
+
 
 module.exports =router;

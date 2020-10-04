@@ -88,17 +88,6 @@ export default class CreateStartup extends Component {
     }
 
     onChangeFondateurs(e) {
-        //console.log(e.target.value)
-        /*if(this.state.fond.length<=0){
-            this.setState({
-                fondateurs: [e.target.value]
-            })
-        }
-        else{
-            this.setState({
-                fondateurs: [...this.state.fondateurs,e.target.value]
-            })
-        }*/
         this.setState({
             nomfond: e.target.value
         })
@@ -158,11 +147,15 @@ export default class CreateStartup extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        console.log(this.state.domaines)
+        if (this.state.fond.length===0)
+        {
+            this.state.fond.push(this.state.nomfond)
+        }
+
         const startup = {
             nom: this.state.nom,
             description: this.state.description,
-            fondateurs: this.state.fondateurs,
+            fondateurs: this.state.fond,
             dateCreation: this.state.dateCreation,
             logo: this.state.logo,
             domainesId: this.state.domaines
@@ -174,7 +167,7 @@ export default class CreateStartup extends Component {
             .then(res => console.log(res.data));
 
         window.location.replace('#/startups/afficher');
-        window.location.reload(false);
+      //  window.location.reload(false);
     }
 
     render() {
@@ -218,11 +211,12 @@ export default class CreateStartup extends Component {
                                                 />
                                             </FormGroup>
 
+                                        <FormGroup>
                                             <Label for="exampleText"><b>Fondateurs</b></Label>
                                             <InputGroup>
                                                 <Input nom="fondateurs" value={this.state.nomfond} onChange={this.onChangeFondateurs} />
                                                 <InputGroupAddon addonType="append">
-                                                    <Button color="success" onClick={(e)=>this.onAjouterFondateur(e)}>Ajouter un autre fondateur</Button>
+                                                    <Button color="success" onClick={(e)=>this.onAjouterFondateur(e)}>Ajouter</Button>
                                                 </InputGroupAddon>
                                             </InputGroup>
                                             {
@@ -235,6 +229,7 @@ export default class CreateStartup extends Component {
                                                     </InputGroup>)
                                                 })
                                             }
+                                        </FormGroup>
                                             <FormGroup>
                                                 <Label for="exampleText"><b>Domaines reliés</b></Label>
                                                 <div>

@@ -7,6 +7,6 @@ router.get('/',tendancesController.tendances_list);
 //Create Domaine
 router.post('/add',tendancesController.tendance_create_post);
 
-router.get('/news/:veille/:language',tendancesController.get_news);
+router.get('/news/:id/:language',tendancesController.get_news_domaine);
 
 module.exports =router;

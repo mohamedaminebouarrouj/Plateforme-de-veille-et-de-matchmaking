@@ -11,6 +11,15 @@ import TableHover from './Examples/TableHover';
 import axios from 'axios';
 
 
+function ajouterButton(){
+
+    axios.get('http://localhost:5000/startups/scraping/')
+        .then(res => console.log(res.data));
+
+    window.location.replace('#/startups/afficher');
+    window.location.reload(false);
+}
+
 const AffichageTable = (props) => {
     return (
         <Fragment>
@@ -19,7 +28,7 @@ const AffichageTable = (props) => {
                 icon="pe-7s-star icon-gradient bg-happy-itmeo"
             />
 
-            <Button>Ajouter les startups</Button>
+            <Button onClick={ajouterButton}>Ajouter les startups</Button>
             <br></br>
             <br></br>
 

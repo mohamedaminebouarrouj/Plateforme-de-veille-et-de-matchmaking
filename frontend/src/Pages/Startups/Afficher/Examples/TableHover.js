@@ -24,20 +24,6 @@ const useRowStyles = makeStyles({
     },
 });
 
-const Startup= props =>(
-    <tr>
-      <td width='18%'>{props.startup.nom}</td>
-      <td width='50%'>{props.startup.description.split('.')[0]}</td>
-      <td width='20%'>{props.startup.type}</td>
-      <td width='12%'>{props.startup.domainesId.length}</td>
-      <td>
-        <Button outline className="mb-2 mr-2 btn-transition" color="info"><Link to={"/startups/update/"+props.startup._id}>Modifier</Link> </Button>
-      </td>
-      <td>
-        <Button outline className="mb-2 mr-2 btn-transition" color="danger" onClick={() => { props.deleteStartup(props.startup._id) }}>Supprimer</Button>
-      </td>
-    </tr>
-)
 
 function Row(props){
     const [open,setOpen]=React.useState(false)
@@ -50,7 +36,6 @@ function Row(props){
                     {props.startup.nom}
                 </TableCell>
                 <TableCell width='45%'>{props.startup.description.split('.')[0]}</TableCell>
-                <TableCell width='20%'>{props.startup.dateCreation.split('T')[0]}</TableCell>
                 <TableCell width='15%'>{props.startup.domainesId.length}
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -146,7 +131,6 @@ export default class startupsList extends Component {
           <TableRow>
             <TableCell><b>Nom de la Startup</b></TableCell>
             <TableCell><b>Description</b></TableCell>
-            <TableCell><b>Date de création</b></TableCell>
             <TableCell><b>Domaines Reliés</b></TableCell>
             <TableCell><b>Modifier</b></TableCell>
               <TableCell><b>Supprimer</b></TableCell>

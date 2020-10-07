@@ -72,16 +72,13 @@ export default class AnalyticsDashboard1 extends Component {
                                             <div className="widget-numbers">
                                                 29
                                             </div>
-                                                <a href="#">
                                             <div className="widget-subheading">
-                                                Thèmes
+                                                Domaines
                                             </div>
-                                            </a>
                                         </div>
 
                                     </Col>
                                     <Col md="6">
-                                        <a href="#">
                                         <div className="card mb-3 bg-midnight-bloom widget-chart text-white card-border">
                                             <div className="icon-wrapper rounded">
                                                 <div className="icon-wrapper-bg bg-white opacity-10"/>
@@ -94,10 +91,9 @@ export default class AnalyticsDashboard1 extends Component {
                                                 Challenges
                                             </div>
                                         </div>
-                                        </a>
+
                                     </Col>
                                     <Col md="6">
-                                        <a href="#">
                                         <div className="card mb-3 bg-grow-early widget-chart text-white card-border">
                                             <div className="icon-wrapper rounded">
                                                 <div className="icon-wrapper-bg bg-dark opacity-9"/>
@@ -110,10 +106,8 @@ export default class AnalyticsDashboard1 extends Component {
                                                 Articles
                                             </div>
                                         </div>
-                                        </a>
                                     </Col>
                                     <Col md="6">
-                                        <a href="#">
                                         <div className="card mb-3 bg-love-kiss widget-chart card-border">
                                             <div className="widget-chart-content text-white">
                                                 <div className="icon-wrapper rounded-circle">
@@ -128,7 +122,7 @@ export default class AnalyticsDashboard1 extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        </a>
+
                                     </Col>
                                 </Row>
                             </Col>

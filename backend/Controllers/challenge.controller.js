@@ -13,7 +13,7 @@ exports.challenge_create_post = function (req,res) {
         domainesId,
     })
 
-    newChallenge.save()
+    Challenges.create(newChallenge)
         .then((challenge)=> {
             challenge.domainesId.map((domId)=>{
                 Domaines.findByIdAndUpdate(domId,
@@ -34,12 +34,13 @@ exports.challenge_list = function (req,res) {
             populate : {
                 path:'secteursId',
                 model: 'Secteur',
-                populate:{
-                    path: 'startupId',
-                    model:'Startup'
-                }
+
             },
 
+        })
+        .populate({
+            path: 'tendancesId',
+            model:'Tendance'
         })
         .exec()
         .then(challenge => res.json(challenge))

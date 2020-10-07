@@ -14,8 +14,8 @@ const AffichageTable = (props) => {
     return (
         <Fragment>
             <PageTitle
-                heading="Domaines d'activité"
-                icon="pe-7s-paint icon-gradient bg-happy-itmeo"
+                heading="Tendances"
+                icon="pe-7s-news-paper icon-gradient bg-happy-itmeo"
             />
             <ReactCSSTransitionGroup
                 component="div"

@@ -11,8 +11,9 @@ import FormElementsControls from "./Ajouter";
 import AppHeader from '../../Layout/AppHeader/';
 import AppSidebar from '../../Layout/AppSidebar/';
 import AppFooter from '../../Layout/AppFooter/';
+import FormElementsControlsUpdateTendance from "./Modifier";
 
-const Domaines = ({match}) => (
+const Tendances = ({match}) => (
     <Fragment>
         <AppHeader/>
         <div className="app-main">
@@ -23,7 +24,9 @@ const Domaines = ({match}) => (
                     {/* Tables */}
 
                     <Route path={`${match.url}/afficher`} component={AffichageTable}/>
-                    <Route path={`${match.url}/ajouter`} component={FormElementsControls}/>
+                    <Route path={`${match.url}/ajouter/`} component={FormElementsControls}/>
+                    <Route path={`${match.url}/update/:id`} component={FormElementsControlsUpdateTendance}/>
+
                 </div>
                 <AppFooter/>
             </div>
@@ -31,4 +34,4 @@ const Domaines = ({match}) => (
     </Fragment>
 );
 
-export default Domaines;
+export default Tendances;

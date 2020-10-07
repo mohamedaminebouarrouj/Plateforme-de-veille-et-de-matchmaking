@@ -1,8 +1,9 @@
 var Startups= require('../Models/startup.model');
 var Domaines =require('../Models/domaine.model');
 const upload = require("../middleware/upload");
-let {PythonShell} = require('python-shell');
+const path = require('path')
 const {spawn} = require('child_process');
+
 
 
 exports.startup_create_post = function (req,res) {
@@ -22,7 +23,7 @@ exports.startup_create_post = function (req,res) {
         domainesId,
     })
 
-    newStartup.save()
+    Startups.create(newStartup)
         .then((startup)=> {
             startup.domainesId.map((domId)=>{
                 Domaines.findByIdAndUpdate(domId,
@@ -56,8 +57,6 @@ exports.startup_update_post= function (req,res){
         .then(startup => {
             startup.nom = req.body.nom;
             startup.description = req.body.description;
-            startup.fondateurs = req.body.fondateurs;
-            startup.dateCreation = Date.parse(req.body.dateCreation);
             startup.logo = req.body.logo;
             startup.domainesId= req.body.domainesId;
 
@@ -112,11 +111,25 @@ exports.upload_logo = async (req,res) =>{
 }
 
 exports.startup_scraping =async (req,res) =>{
-    var spawn = require("child_process").spawn;
-    var process = spawn('python', ["./scraping_startup_act.py"]);
-    console.log(process)
+    const subprocess = runScript()
+    let scraped_data = []
+// print output of script
+    subprocess.stdout.on('data', (data) => {
+        res.send(`${data}`);
 
-    process.stdout.on("data", function (data) {
-        res.send(data.toString());
     });
+    subprocess.stderr.on('data', (data) => {
+        console.log(`error:${data}`);
+    });
+    subprocess.stderr.on('close', () => {
+        console.log("Closed");
+    });
+
 }
+
+function runScript(){
+    return spawn('python', [
+        path.join(__dirname, 'script.py')
+    ]);
+}
+

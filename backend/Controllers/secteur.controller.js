@@ -11,13 +11,18 @@ exports.secteur_create_post = function (req,res) {
         categorie,
     });
 
-    newSecteur.save()
+    Secteurs.create(newSecteur)
         .then(()=> res.json('Secteur ajouté!'))
         .catch(err=> res.status(400).json('Error: '+err))
 };
 
 exports.secteur_list = function (req,res) {
     Secteurs.find()
+        .populate({
+            path: 'tendancesId',
+            model: 'Tendance',
+
+        })
         .then(secteurs => res.json(secteurs))
         .catch(err => res.status(400).json('Error: '+err));
 };

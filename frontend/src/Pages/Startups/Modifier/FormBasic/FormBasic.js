@@ -81,45 +81,16 @@ export default class UpdateStartup extends Component {
                 selected.push({value:currentDomaine._id, label:currentDomaine.nom})
             }
         })
-        console.log("selected:",selected)
-        console.log([options[0],options[1]])
         return (
             <Select
                 closeMenuOnSelect={false}
                 components={animatedComponents}
-                defaultValue={selected}
+                defaultValue={this.state.domaines}
                 isMulti
                 options={options}
                 onChange={this.onChangeDomaine}
             > </Select>
         )
-
-      /*  return this.state.dom.map(currentDomaine => {
-            return <CustomInput type="checkbox" checked= {this.state.domaines.includes(currentDomaine._id)} label={currentDomaine.nom} value={currentDomaine._id} id={currentDomaine._id} key={currentDomaine._id} onChange={this.onChangeDomaine}/>;
-        }) */
-    }
-
-    onDeleteFondateur(e){
-
-        this.state.fond.pop(e.target.value)
-        this.setState({
-            fond: this.state.fond
-        })
-    }
-
-    onAjouterFondateur(e){
-
-        this.setState({fond:[...this.state.fond, this.state.nomfond]})
-        console.log(this.state.fond)
-        this.setState({
-            nomfond: ''
-        })
-    }
-
-    onChangeFondateurs(e) {
-        this.setState({
-            nomfond: e.target.value
-        })
     }
 
 
@@ -144,16 +115,15 @@ export default class UpdateStartup extends Component {
     onSubmit(e) {
         e.preventDefault();
 
-        const challenge = {
+        const startup = {
             nom: this.state.nom,
             description: this.state.description,
-            type: this.state.type,
             domainesId : this.state.domaines
         }
 
-        console.log(challenge);
+        console.log(startup);
 
-        axios.post('http://localhost:5000/startups/update/' + this.props.id, challenge)
+        axios.post('http://localhost:5000/startups/update/' + this.props.id, startup)
             .then(res => console.log(res.data));
 
         window.location.replace('#/startups/afficher');
@@ -200,30 +170,6 @@ export default class UpdateStartup extends Component {
                                             </div>
                                         </FormGroup>
 
-                                            <FormGroup>
-                                                <Label for="exampleText"><b>Fondateurs</b></Label>
-
-                                                    {this.state.fondateurs.map((currentFon)=>
-                                                        <InputGroup>
-                                                        <Input nom="fondateurs" value={currentFon} onChange={this.onChangeFondateurs} />
-                                                        <InputGroupAddon addonType="append">
-                                                        <Button color="success" onClick={(e)=>this.onAjouterFondateur(e)}>Ajouter un autre fondateur</Button>
-                                                        </InputGroupAddon>
-                                                        </InputGroup>
-                                                    )}
-
-                                                {
-                                                    this.state.fond.map((key, value)=>{
-                                                        return(<InputGroup id={key}>
-                                                            <InputGroupAddon addonType="prepend">
-                                                                <Button color="danger" onClick={this.onDeleteFondateur}>Supprimer</Button>
-                                                            </InputGroupAddon>
-                                                            <Input disabled value={this.state.fond[value]} placeholder="and..." onChange={this.onChangeFondateurs}/>
-                                                        </InputGroup>)
-                                                    })
-                                                }
-
-                                            </FormGroup>
                                             <Button color="primary" className="mt-1" type="submit">Submit</Button>
                                         </Form>
                                     </CardBody>

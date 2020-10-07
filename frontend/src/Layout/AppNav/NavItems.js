@@ -20,7 +20,7 @@ export const MainNav = [
         ],
     },
     {
-        icon: 'pe-7s-eyedropper',
+        icon: 'pe-7s-box2',
         label: 'Domaines',
         content: [
             {
@@ -67,17 +67,8 @@ export const MainNav = [
     {
         icon: 'pe-7s-news-paper',
         label: 'Tendances',
-        content: [
-            {
-                label: 'Afficher les Tendances',
-                to:'#/tendances/afficher'
-            },
-            {
-                label: 'Ajouter une nouvelle Tendance',
-                to:'#/tendances/ajouter'
-            },
+        to:'#/tendances/afficher',
 
-        ],
     },
     {
         icon: 'pe-7s-users',
@@ -91,6 +82,7 @@ export const MainNav = [
         ],
     },
 ];
+/*
 export const ComponentsNav = [
     {
         icon: 'pe-7s-diamond',
@@ -201,4 +193,4 @@ export const ChartsNav = [
         label: 'ChartJS',
         to: '#/charts/chartjs',
     },
-];
+]; */

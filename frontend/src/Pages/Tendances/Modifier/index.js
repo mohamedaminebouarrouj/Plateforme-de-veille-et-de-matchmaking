@@ -1,11 +1,17 @@
 import React, {Component, Fragment} from 'react'
+
+import Tabs from 'react-responsive-tabs';
+
 import PageTitle from '../../../Layout/AppMain/PageTitle';
+
+// Examples
+
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import {Card, Col, Row} from "reactstrap";
-import UpdateChallenge from "./FormBasic/FormBasic";
+import UpdateTendance from "./FormBasic/FormBasic";
 
 
-export default class FormElementsControlsUpdate extends Component {
+export default class FormElementsControlsUpdateTendance extends Component {
     constructor(props) {
         super(props);
     }
@@ -14,8 +20,8 @@ export default class FormElementsControlsUpdate extends Component {
 
             <Fragment>
                 <PageTitle
-                    heading="Challenges"
-                    icon="pe-7s-target  icon-gradient bg-happy-itmeo"
+                    heading="Tendances"
+                    icon="pe-7s-box2 icon-gradient bg-happy-itmeo"
                 />
                 <ReactCSSTransitionGroup
                     component="div"
@@ -27,7 +33,7 @@ export default class FormElementsControlsUpdate extends Component {
                     <Row>
                         <Col>
                             <Card className="main-card mb-3">
-                                <UpdateChallenge id={this.props.match.params.id}/>
+                                <UpdateTendance id={this.props.match.params.id}/>
                             </Card>
                         </Col>
                     </Row>

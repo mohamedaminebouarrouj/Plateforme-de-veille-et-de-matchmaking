@@ -15,7 +15,7 @@ const AffichageTable = (props) => {
         <Fragment>
             <PageTitle
                 heading="Challenges"
-                icon="pe-7s-arc  icon-gradient bg-happy-itmeo"
+                icon="pe-7s-target  icon-gradient bg-happy-itmeo"
             />
             <ReactCSSTransitionGroup
                 component="div"

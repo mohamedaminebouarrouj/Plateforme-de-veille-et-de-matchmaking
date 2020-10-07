@@ -9,14 +9,7 @@ import PageTitle from '../../../Layout/AppMain/PageTitle';
 import FormsDefault from './FormBasic/FormBasic';
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import {Card, Col, Row} from "reactstrap";
-import TableHover from "../Afficher/Examples/TableHover";
 
-const tabsContent = [
-    {
-        title: 'Basic',
-        content: <FormsDefault/>
-    },
-];
 
 const FormElementsControls = (props) => {
 
@@ -24,7 +17,7 @@ const FormElementsControls = (props) => {
 
             <Fragment>
                 <PageTitle
-                    heading="Domaines"
+                    heading="Tendances"
                     icon="pe-7s-drawer icon-gradient bg-happy-itmeo"
                 />
                 <ReactCSSTransitionGroup

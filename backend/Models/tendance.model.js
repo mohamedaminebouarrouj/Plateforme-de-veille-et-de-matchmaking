@@ -7,10 +7,14 @@ const tendanceSchema = new Schema({
         contenu: {type: String},
         datePublication: {type: Date},
         resume: {type:String},
-        url:{type: String},
+        url:{type: String, unique: true},
         urlToImage:{type:String},
         source:{type:String},
-        domainesId:{type: Schema.ObjectId,ref : 'Domaine'}
+        langage:{type:String},
+
+        domaineId:{type: Schema.ObjectId,ref : 'Domaine'},
+        challengeId:{type: Schema.ObjectId,ref : 'Challenge'},
+        secteurId:{type: Schema.ObjectId,ref : 'Secteur'},
     },
     {
         timestamp:true,

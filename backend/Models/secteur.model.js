@@ -11,7 +11,10 @@ const secteurSchema = new Schema({
         default: 'Autre',
         required: true,
     },
-    domainesId : [{ type: Schema.ObjectId, ref: 'Domaine' }]
+
+    domainesId : [{ type: Schema.ObjectId, ref: 'Domaine' }],
+
+    tendancesId:[{type: Schema.ObjectId,ref : 'Tendance'}]
 },
     {
         timestamp:true,

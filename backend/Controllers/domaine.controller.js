@@ -19,7 +19,7 @@ exports.domaine_create_post = async (req,res) => {
         secteursId,
     })
 
-    newDomaine.save()
+    Domaines.create(newDomaine)
         .then((domaine)=> {
             domaine.secteursId.map((sectId)=>{
                 Secteurs.findByIdAndUpdate(sectId,
@@ -34,7 +34,15 @@ exports.domaine_create_post = async (req,res) => {
 
 exports.domaine_list = function (req,res) {
     Domaines.find()
-        .populate('secteursId')
+        .populate({
+            path: 'tendancesId',
+            model: 'Tendance',
+
+        })
+        .populate ({
+        path:'secteursId',
+            model: 'Secteur'
+        })
         .exec()
         .then(domaines => res.json(domaines))
         .catch(err => res.status(400).json('Error: '+err));
@@ -55,7 +63,7 @@ exports.domaine_update_post= function (req,res){
             domaine.categorie = req.body.categorie;
 
             domaine.save()
-                .then(() => res.json('Secteur updated!'))
+                .then(() => res.json('Domaine updated!'))
                 .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));

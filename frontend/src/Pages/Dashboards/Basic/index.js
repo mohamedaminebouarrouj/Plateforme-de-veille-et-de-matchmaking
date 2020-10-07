@@ -15,32 +15,6 @@ import {
 
 import PageTitle from '../../../Layout/AppMain/PageTitle';
 
-import {
-    AreaChart, Area, Line,
-    ResponsiveContainer,
-    Bar,
-    BarChart,
-    ComposedChart,
-    CartesianGrid,
-    Tooltip,
-    LineChart
-} from 'recharts';
-
-import {
-    faAngleUp,
-    faArrowRight,
-    faArrowUp,
-    faArrowLeft,
-    faAngleDown
-} from '@fortawesome/free-solid-svg-icons';
-
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-
-import avatar1 from '../../../assets/utils/images/avatars/1.jpg';
-import avatar2 from '../../../assets/utils/images/avatars/2.jpg';
-import avatar3 from '../../../assets/utils/images/avatars/3.jpg';
-import avatar4 from '../../../assets/utils/images/avatars/4.jpg';
-
 export default class AnalyticsDashboard1 extends Component {
     render() {
 
@@ -70,7 +44,7 @@ export default class AnalyticsDashboard1 extends Component {
                                                 <i className="lnr-cog icon-gradient bg-arielle-smile"/>
                                             </div>
                                             <div className="widget-numbers">
-                                                29
+                                                2
                                             </div>
                                             <div className="widget-subheading">
                                                 Domaines
@@ -85,7 +59,7 @@ export default class AnalyticsDashboard1 extends Component {
                                                 <i className="lnr-screen icon-gradient bg-warm-flame"/>
                                             </div>
                                             <div className="widget-numbers">
-                                                50
+                                                2
                                             </div>
                                             <div className="widget-subheading">
                                                 Challenges
@@ -100,10 +74,10 @@ export default class AnalyticsDashboard1 extends Component {
                                                 <i className="lnr-graduation-hat text-white"/>
                                             </div>
                                             <div className="widget-numbers">
-                                                100
+                                                0
                                             </div>
                                             <div className="widget-subheading">
-                                                Articles
+                                                Startups
                                             </div>
                                         </div>
                                     </Col>
@@ -115,10 +89,10 @@ export default class AnalyticsDashboard1 extends Component {
                                                     <i className="lnr-cog"/>
                                                 </div>
                                                 <div className="widget-numbers">
-                                                    200
+                                                    0
                                                 </div>
                                                 <div className="widget-subheading">
-                                                    Profils
+                                                    Articles
                                                 </div>
                                             </div>
                                         </div>

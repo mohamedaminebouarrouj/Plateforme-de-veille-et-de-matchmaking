@@ -15,6 +15,12 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useRowStyles = makeStyles({
     root: {
@@ -87,14 +93,44 @@ function Row(props){
     );
 }
 
+function LoadingSpinner () {
+    const [open, setOpen] = React.useState(true);
+
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return (
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Scraping des startups en cours"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                            <CircularProgress /> Loading...
+                    </DialogContentText>
+
+                </DialogContent>
+            </Dialog>
+    )
+}
+
+
 
 export default class startupsList extends Component {
   constructor(props) {
-    super(props);
+      super(props);
+      this.deleteStartup = this.deleteStartup.bind(this)
+      this.ajouterButton=this.ajouterButton.bind(this)
 
-    this.deleteStartup = this.deleteStartup.bind(this)
-
-    this.state = {startups: []};
+      this.state = {
+        startups: [],
+        loading:false,
+    };
   }
 
   componentDidMount() {
@@ -124,21 +160,55 @@ export default class startupsList extends Component {
     })
   }
 
+  ajouterButton(){
+      this.setState({loading:true},()=>{
+          console.log(this.state.loading)
+          axios.get('http://localhost:5000/startups/scraping/')
+              .then(res =>{
+                  console.log(res.data)
+                  loading:false
+                  window.location.replace('#/startups/afficher');
+                  window.location.reload(false);
+              });
+      })
+
+    }
+
   render() {
     return (
-        <Table hover className="mb-0">
+        <Table>
             <TableHead>
-          <TableRow>
-            <TableCell><b>Nom de la Startup</b></TableCell>
-            <TableCell><b>Description</b></TableCell>
-            <TableCell><b>Domaines Reliés</b></TableCell>
-            <TableCell><b>Modifier</b></TableCell>
-              <TableCell><b>Supprimer</b></TableCell>
-          </TableRow>
-          </TableHead>
-          <tbody>
-          {this.startupList()}
-          </tbody>
+                <TableRow>
+                    <Table hover className="mb-0">
+
+                        <TableHead>
+                            <TableRow>
+                                <TableCell width="18%"/>
+                                <TableCell width="45%"/>
+                                <TableCell width="15%"/>
+                                <TableCell/>
+                                <TableCell/>
+                                <TableCell>
+                                    <Button onClick={this.ajouterButton} variant="outlined" className="mb-2 mr-2" color="success">+</Button>
+                                    {this.state.loading? <LoadingSpinner/>: null}
+                                </TableCell>
+
+                            </TableRow>
+                            <TableRow>
+                                <TableCell><b>Nom de la Startup</b></TableCell>
+                                <TableCell><b>Description</b></TableCell>
+                                <TableCell><b>Domaines Reliés</b></TableCell>
+                                <TableCell><b>Modifier</b></TableCell>
+                                <TableCell><b>Supprimer</b></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <tbody>
+                        {this.startupList()}
+                        </tbody>
+                    </Table>
+                </TableRow>
+            </TableHead>
+
         </Table>
     );
   }

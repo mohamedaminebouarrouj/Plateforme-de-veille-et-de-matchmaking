@@ -73,6 +73,13 @@ if __name__ == "__main__":
     client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
     db = client['<dbname>']
     col=db.startups
+    col.create_index([('nom', pymongo.ASCENDING)],unique=True)
+
     records = json.loads(data.T.to_json()).values()
-    col.insert_many(records)
-    print("Startups ajoutées")
+
+    try:
+        col.insert_many(records)
+        print("Startups ajoutées")
+
+    except:
+        print("Startups déjà ajoutées")

@@ -34,18 +34,25 @@ const useRowStyles = makeStyles({
 function Row(props){
     const [open,setOpen]=React.useState(false)
     const classes= useRowStyles();
+    const dateCreation = new Date(props.startup.dateCreation)
 
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
                 <TableCell component="th" scope="row" width='18%'>
-                    {props.startup.nom}
+                    {
+                        props.startup.siteWeb==="" ? props.startup.nom : <a href={"https://"+props.startup.siteWeb} target='_blank'>{props.startup.nom}</a>
+                    }
+
                 </TableCell>
-                <TableCell width='45%'>{props.startup.description.split('.')[0]}</TableCell>
+                <TableCell width='45%'>{props.startup.description}</TableCell>
                 <TableCell width='15%'>{props.startup.domainesId.length}
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
+                </TableCell>
+                <TableCell>
+                    {dateCreation.toISOString().split('-01T')[0]}
                 </TableCell>
                 <TableCell>
                     <Button outline className="mb-2 mr-2 btn-transition" color="info"><Link to={"/startups/update/"+props.startup._id}>Modifier</Link> </Button>
@@ -188,7 +195,7 @@ export default class startupsList extends Component {
                                 <TableCell width="15%"/>
                                 <TableCell/>
                                 <TableCell/>
-                                <TableCell>
+                                <TableCell align="right">
                                     <Button onClick={this.ajouterButton} variant="outlined" className="mb-2 mr-2" color="success">+</Button>
                                     {this.state.loading? <LoadingSpinner/>: null}
                                 </TableCell>
@@ -198,6 +205,7 @@ export default class startupsList extends Component {
                                 <TableCell><b>Nom de la Startup</b></TableCell>
                                 <TableCell><b>Description</b></TableCell>
                                 <TableCell><b>Domaines Reliés</b></TableCell>
+                                <TableCell><b>Date de labélisation</b></TableCell>
                                 <TableCell><b>Modifier</b></TableCell>
                                 <TableCell><b>Supprimer</b></TableCell>
                             </TableRow>

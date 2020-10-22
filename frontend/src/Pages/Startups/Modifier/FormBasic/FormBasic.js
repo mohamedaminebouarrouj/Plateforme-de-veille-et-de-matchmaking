@@ -81,14 +81,23 @@ export default class UpdateStartup extends Component {
                 selected.push({value:currentDomaine._id, label:currentDomaine.nom})
             }
         })
+        const op = [
+            { value: 'chocolate', label: 'Chocolate' },
+            { value: 'strawberry', label: 'Strawberry' },
+            { value: 'vanilla', label: 'Vanilla' }
+        ]
+        console.log([op[0],op[1]])
+        console.log(selected)
         return (
             <Select
+                defaultValue={selected}
                 closeMenuOnSelect={false}
                 components={animatedComponents}
-                defaultValue={this.state.domaines}
                 isMulti
                 options={options}
                 onChange={this.onChangeDomaine}
+                className="basic-multi-select"
+                classNamePrefix="select"
             > </Select>
         )
     }

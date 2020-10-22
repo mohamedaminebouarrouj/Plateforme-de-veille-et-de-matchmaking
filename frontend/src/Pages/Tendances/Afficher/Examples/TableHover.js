@@ -68,13 +68,13 @@ function Row(props){
                                     {props.val.tendancesId.map((currentTendance)=>
                                         <TableRow>
                                             <TableCell>
-                                                {currentTendance.titre}
+                                            {currentTendance.titre}
                                             </TableCell>
                                             <TableCell>
                                                 {currentTendance.resume}
                                             </TableCell>
                                             <TableCell>
-                                                {currentTendance.source}
+                                        <a href={currentTendance.url}  target="_blank"> {currentTendance.source}</a>
                                             </TableCell>
                                             <TableCell>
                                                 {currentTendance.datePublication.split('T')[0]}

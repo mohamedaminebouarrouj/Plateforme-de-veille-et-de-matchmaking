@@ -33,7 +33,7 @@ function Row(props){
                 <TableCell component="th" scope="row" width='18%'>
                     {props.domaine.nom}
                 </TableCell>
-                <TableCell width='50%'>{props.domaine.description.split('.')[0]}</TableCell>
+                <TableCell width='50%'>{props.domaine.description.split('.')[0]+"."}</TableCell>
                 <TableCell width='20%'>{props.domaine.categorie}</TableCell>
                 <TableCell width='12%'>{props.domaine.secteursId.length}
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>

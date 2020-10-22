@@ -7,7 +7,6 @@ const domaineSchema = new Schema({
         description: {type: String},
         categorie: {
             type: String,
-            required: true,
         },
         secteursId:
             [

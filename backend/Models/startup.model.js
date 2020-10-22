@@ -8,6 +8,7 @@ const startupSchema = new Schema({
         fondateurs :[{type: String}],
         dateCreation: {type: Date},
         logo: {type:String},
+        siteWeb:{type:String},
         domainesId:[{type: Schema.ObjectId,ref : 'Domaine'}]
     },
     {

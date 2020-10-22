@@ -108,10 +108,12 @@ export default class UpdateDomaine extends Component {
         console.log(domaine);
 
         axios.post('http://localhost:5000/domaines/update/' + this.props.id, domaine)
-            .then(res => console.log(res.data));
+            .then(res => {
+                console.log(res.data)
+                window.location.replace('#/domaines/afficher');
+            });
 
-        window.location.replace('#/domaines/afficher');
-        window.location.reload(false);
+
     }
 
     render() {
@@ -160,8 +162,8 @@ export default class UpdateDomaine extends Component {
                                                              name="categorie"
                                                              value={this.state.categorie}
                                                              onChange={this.onChangeCategorie}
-                                                required>
-                                                    <option>Selectionner une catégorie</option>
+                                                >
+                                                    <option value="">Selectionner une catégorie</option>
                                                     <option value="Ingénierie">Ingénierie</option>
                                                     <option value="ICT">ICT</option>
                                                 </CustomInput>

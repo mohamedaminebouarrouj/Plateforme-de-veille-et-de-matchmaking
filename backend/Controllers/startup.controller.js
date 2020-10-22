@@ -1,3 +1,4 @@
+var Secteurs=require('../Models/secteur.model')
 var Startups= require('../Models/startup.model');
 var Domaines =require('../Models/domaine.model');
 const upload = require("../middleware/upload");
@@ -112,9 +113,9 @@ exports.upload_logo = async (req,res) =>{
 
 exports.startup_scraping =async (req,res) =>{
     const subprocess = runScript()
-    let scraped_data = []
 // print output of script
     subprocess.stdout.on('data', (data) => {
+        console.log(`${data}`);
         res.send(`${data}`);
 
     });
@@ -128,8 +129,7 @@ exports.startup_scraping =async (req,res) =>{
 }
 
 function runScript(){
-    return spawn('python', [
-        path.join(__dirname, 'script.py')
-    ]);
+   return spawn('python', [
+        path.join(__dirname, 'scraping.py')
+    ])
 }
-

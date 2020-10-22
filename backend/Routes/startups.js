@@ -16,5 +16,4 @@ router.get('/:id',startupController.startup_find);
 router.post('/upload',startupController.upload_logo);
 
 
-
 module.exports =router;

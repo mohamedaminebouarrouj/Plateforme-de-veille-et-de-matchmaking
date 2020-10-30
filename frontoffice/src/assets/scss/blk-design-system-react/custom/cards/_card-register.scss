@@ -5,9 +5,9 @@
 
   .card-header img {
     position: absolute;
-    margin-left: -50px;
-    margin-top: -150px;
-    border-radius: 20%;
+    margin-left: -70px;
+    margin-top: -230px;
+    border-radius: 10%;
     width: 350px;
     }
 
@@ -42,11 +42,11 @@
 
       .card-title {
         position: relative;
-        font-size: 5em;
+        font-size: 30px;
         font-weight: 900;
-        color: $black;
-        text-transform: lowercase;
-        margin-left: -5px;
+        color: $default-states;
+        text-transform: capitalize;
+        margin-left: 5px;
         z-index: 1;
       }
     }

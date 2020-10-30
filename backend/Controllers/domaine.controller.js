@@ -82,7 +82,7 @@ exports.domaine_delete = function (req,res){
                 Secteurs.findByIdAndUpdate(sectId,
                     {$pull: {domainesId: domaine._id}},
                     {new: true, useFindAndModify: false})
-                    .then((secteur) => res.json(secteur))
+                    .then()
                 domaine.startupsId.map((startId) => {
                     Startups.findByIdAndUpdate(startId,
                         {$pull: {domainesId: domaine._id}},

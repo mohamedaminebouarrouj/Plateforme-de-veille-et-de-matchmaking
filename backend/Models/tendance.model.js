@@ -12,9 +12,9 @@ const tendanceSchema = new Schema({
         source:{type:String},
         langage:{type:String},
 
-        domaineId:{type: Schema.ObjectId,ref : 'Domaine'},
-        challengeId:{type: Schema.ObjectId,ref : 'Challenge'},
-        secteurId:{type: Schema.ObjectId,ref : 'Secteur'},
+        domaineId:{type: Schema.ObjectId, ref : 'Domaine'},
+        challengeId:{type: Schema.ObjectId, ref : 'Challenge'},
+        secteurId:{type: Schema.ObjectId, ref : 'Secteur'},
     },
     {
         timestamp:true,

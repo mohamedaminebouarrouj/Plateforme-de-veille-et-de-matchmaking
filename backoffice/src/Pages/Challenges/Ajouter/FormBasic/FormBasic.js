@@ -100,7 +100,6 @@ export default class CreateChallenge extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        console.log(this.state.domaines)
         const challenge = {
             nom: this.state.nom,
             description: this.state.description,
@@ -108,13 +107,12 @@ export default class CreateChallenge extends Component {
             domainesId: this.state.domaines
         }
 
-        console.log(challenge);
-
         axios.post('http://localhost:5000/challenges/add', challenge)
-            .then(res => console.log(res.data));
+            .then(res =>{
+                console.log(res.data)
+                window.location.replace('#/challenges/afficher');
+            }) ;
 
-        window.location.replace('#/challenges/afficher');
-        window.location.reload(false);
     }
 
     render() {

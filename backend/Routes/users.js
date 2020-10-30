@@ -1,5 +1,7 @@
 const router= require('express').Router();
 let  User = require('../Models/user.model');
+const userController=require('../Controllers/user.controller')
+const auth=require('../middleware/authentification')
 
 router.route('/').get((req, res) =>{
     User.find()
@@ -7,14 +9,10 @@ router.route('/').get((req, res) =>{
         .catch(err => res.status(400).json('Error: '+err));
 });
 
-router.route('/add').post((req,res)=>{
-    const username = req.body.username;
+router.route('/register').post(userController.register);
 
-    const newUser = new User({username});
+router.route('/login').post(userController.login);
 
-    newUser.save()
-        .then(()=> res.json('User added!'))
-        .catch(err=> res.status(400).json('Error: '+err))
-});
+router.get('/user',[auth],userController.getConnectedUser);
 
 module.exports =router;

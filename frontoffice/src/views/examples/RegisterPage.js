@@ -37,11 +37,10 @@ import {
   Row,
   Col
 } from "reactstrap";
-import IndexNavbar from "components/Navbars/IndexNavbar.js";
 
 
 // core components
-import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
+import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import Footer from "components/Footer/Footer.js";
 
 class RegisterPage extends React.Component {
@@ -103,9 +102,9 @@ class RegisterPage extends React.Component {
                       <CardHeader>
                         <CardImg
                           alt="..."
-                          src={require("assets/img/square-purple-1.png")}
+                          src={require("assets/img/square-yellow.png")}
                         />
-                        <CardTitle tag="h4">Register</CardTitle>
+                        <CardTitle tag="h4">Créer un compte</CardTitle>
                       </CardHeader>
                       <CardBody>
                         <Form className="form">
@@ -205,7 +204,7 @@ class RegisterPage extends React.Component {
                         </Form>
                       </CardBody>
                       <CardFooter>
-                        <Button className="btn-round" color="primary" size="lg">
+                        <Button className="btn-simple btn-round" color="primary" size="lg">
                           Get Started
                         </Button>
                       </CardFooter>

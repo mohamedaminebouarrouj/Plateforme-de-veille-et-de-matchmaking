@@ -1,9 +1,9 @@
 var router= require('express').Router();
 var challengeController = require('../Controllers/challenge.controller')
-
+const auth = require('../middleware/authentification')
 
 //Get List Domaines
-router.get('/',challengeController.challenge_list);
+router.get('/',[auth],challengeController.challenge_list);
 //Create Domaine
 router.post('/add',challengeController.challenge_create_post);
 

@@ -24,9 +24,10 @@ import "assets/scss/blk-design-system-react.scss?v=1.1.0";
 import "assets/demo/demo.css";
 
 import Index from "views/Index.js";
-import LandingPage from "views/examples/LandingPage.js";
+import LandingPage from "views/Discover/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
+import SecteurPage from "views/Secteurs/index.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -44,6 +45,11 @@ ReactDOM.render(
         path="/profile-page"
         render={props => <ProfilePage {...props} />}
       />
+
+      <Route
+        path="/secteurs/:id"
+        render={props => <SecteurPage {...props} />} />
+
       <Redirect from="/" to="/components" />
     </Switch>
   </BrowserRouter>,

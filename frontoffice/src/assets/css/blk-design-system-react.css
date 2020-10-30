@@ -11652,10 +11652,10 @@ textarea.form-control {
 .index-page .squares {
   animation: move-left-right 1s infinite;
   background: #ba54f5;
-  background: -webkit-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
-  background: -o-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
-  background: -moz-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
-  background: linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
+  background: -webkit-linear-gradient(0deg, #ba54f5 0%, #ffe600 100%);
+  background: -o-linear-gradient(0deg, #ba54f5 0%, #ffe600 100%);
+  background: -o-linear-gradient(0deg, #ba54f5 0%, #ffe600 100%);
+  background: -o-linear-gradient(0deg, #ba54f5 0%, #ffe600 100%);
   position: absolute;
   transition: 0.5s ease-out;
   overflow: hidden;
@@ -15526,14 +15526,15 @@ td.rdtYear:hover {
   background: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%); }
 
 .register-page .squares, .register-page .square, .section.section-signup .squares, .section.section-signup .square {
-  background: #ba54f5;
-  background: -webkit-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
-  background: -o-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
-  background: -moz-linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
-  background: linear-gradient(0deg, #ba54f5 0%, #e14eca 100%); }
+  background: #ffe600;
+
+  background: -webkit-linear-gradient(0deg, #ba54f5 0%, #ffe600 100%);
+  background: -o-linear-gradient(0deg, #ba54f5 0%, #ffe600 100%);
+  background: -moz-linear-gradient(0deg, #ba54f5 0%, #ffe600 100%);
+  background: linear-gradient(0deg, #ba54f5 0%, #ffe600 100%); }
 
 .footer {
-  border-color: #8c3db9; }
+  border-color: #ffe600; }
 
 .form-control:focus,
 .form-control:focus + .input-group-append .input-group-text,

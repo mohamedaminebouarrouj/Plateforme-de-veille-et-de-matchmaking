@@ -333,6 +333,7 @@ export default class tendancesList extends Component {
             chal:[],
             secteurs:[],
             sect:[],
+            tendances:[],
             langages:[]
         };
     }
@@ -346,7 +347,9 @@ export default class tendancesList extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/challenges/')
+        axios.get('http://localhost:5000/challenges/',{headers: {
+                Authorization: localStorage.getItem('auth-token')
+            }})
             .then(response => {
                 this.setState({challenges: response.data})
             })
@@ -361,17 +364,23 @@ export default class tendancesList extends Component {
             .catch((error) => {
                 console.log(error);
             })
+        axios.get('http://localhost:5000/tendances')
+            .then(response => {
+                this.setState({tendances: response.data})
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     deleteTendance(id) {
         axios.delete('http://localhost:5000/tendances/' + id)
-            .then(response => {
-                console.log(response.data)
-            });
 
         this.setState({
-            domaines: this.state.domaines.filter(el => el._id !== id)
+            tendances: this.state.tendances.filter(el => el._id !== id)
         })
+
+
     }
 
     domaineList() {
@@ -402,7 +411,6 @@ export default class tendancesList extends Component {
                 dom: []
             })
         }
-        console.log(this.state.dom)
     }
 
     onChangeLangue(e) {
@@ -417,8 +425,6 @@ export default class tendancesList extends Component {
             })
         }
 
-        console.log(this.state.langages)
-
 
     }
 
@@ -428,13 +434,13 @@ export default class tendancesList extends Component {
         this.state.dom.map((currentD)=>{
             this.state.langages.map((currentL)=>{
                 axios.get('http://localhost:5000/tendances/news_domaine/'+currentD+'/'+currentL)
-                    .then(res =>
-                         console.log(res.data))
+                    .then(res => {
+                        console.log(res.data)
+                        window.location.replace('#/tendances/afficher');
+                    })
             })
         })
 
-        window.location.replace('#/tendances/afficher');
-        window.location.reload(false);
     }
 
     showDomaine(){
@@ -472,13 +478,13 @@ export default class tendancesList extends Component {
         this.state.chal.map((currentD)=>{
             this.state.langages.map((currentL)=>{
                 axios.get('http://localhost:5000/tendances/news_challenge/'+currentD+'/'+currentL)
-                    .then(res =>
-                        console.log(res.data))
+                    .then(res =>{
+                        console.log(res.data)
+                        window.location.replace('#/tendances/afficher');
+                    })
             })
         })
 
-        window.location.replace('#/tendances/afficher');
-        window.location.reload(false);
 
     }
 
@@ -514,8 +520,9 @@ export default class tendancesList extends Component {
         console.log(this.state.sect)
 
     }
-    onSubmitSecteur()
+    onSubmitSecteur(e)
     {
+        e.preventDefault()
         this.state.sect.map((currentD)=>{
             console.log(currentD)
             this.state.langages.map((currentL)=>{
@@ -524,13 +531,9 @@ export default class tendancesList extends Component {
                     .then(res =>{
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
-                        window.location.reload(false);
                         })
             })
         })
-
-        window.location.replace('#/tendances/afficher');
-        window.location.reload(false);
 
     }
 

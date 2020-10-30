@@ -97,7 +97,9 @@ export default class challengesList extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/challenges/')
+    axios.get('http://localhost:5000/challenges/',{headers: {
+        Authorization: localStorage.getItem('auth-token')
+        }})
         .then(response => {
           this.setState({challenges: response.data})
         })

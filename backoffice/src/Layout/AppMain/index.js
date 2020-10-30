@@ -13,6 +13,8 @@ import Utilisateurs from "../../Pages/Utilisateurs";
 
 
 const Dashboards = lazy(() => import('../../Pages/Dashboards'));
+const Login = lazy(() => import('../../Pages/Login'));
+
 
 const Widgets = lazy(() => import('../../Pages/Widgets'));
 const Elements = lazy(() => import('../../Pages/Elements'));
@@ -121,6 +123,15 @@ const AppMain = () => {
                 </div>
             }>
                 <Route path="/utilisateurs" component={Utilisateurs}/>
+            </Suspense>
+
+            {/* Login */}
+            <Suspense fallback={
+                <div className="loader-container">
+
+                </div>
+            }>
+                <Route path="/login" component={Login}/>
             </Suspense>
 
             {/* Elements */}

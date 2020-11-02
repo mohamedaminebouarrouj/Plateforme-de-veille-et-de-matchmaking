@@ -11,6 +11,6 @@ router.post('/update/:id',secteurController.secteur_update_post);
 
 router.get('/:id',secteurController.secteur_find);
 
-
+router.get('/img/img',secteurController.img);
 
 module.exports =router;

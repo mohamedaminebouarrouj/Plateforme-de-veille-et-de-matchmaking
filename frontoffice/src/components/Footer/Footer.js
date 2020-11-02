@@ -36,7 +36,7 @@ class Footer extends React.Component {
         <Container>
           <Row>
             <Col md="3">
-              <h1 className="title"><span style={{color: '#ffe600'}}>E</span>Ynnovation•</h1>
+              <h1 className="title"><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer•</h1>
             </Col>
             <Col md="3">
               <Nav>
@@ -47,17 +47,12 @@ class Footer extends React.Component {
                 </NavItem>
                 <NavItem>
                   <NavLink to="/landing-page" tag={Link}>
-                    Landing
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/register-page" tag={Link}>
-                    Register
+                    Découvrir
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink to="/profile-page" tag={Link}>
-                    Profile
+                    Votre Profile
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -66,28 +61,18 @@ class Footer extends React.Component {
               <Nav>
                 <NavItem>
                   <NavLink href="https://creative-tim.com/contact-us?ref=blkdsr-footer">
-                    Contact Us
+                    Nous contacter
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink href="https://creative-tim.com/about-us?ref=blkdsr-footer">
-                    About Us
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="https://creative-tim.com/blog?ref=blkdsr-footer">
-                    Blog
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="https://opensource.org/licenses/MIT">
-                    License
+                    A propos
                   </NavLink>
                 </NavItem>
               </Nav>
             </Col>
             <Col md="3">
-              <h3 className="title">Follow us:</h3>
+              <h3 className="title">Nous suivre:</h3>
               <div className="btn-wrapper profile">
                 <Button
                   className="btn-icon btn-neutral btn-round btn-simple"
@@ -112,18 +97,6 @@ class Footer extends React.Component {
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip230450801">
                   Like us
-                </UncontrolledTooltip>
-                <Button
-                  className="btn-icon btn-neutral btn-round btn-simple"
-                  color="default"
-                  href="https://dribbble.com/creativetim"
-                  id="tooltip318450378"
-                  target="_blank"
-                >
-                  <i className="fab fa-dribbble" />
-                </Button>
-                <UncontrolledTooltip delay={0} target="tooltip318450378">
-                  Follow us
                 </UncontrolledTooltip>
               </div>
             </Col>

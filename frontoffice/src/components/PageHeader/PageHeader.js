@@ -35,7 +35,8 @@ class PageHeader extends React.Component {
           <div className="content-center brand">
             <h1 className="h1-seo"><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer•</h1>
             <h4 className="d-none d-sm-block">
-                An innovation platform for the Soothsayers.
+                Une plateforme d'innovation pour les devins.
+                {/*An innovation platform for the Soothsayers.*/}
             </h4>
           </div>
         </Container>

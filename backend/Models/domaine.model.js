@@ -26,7 +26,9 @@ const domaineSchema = new Schema({
         tendancesId:[{
             type : Schema.ObjectId,
             ref: 'Tendance'
-        }]
+        }],
+
+        img:{type:String},
     },
     {
         timestamp:true,

@@ -94,25 +94,43 @@ def scrap_startups_act():
                 fondateurs.append( [f.split('  ')[-1] for f in (n.get_text(separator=" S ").strip()).split(' S ')])
             if(i==2):
                 domaines.append(n.get_text(separator=" ").strip()
-                                .replace('healthtech',"Health tech")
+                                .replace('Industrie robotique','Robotique')
+                                .replace('Healthtech',"Health tech")
+                                .replace('Cybersecurité','Cyber Securité')
                                 .replace('Ecommerce','E-commerce')
                                 .replace('ECommerce','E-commerce')
                                 .replace("EComerce","E-commerce")
+
                                 .replace("HR","Ressources Humaines")
+
                                 .replace('AI','Intelligence Artificielle')
+
                                 .replace("Logistqiue","Logistique")
+
                                 .replace("Télécoms","Télécomunication")
                                 .replace("Telecom","Télécomunication")
+
                                 .replace("IT","Information technology")
+                                .replace('Information technology',"Technologies de l'information et de la communication")
+
                                 .replace("EdtTech",'Edtech')
+                                .replace('Edtech',"Ed tech")
+
                                 .replace("Blockchain & cryptocurrency","Blockchain")
                                 .replace('Blockchain & Cryptocurrency','Blockchain')
                                 .replace("Cryptocurrency & Blockchain","Cryptocurrency")
+
                                 .replace("Mobile","Application mobile")
+
                                 .replace('Biotechnologie','Biotech')
                                 .replace('Biotech','Biotechnologie')
                                 .replace('BioTech','Biotechnologie')
+
                                 .replace('Gaming','Jeux vidéos')
+
+                                .replace('Cleantech','Technologie environnementale')
+
+                                .replace('Agritech','Technologie agricole')
                                 .capitalize())
                 i=-1
             i+=1
@@ -121,8 +139,8 @@ def scrap_startups_act():
             if s.find_all('th',scope="row")[i].find('img'):
                 if s.find_all('th',scope="row")[i].find('img').get('src'):
                     img=s.find_all('th',scope="row")[i].find('img').get('src').split('img/')[-1].split('.')[0]
-                    if len(re.split('[0-9]+',img))>1:
-                        names.append(re.split('[0-9]+',img)[1].replace('-',' ').strip().capitalize())
+                    if len(re.split('[0-9]+-',img))>1:
+                        names.append(re.split('[0-9]+-',img)[1].replace('-',' ').strip().capitalize())
                     else:
                         names.append(img.capitalize())
                 else:
@@ -151,15 +169,20 @@ def create_domaines(data):
     description=[]
     categorie=[]
     nom=[]
+    client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    db = client['<dbname>']
+    colDomaines=db.domaines
+
     for i in range(len(data['domaines'].unique())):
         if data['domaines'].unique()[i]!="":
-            nom.append(data['domaines'].unique()[i])
-            description.append(get_description(wiki_url_qwant(data['domaines'].unique()[i])))
-            secteursId.append([])
-            startupsId.append([])
-            challengesId.append([])
-            tendancesId.append([])
-            categorie.append('')
+            if not colDomaines.find_one({"nom": data['domaines'].unique()[i]}):
+                nom.append(data['domaines'].unique()[i])
+                description.append(get_description(wiki_url_qwant(data['domaines'].unique()[i])))
+                secteursId.append([])
+                startupsId.append([])
+                challengesId.append([])
+                tendancesId.append([])
+                categorie.append('')
 
     df_domaines = pd.DataFrame(list(zip(nom,description,categorie,secteursId,startupsId,challengesId,tendancesId)),
                                 columns =['nom','description','categorie','secteursId','startupsId','challengesId','tendancesId'])
@@ -197,6 +220,7 @@ if __name__ == "__main__":
     records = df_startups.to_dict('records')
     try:
         colStartups.insert_many(records)
+
         df_startups = pd.DataFrame(list(colStartups.find()))
 
         for i in range(len(df_domaines)):

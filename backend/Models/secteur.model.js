@@ -12,6 +12,8 @@ const secteurSchema = new Schema({
         required: true,
     },
 
+    img:{type:String},
+
     domainesId : [{ type: Schema.ObjectId, ref: 'Domaine' }],
 
     tendancesId:[{type: Schema.ObjectId,ref : 'Tendance'}]

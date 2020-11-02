@@ -1,19 +1,43 @@
 var Secteurs = require('../Models/secteur.model');
+const translate = require('@k3rn31p4nic/google-translate-api');
+
+
+
+// require syntax
+const fetch = require('node-fetch');
+global.fetch = fetch;
+
+const Unsplash = require('unsplash-js').default;
+const toJson = require('unsplash-js').toJson;
+const APP_ACCESS_KEY= 'w4cwJK1-Trq5L4sDHOraWA-1LgFjp88Plis7ShcHrgE'
+
+const unsplash = new Unsplash({ accessKey: APP_ACCESS_KEY });
 
 exports.secteur_create_post = function (req,res) {
     const nom = req.body.nom;
     const description = req.body.description;
     const categorie = req.body.categorie;
+    var img=''
+    translate(nom, { to: 'en' })
+        .then(r => {
+            unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
+                .then(toJson)
+                .then(json => {
+                    img = json.results[0].urls.regular
+                    const newSecteur = new Secteurs({
+                        nom,
+                        description,
+                        categorie,
+                        img
+                    });
 
-    const newSecteur = new Secteurs({
-        nom,
-        description,
-        categorie,
-    });
+                    Secteurs.create(newSecteur)
+                        .then(()=> res.json('Secteur ajouté!'))
+                        .catch(err=> res.status(400).json('Error: '+err))
+                })
+        })
 
-    Secteurs.create(newSecteur)
-        .then(()=> res.json('Secteur ajouté!'))
-        .catch(err=> res.status(400).json('Error: '+err))
+
 };
 
 exports.secteur_list = function (req,res) {
@@ -72,4 +96,25 @@ exports.secteur_delete_2 = function (req,res){
             domaine.deleteOne()
         })
     })
+}
+
+
+
+
+
+
+exports.img = async (req,res) =>{
+    let url=""
+    translate('Technologies de l\'information et de la communication', { to: 'en' })
+        .then(r => {
+            console.log(r.text)
+        unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
+        .then(toJson)
+        .then(json =>{
+            res.json(json)
+            url=json.results[0].urls.full
+                console.log("url",url)
+        }
+        )
+        })
 }

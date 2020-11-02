@@ -1,7 +1,16 @@
 var Domaines= require('../Models/domaine.model');
 var Challenges= require('../Models/challenge.model');
 var Secteurs= require('../Models/secteur.model');
-var Startups = require('../Models/startup.model')
+var Startups = require('../Models/startup.model');
+const translate = require('@k3rn31p4nic/google-translate-api');
+const fetch = require('node-fetch');
+global.fetch = fetch;
+
+const Unsplash = require('unsplash-js').default;
+const toJson = require('unsplash-js').toJson;
+const APP_ACCESS_KEY= 'w4cwJK1-Trq5L4sDHOraWA-1LgFjp88Plis7ShcHrgE'
+
+const unsplash = new Unsplash({ accessKey: APP_ACCESS_KEY });
 
 exports.domaine_create_post = async (req,res) => {
     const nom = req.body.nom;
@@ -121,4 +130,33 @@ exports.domaine_find_byName = async (req,res) =>{
         .then((response)=>{
            response._id
         })
+}
+
+exports.domaine_add_picture = async (req,res)=>{
+    Domaines.find()
+        .then((domaines)=>
+        {
+            domaines.map(currentDomaine=>{
+            translate(currentDomaine.nom, { to: 'en' })
+                .then(r => {
+                    unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
+                        .then(toJson)
+                        .then(json =>
+                        {
+                            var img=''
+                            img = json.results[0].urls.regular
+
+                            Domaines.findByIdAndUpdate(currentDomaine._id,
+                                {$push: {img: img}},
+                                {new: true, useFindAndModify: false})
+                                .then()
+
+                        })
+                        .catch(err => res.status(400).json('Error: ' + err + ' :' + r.text));
+                })
+                .catch(err => res.status(401).json('Error: ' + err));
+            })
+            res.json('Updated')
+        })
+        .catch(err => res.status(402).json('Error: ' + err));
 }

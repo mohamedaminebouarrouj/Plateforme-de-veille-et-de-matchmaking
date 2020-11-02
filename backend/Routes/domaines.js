@@ -17,5 +17,7 @@ router.get('/:id',domaineController.domaine_find);
 
 router.get('/domaine_find_one/:id',domaineController.domaine_find_one);
 
+router.post('/update_image',domaineController.domaine_add_picture);
+
 
 module.exports =router;

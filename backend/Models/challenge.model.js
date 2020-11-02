@@ -13,7 +13,9 @@ const challengeSchema = new Schema({
         },
         domainesId:[{type: Schema.ObjectId,ref : 'Domaine'}],
     
-        tendancesId:[{type: Schema.ObjectId,ref : 'Tendance'}]
+        tendancesId:[{type: Schema.ObjectId,ref : 'Tendance'}],
+
+        img:{type:String},
 
     },
     {

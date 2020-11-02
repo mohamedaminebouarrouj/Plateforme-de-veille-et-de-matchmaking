@@ -66,7 +66,7 @@ function TitlebarGridList(props) {
           {props.val.map((tile) => (
               <GridListTile key={tile.nom}>
                 <NavLink tag={Link} to={'/'+props.sel+'/'+tile._id}>
-                <img src={require("assets/img/ryan.jpg")} alt={tile.nom} />
+                <img src={tile.img}  style={{opacity:0.7}} alt={tile.nom} />
               </NavLink>
 
                 <GridListTileBar

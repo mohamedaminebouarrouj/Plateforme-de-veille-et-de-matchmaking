@@ -23,23 +23,20 @@ import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.1.0";
 import "assets/demo/demo.css";
 
-import Index from "views/Index.js";
+import Index from "views/Home Page/index";
 import LandingPage from "views/Discover/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
-import SecteurPage from "views/Secteurs/index.js";
+import ShowSecteur from "./views/Secteurs/Afficher/showSecteur";
+import ShowDomaine from "./views/Domaines/Afficher/showDomaine";
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/components" render={props => <Index {...props} />} />
+      <Route path="/index" render={props => <Index {...props} />} />
       <Route
-        path="/landing-page"
+        path="/discover"
         render={props => <LandingPage {...props} />}
-      />
-      <Route
-        path="/register-page"
-        render={props => <RegisterPage {...props} />}
       />
       <Route
         path="/profile-page"
@@ -48,9 +45,14 @@ ReactDOM.render(
 
       <Route
         path="/secteurs/:id"
-        render={props => <SecteurPage {...props} />} />
+        render={props => <ShowSecteur {...props} />} />
 
-      <Redirect from="/" to="/components" />
+      <Route
+          path="/domaines/:id"
+          render={props => <ShowDomaine {...props} />} />
+
+
+      <Redirect from="/" to="/index" />
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

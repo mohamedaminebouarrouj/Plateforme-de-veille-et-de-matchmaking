@@ -429,14 +429,16 @@ export default class tendancesList extends Component {
     }
 
 
-    onSubmitDomaine()
+    onSubmitDomaine(e)
     {
+        e.preventDefault();
         this.state.dom.map((currentD)=>{
             this.state.langages.map((currentL)=>{
                 axios.get('http://localhost:5000/tendances/news_domaine/'+currentD+'/'+currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
+                        window.location.reload();
                     })
             })
         })
@@ -474,13 +476,16 @@ export default class tendancesList extends Component {
         }
         console.log(this.state.chal)
     }
-    onSubmitChallenge(){
+    onSubmitChallenge(e){
+        e.preventDefault();
+
         this.state.chal.map((currentD)=>{
             this.state.langages.map((currentL)=>{
                 axios.get('http://localhost:5000/tendances/news_challenge/'+currentD+'/'+currentL)
                     .then(res =>{
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
+                        window.location.reload(false);
                     })
             })
         })
@@ -531,6 +536,7 @@ export default class tendancesList extends Component {
                     .then(res =>{
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
+                        window.location.reload(false);
                         })
             })
         })

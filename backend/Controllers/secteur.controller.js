@@ -47,6 +47,11 @@ exports.secteur_list = function (req,res) {
             model: 'Tendance',
 
         })
+        .populate ({
+            path:'domainesId',
+            model: 'Domaine'
+        })
+        .exec()
         .then(secteurs => res.json(secteurs))
         .catch(err => res.status(400).json('Error: '+err));
 };
@@ -74,6 +79,16 @@ exports.secteur_update_post= function (req,res){
 
 exports.secteur_find = function (req,res){
     Secteurs.findById(req.params.id)
+        .populate({
+            path: 'tendancesId',
+            model: 'Tendance',
+
+        })
+        .populate ({
+            path:'domainesId',
+            model: 'Domaine'
+        })
+        .exec()
         .then(secteur => res.json(secteur))
         .catch(err => res.status(400).json('Error: ' + err));
 }
@@ -105,10 +120,10 @@ exports.secteur_delete_2 = function (req,res){
 
 exports.img = async (req,res) =>{
     let url=""
-    translate('Technologies de l\'information et de la communication', { to: 'en' })
+    translate('Agro-alimentaire', { to: 'en' })
         .then(r => {
             console.log(r.text)
-        unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
+        unsplash.search.photos(r.text,4, 10, { orientation: "landscape"})
         .then(toJson)
         .then(json =>{
             res.json(json)

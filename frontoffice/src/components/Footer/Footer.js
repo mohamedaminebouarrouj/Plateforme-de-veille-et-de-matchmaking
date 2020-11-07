@@ -52,7 +52,7 @@ class Footer extends React.Component {
                 </NavItem>
                 <NavItem>
                   <NavLink to="/profile-page" tag={Link}>
-                    Votre Profile
+                    Votre Profil
                   </NavLink>
                 </NavItem>
               </Nav>

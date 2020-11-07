@@ -55,8 +55,14 @@ exports.challenge_update_post= function (req,res){
             challenge.type = req.body.type;
             challenge.domainesId= req.body.domainesId;
 
+            challenge.domainesId.map(domaineId=>{
+                Domaines.findByIdAndUpdate(domaineId,
+                    {$push: {challengesId : challenge._id}},
+                    { new: true , useFindAndModify: false})
+                    .then()
+            })
             challenge.save()
-                .then(() => res.json('Secteur updated!'))
+                .then(() => res.json('Challenge updated!'))
                 .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));

@@ -44,8 +44,6 @@ exports.get_news_domaine = async (req,res) => {
                                 const urlToImage= currentArticle.urlToImage
                                 const source = currentArticle.source.name
                                 const domaineId = req.params.id
-                                const challengeId=''
-                                const secteurId=''
                                 const langage= "Anglais"
 
                                 const newTendance = new Tendances({
@@ -58,8 +56,6 @@ exports.get_news_domaine = async (req,res) => {
                                     source,
                                     langage,
                                     domaineId,
-                                    challengeId,
-                                    secteurId
                                 })
 
                                 Tendances.create(newTendance)
@@ -99,8 +95,6 @@ exports.get_news_domaine = async (req,res) => {
                                 const urlToImage= currentArticle.urlToImage
                                 const source = currentArticle.source.name
                                 const domaineId = req.params.id
-                                const challengeId=''
-                                const secteurId=''
                                 const langage= "Arabe"
 
                                 const newTendance = new Tendances({
@@ -113,8 +107,6 @@ exports.get_news_domaine = async (req,res) => {
                                     source,
                                     langage,
                                     domaineId,
-                                    challengeId,
-                                    secteurId
                                 })
 
                                 Tendances.create(newTendance)
@@ -150,8 +142,6 @@ exports.get_news_domaine = async (req,res) => {
                             const urlToImage = currentArticle.urlToImage
                             const source = currentArticle.source.name
                             const domaineId = req.params.id
-                            const challengeId=''
-                            const secteurId=''
                             const langage = "Français"
 
                             const newTendance = new Tendances({
@@ -164,8 +154,6 @@ exports.get_news_domaine = async (req,res) => {
                                 source,
                                 langage,
                                 domaineId,
-                                challengeId,
-                                secteurId
                             })
 
                             Tendances.create(newTendance)
@@ -210,8 +198,6 @@ exports.get_news_challenge = async (req,res) => {
                                 const urlToImage= currentArticle.urlToImage
                                 const source = currentArticle.source.name
                                 const challengeId = req.params.id
-                                const domaineId=''
-                                const secteurId=''
                                 const langage= "Anglais"
 
                                 const newTendance = new Tendances({
@@ -224,8 +210,6 @@ exports.get_news_challenge = async (req,res) => {
                                     source,
                                     langage,
                                     challengeId,
-                                    domaineId,
-                                    secteurId
                                 })
 
                                 Tendances.create(newTendance)
@@ -264,8 +248,6 @@ exports.get_news_challenge = async (req,res) => {
                                 const urlToImage= currentArticle.urlToImage
                                 const source = currentArticle.source.name
                                 const challengeId = req.params.id
-                                const domaineId=''
-                                const secteurId=''
                                 const langage= "Arabe"
 
                                 const newTendance = new Tendances({
@@ -278,8 +260,6 @@ exports.get_news_challenge = async (req,res) => {
                                     source,
                                     langage,
                                     challengeId,
-                                    domaineId,
-                                    secteurId
                                 })
 
                                 Tendances.create(newTendance)
@@ -315,8 +295,6 @@ exports.get_news_challenge = async (req,res) => {
                             const urlToImage = currentArticle.urlToImage
                             const source = currentArticle.source.name
                             const challengeId = req.params.id
-                            const domaineId=''
-                            const secteurId=''
                             const langage = "Français"
 
                             const newTendance = new Tendances({
@@ -329,8 +307,6 @@ exports.get_news_challenge = async (req,res) => {
                                 source,
                                 langage,
                                 challengeId,
-                                domaineId,
-                                secteurId
                             })
 
                             Tendances.create(newTendance)
@@ -376,8 +352,6 @@ exports.get_news_secteur = async (req,res) => {
                                 const urlToImage= currentArticle.urlToImage
                                 const source = currentArticle.source.name
                                 const secteurId = req.params.id
-                                const domaineId=''
-                                const challengeId=''
                                 const langage= "Anglais"
 
                                 const newTendance = new Tendances({
@@ -390,8 +364,6 @@ exports.get_news_secteur = async (req,res) => {
                                     source,
                                     langage,
                                     secteurId,
-                                    domaineId,
-                                    challengeId
                                 })
 
                                 Tendances.create(newTendance)
@@ -431,8 +403,6 @@ exports.get_news_secteur = async (req,res) => {
                                 const urlToImage= currentArticle.urlToImage
                                 const source = currentArticle.source.name
                                 const secteurId = req.params.id
-                                const domaineId=''
-                                const challengeId=''
                                 const langage= "Arabe"
 
                                 const newTendance = new Tendances({
@@ -445,8 +415,6 @@ exports.get_news_secteur = async (req,res) => {
                                     source,
                                     langage,
                                     secteurId,
-                                    domaineId,
-                                    challengeId
                                 })
 
                                 Tendances.create(newTendance)
@@ -483,8 +451,6 @@ exports.get_news_secteur = async (req,res) => {
                             const urlToImage = currentArticle.urlToImage
                             const source = currentArticle.source.name
                             const secteurId = req.params.id
-                            const domaineId=''
-                            const challengeId=''
                             const langage = "Français"
 
                             const newTendance = new Tendances({
@@ -497,8 +463,6 @@ exports.get_news_secteur = async (req,res) => {
                                 source,
                                 langage,
                                 secteurId,
-                                domaineId,
-                                challengeId
                             })
 
                             Tendances.create(newTendance)

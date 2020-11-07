@@ -168,6 +168,7 @@ def create_domaines(data):
     tendancesId=[]
     description=[]
     categorie=[]
+    __v=[]
     nom=[]
     client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
     db = client['<dbname>']
@@ -183,9 +184,10 @@ def create_domaines(data):
                 challengesId.append([])
                 tendancesId.append([])
                 categorie.append('')
+                __v.append(0)
 
-    df_domaines = pd.DataFrame(list(zip(nom,description,categorie,secteursId,startupsId,challengesId,tendancesId)),
-                                columns =['nom','description','categorie','secteursId','startupsId','challengesId','tendancesId'])
+    df_domaines = pd.DataFrame(list(zip(__v,nom,description,categorie,secteursId,startupsId,challengesId,tendancesId)),
+                                columns =['__v','nom','description','categorie','secteursId','startupsId','challengesId','tendancesId'])
 
     return df_domaines
 

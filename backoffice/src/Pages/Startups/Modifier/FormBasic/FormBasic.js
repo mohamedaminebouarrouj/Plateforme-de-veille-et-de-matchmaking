@@ -74,19 +74,14 @@ export default class UpdateStartup extends Component {
 
 
     domaineList() {
-        const selected= []
+        let selected= []
+
         const options= this.state.dom.map(currentDomaine => ({value: currentDomaine._id, label:currentDomaine.nom}))
         this.state.dom.map(currentDomaine =>{
             if (this.state.domaines.includes(currentDomaine._id)){
                 selected.push({value:currentDomaine._id, label:currentDomaine.nom})
             }
         })
-        const op = [
-            { value: 'chocolate', label: 'Chocolate' },
-            { value: 'strawberry', label: 'Strawberry' },
-            { value: 'vanilla', label: 'Vanilla' }
-        ]
-        console.log([op[0],op[1]])
         console.log(selected)
         return (
             <Select

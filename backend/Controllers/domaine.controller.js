@@ -43,14 +43,18 @@ exports.domaine_create_post = async (req,res) => {
 
 exports.domaine_list = function (req,res) {
     Domaines.find()
+        .populate ({
+        path:'secteursId',
+            model: 'Secteur'
+        })
         .populate({
             path: 'tendancesId',
             model: 'Tendance',
 
         })
         .populate ({
-        path:'secteursId',
-            model: 'Secteur'
+            path:'startupsId',
+            model: 'Startup'
         })
         .exec()
         .then(domaines => res.json(domaines))
@@ -66,19 +70,85 @@ exports.domaine_update_get = function (req,res) {
 exports.domaine_update_post= function (req,res){
     Domaines.findById(req.params.id)
         .then(domaine => {
+
+            const diffPull= domaine.secteursId.filter(x => ! req.body.secteursId.includes(x))
+            if (diffPull.length>0)
+            {
+                diffPull.map(d=>{
+                    Secteurs.findByIdAndUpdate(d,
+                        {$pull: {domainesId : domaine._id}},
+                        { new: true, useFindAndModify: false })
+                        .then()
+
+                })
+            }
             domaine.nom = req.body.nom;
             domaine.description = req.body.description;
             domaine.secteursId=req.body.secteursId;
             domaine.categorie = req.body.categorie;
 
+            domaine.secteursId.map(sect=>{
+                Secteurs.findById(sect)
+                    .then(secteur=>{
+                        if (!secteur.domainesId.includes(domaine._id))
+                        {
+                            Secteurs.findByIdAndUpdate(sect,
+                                {$push: {domainesId : domaine._id}},
+                                { new: true, useFindAndModify: false })
+                                .then()
+                        }
+                    })
+
+            })
             domaine.save()
                 .then(() => res.json('Domaine updated!'))
                 .catch(err => res.status(400).json('Error: ' + err));
+
+
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+}
+
+exports.domaine_update_v1= function (req,res){
+    Domaines.find()
+        .then(Ldomaine => {
+            Ldomaine.map(currentD=>{
+                Domaines.findByIdAndUpdate(currentD)
+                    .then(domaine=>{
+                        domaine.__v=0;
+                        domaine.categorie = "";
+                        domaine.save()
+                            .then(() => res.json('Domaine updated!'))
+                            .catch(err => res.status(400).json('Error: ' + err));
+                    })
+
+            })
+
         })
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
 exports.domaine_find = function (req,res){
+    Domaines.findById(req.params.id)
+        .populate ({
+            path:'secteursId',
+            model: 'Secteur'
+        })
+        .populate({
+            path: 'tendancesId',
+            model: 'Tendance',
+
+        })
+        .populate ({
+            path:'startupsId',
+            model: 'Startup'
+        })
+        .exec()
+        .then(domaine => res.json(domaine))
+        .catch(err => res.status(400).json('Error: ' + err));
+}
+
+exports.domaine_findUpdate = function (req,res){
     Domaines.findById(req.params.id)
         .then(domaine => res.json(domaine))
         .catch(err => res.status(400).json('Error: ' + err));

@@ -56,10 +56,37 @@ exports.startup_list = function (req,res) {
 exports.startup_update_post= function (req,res){
     Startups.findById(req.params.id)
         .then(startup => {
+
+            const diffPull= startup.domainesId.filter(x => ! req.body.domainesId.includes(x))
+
+            if (diffPull.length>0)
+            {
+                diffPull.map(d=>{
+                    Domaines.findByIdAndUpdate(d,
+                        {$pull: {startupsId : startup._id}},
+                        { new: true, useFindAndModify: false })
+                        .then()
+
+                })
+            }
+
             startup.nom = req.body.nom;
             startup.description = req.body.description;
             startup.logo = req.body.logo;
             startup.domainesId= req.body.domainesId;
+
+            startup.domainesId.map((domId)=>{
+                Domaines.findById(domId)
+                    .then(domaine=>{
+                        if (!domaine.domainesId.includes(startup._id))
+                        {
+                            Secteurs.findByIdAndUpdate(sect,
+                                {$push: {startupsId : startup._id}},
+                                { new: true, useFindAndModify: false })
+                                .then()
+                        }
+                    })
+            })
 
             startup.save()
                 .then(() => res.json('Startup updated!'))

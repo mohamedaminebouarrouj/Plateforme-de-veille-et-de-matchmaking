@@ -89,15 +89,15 @@ class ComponentsNavbar extends React.Component {
 
     changeColor = () => {
         if (
-            document.documentElement.scrollTop > 99 ||
-            document.body.scrollTop > 99
+            document.documentElement.scrollTop > 29 ||
+            document.body.scrollTop > 29
         ) {
             this.setState({
                 color: "bg-default"
             });
         } else if (
-            document.documentElement.scrollTop < 100 ||
-            document.body.scrollTop < 100
+            document.documentElement.scrollTop < 30 ||
+            document.body.scrollTop < 30
         ) {
             this.setState({
                 color: "navbar-transparent"
@@ -219,7 +219,7 @@ class ComponentsNavbar extends React.Component {
                 <Nav>
                     <NavItem className="active">
                         <NavLink tag={Link} to="/profile-page">
-                            <i className="tim-icons icon-world"/>
+                            <i className="tim-icons icon-single-02"/>
                             {this.state.user.nom}
                         </NavLink>
 
@@ -532,7 +532,7 @@ class ComponentsNavbar extends React.Component {
                             tag={Link}
                             id="navbar-brand"
                         >
-                            <span><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer• </span>
+                            <span style={{fontSize:'20px'}}><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer• </span>
                         </NavbarBrand>
                     </div>
                     <Collapse
@@ -546,7 +546,7 @@ class ComponentsNavbar extends React.Component {
                         <Nav navbar>
 
                             <NavItem className="active">
-                                <NavLink tag={Link} to="/landing-page">
+                                <NavLink tag={Link} to="/discover">
                                     <i className="tim-icons icon-world"/>
                                     Découvrir
                                 </NavLink>

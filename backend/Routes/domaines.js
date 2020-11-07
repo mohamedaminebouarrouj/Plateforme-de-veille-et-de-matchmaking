@@ -13,7 +13,12 @@ router.delete('/:id',domaineController.domaine_delete);
 
 router.post('/update/:id',domaineController.domaine_update_post);
 
+router.post('/updatev/',domaineController.domaine_update_v1);
+
 router.get('/:id',domaineController.domaine_find);
+
+router.get('/findUpdate/:id',domaineController.domaine_findUpdate);
+
 
 router.get('/domaine_find_one/:id',domaineController.domaine_find_one);
 

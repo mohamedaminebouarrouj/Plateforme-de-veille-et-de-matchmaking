@@ -31,7 +31,7 @@ export default class UpdateDomaine extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/domaines/' + this.props.id)
+        axios.get('http://localhost:5000/domaines/findUpdate/' + this.props.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
@@ -105,11 +105,9 @@ export default class UpdateDomaine extends Component {
             secteursId : this.state.secteurs
         }
 
-        console.log(domaine);
-
         axios.post('http://localhost:5000/domaines/update/' + this.props.id, domaine)
             .then(res => {
-                console.log(res.data)
+                console.log(res)
                 window.location.replace('#/domaines/afficher');
             });
 

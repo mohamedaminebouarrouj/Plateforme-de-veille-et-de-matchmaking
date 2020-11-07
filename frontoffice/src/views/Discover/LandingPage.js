@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+let ps=null
 function TitlebarGridList(props) {
   const classes = useStyles();
   return (

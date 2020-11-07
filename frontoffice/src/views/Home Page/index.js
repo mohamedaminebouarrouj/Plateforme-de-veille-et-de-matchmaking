@@ -23,7 +23,6 @@ import PageHeader from "components/PageHeader/PageHeader.js";
 import Footer from "components/Footer/Footer.js";
 
 // sections for this page/view
-import Basics from "views/IndexSections/Basics.js";
 import Navbars from "views/IndexSections/Navbars.js";
 import Tabs from "views/IndexSections/Tabs.js";
 import Pagination from "views/IndexSections/Pagination.js";
@@ -34,7 +33,9 @@ import NucleoIcons from "views/IndexSections/NucleoIcons.js";
 import Signup from "views/IndexSections/Signup.js";
 import Examples from "views/IndexSections/Examples.js";
 import Download from "views/IndexSections/Download.js";
+import Basics from "../IndexSections/Basics";
 
+let ps=null
 class Index extends React.Component {
   componentDidMount() {
     document.body.classList.toggle("index-page");

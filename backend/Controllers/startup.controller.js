@@ -97,6 +97,15 @@ exports.startup_update_post= function (req,res){
 
 exports.startup_find = function (req,res){
     Startups.findById(req.params.id)
+        .populate({
+            path: 'domainesId',
+            model: 'Domaine',
+            populate : {
+                path:'secteursId',
+                model: 'Secteur'
+            }
+        })
+        .exec()
         .then(startup => res.json(startup))
         .catch(err => res.status(400).json('Error: ' + err));
 }

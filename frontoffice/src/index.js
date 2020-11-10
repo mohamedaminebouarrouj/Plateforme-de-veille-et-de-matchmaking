@@ -25,10 +25,10 @@ import "assets/demo/demo.css";
 
 import Index from "views/Home Page/index";
 import LandingPage from "views/Discover/LandingPage.js";
-import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
 import ShowSecteur from "./views/Secteurs/Afficher/showSecteur";
 import ShowDomaine from "./views/Domaines/Afficher/showDomaine";
+import ShowStartup from "./views/Startups/Afficher/showStartup";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -50,6 +50,11 @@ ReactDOM.render(
       <Route
           path="/domaines/:id"
           render={props => <ShowDomaine {...props} />} />
+
+      <Route
+          path="/startups/:id"
+          render={props => <ShowStartup {...props} />} />
+
 
 
       <Redirect from="/" to="/index" />

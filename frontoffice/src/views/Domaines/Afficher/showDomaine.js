@@ -1,48 +1,42 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import axios from 'axios';
 import IndexNavbar from "../../../components/Navbars/IndexNavbar";
 import Footer from "../../../components/Footer/Footer";
 
 import {
-    Button, Card, CardBody, CardHeader,
-    Col,
-    Container,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle, FormGroup, FormText, Input, Label, Nav, NavItem, NavLink,
-    Row, TabContent, Table, TabPane,
-    UncontrolledTooltip
+    Button, Card, CardBody,
+    Col, Nav, NavItem, NavLink,
+    Row, TabContent, TabPane,
 } from "reactstrap";
 import classnames from "classnames";
-import PerfectScrollbar from "perfect-scrollbar";
 import Select from "react-select";
 import {Link} from "react-router-dom";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
 
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
+import AppComponent from "../../../components/Graph/AppComponent";
 
 function Show(props){
     return (
         <React.Fragment>
 
-            <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a target='_blank' href={props.tendance.url}>{props.tendance.titre}</a> </p>
+            <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a rel="noopener noreferrer" target='_blank' href={props.tendance.url}>{props.tendance.titre}</a> </p>
             <p style={{fontSize: '11px' , opacity:'0.7'}}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
             <p style={{fontSize: '11px' , opacity:'0.2'}}>───────────────────────────────────────────────────────────────────</p>
         </React.Fragment>
     );
 }
 function ShowStartup(props){
+    let errorflag=true
     return (
 
         <div>
             <GridList cols={5} cellHeight={180}>
                 {props.startup.map((tile) => (
                     <GridListTile key={tile.nom}>
-                        <NavLink tag={Link} to={'/startups'+'/'+tile._id}>
-                            <img src={tile.img}  style={{opacity:0.7}} alt={tile.nom} />
+                        <NavLink tag={Link} to={'/startups/'+tile._id}>
+                            <img style={{opacity:0.7}} alt="" />
+                            {tile.nom}
                         </NavLink>
                     </GridListTile>
                 ))}
@@ -150,6 +144,7 @@ export default class ShowDomaine extends Component {
             {
                 return <Show tendance={currentTendance} key={currentTendance._id}/>;
             }
+            return null
 
         })
 
@@ -162,6 +157,8 @@ export default class ShowDomaine extends Component {
             {
                 return <Show tendance={currentTendance} key={currentTendance._id}/>;
             }
+            return null
+
 
         })
     }
@@ -172,6 +169,8 @@ export default class ShowDomaine extends Component {
             {
                 return <Show tendance={currentTendance} key={currentTendance._id}/>;
             }
+            return null
+
 
         })
     }
@@ -228,6 +227,7 @@ export default class ShowDomaine extends Component {
                             <Row>
                                 <Col className="ml-auto mr-auto" lg="6" md="6">
                                     <section>
+                                        <AppComponent id={this.props.match.params.id} history={this.props.history}/>
                                     </section>
                                 </Col>
 
@@ -238,9 +238,9 @@ export default class ShowDomaine extends Component {
                                         <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
                                             {this.state.nom}
                                         </h1>
-                                        <p style={{position: 'absolute',top:50,width:'auto',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
-                                            Catégorie: <a href="#">{this.state.categorie}</a> &nbsp;
-                                        </p>
+                                        {/*<p style={{position: 'absolute',top:50,width:'auto',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>*/}
+                                        {/*    Catégorie: <a href="#" rel="noopener noreferrer">{this.state.categorie}</a> &nbsp;*/}
+                                        {/*</p>*/}
 
                                     </div>
                                     <br/>

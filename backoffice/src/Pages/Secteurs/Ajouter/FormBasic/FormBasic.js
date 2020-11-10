@@ -54,13 +54,13 @@ export default class CreateSecteur extends Component {
             categorie: this.state.categorie
         }
 
-        console.log(secteur);
 
         axios.post('http://localhost:5000/secteurs/add', secteur)
-            .then(res => console.log(res.data));
+            .then(res => {
+                console.log(res.data)
+                window.location.replace('#/secteurs/afficher')});
 
-        window.location.replace('#/secteurs/afficher');
-        window.location.reload(false);
+
     }
 
     render() {

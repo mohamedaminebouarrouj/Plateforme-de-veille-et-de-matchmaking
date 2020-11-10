@@ -236,7 +236,6 @@ class ComponentsNavbar extends React.Component {
                 <Button
                     className="btn-neutral"
                     color="link"
-                    isOpen={this.state.formModal}
                     onClick={() => this.toggleModal("formModal")}>
                     <i className="tim-icons icon-single-02"/>
                     Se Connecter/S'inscrire
@@ -321,7 +320,7 @@ class ComponentsNavbar extends React.Component {
                                 </InputGroup>
                             </FormGroup>
                             <FormGroup className="mt-3">
-                                <a href="#">
+                                <a href="#" rel="noopener noreferrer">
                                     Mot de passe oublié
                                 </a>
                             </FormGroup>
@@ -338,8 +337,8 @@ class ComponentsNavbar extends React.Component {
                         <div className="text-center mb-4 mt-4">
                             <span> Pas de compte? </span>
                             <a
+                                rel="noopener noreferrer"
                                 className="btn btn-default btn-round"
-                                isOpen={this.state.registerModal}
                                 onClick={() => this.onRegister()}>S'inscrire</a>
                         </div>
                     </div>

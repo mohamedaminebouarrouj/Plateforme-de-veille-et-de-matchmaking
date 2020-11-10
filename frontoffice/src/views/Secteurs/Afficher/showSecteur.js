@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import axios from 'axios';
 import IndexNavbar from "../../../components/Navbars/IndexNavbar";
 import Footer from "../../../components/Footer/Footer";
@@ -10,13 +10,14 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import Select from "react-select";
+import AppComponent from "../../../components/Graph/AppComponent";
 
 
 function Show(props){
     return (
         <React.Fragment>
 
-            <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a target='_blank' href={props.tendance.url}>{props.tendance.titre}</a> </p>
+            <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a target='_blank' rel="noopener noreferrer" href={props.tendance.url}>{props.tendance.titre}</a> </p>
             <p style={{fontSize: '11px' , opacity:'0.7'}}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
             <p style={{fontSize: '11px' , opacity:'0.2'}}>───────────────────────────────────────────────────────────────────</p>
         </React.Fragment>
@@ -88,7 +89,6 @@ export default class ShowSecteur extends Component {
         document.body.classList.toggle("landing-page");
         axios.get('http://localhost:5000/secteurs/' + this.props.match.params.id)
             .then(response => {
-                console.log(response.data)
                 this.setState({
                     nom: response.data.nom,
                     categorie: response.data.categorie,
@@ -120,6 +120,7 @@ export default class ShowSecteur extends Component {
             {
                 return <Show tendance={currentTendance} key={currentTendance._id}/>;
             }
+            return null
 
         })
     }
@@ -130,6 +131,8 @@ export default class ShowSecteur extends Component {
             {
                 return <Show tendance={currentTendance} key={currentTendance._id}/>;
             }
+            return null
+
 
         })
     }
@@ -140,6 +143,9 @@ export default class ShowSecteur extends Component {
             {
                 return <Show tendance={currentTendance} key={currentTendance._id}/>;
             }
+
+            return null
+
 
         })
     }
@@ -163,7 +169,7 @@ export default class ShowSecteur extends Component {
 
     showDomaines(){
         return this.state.domaines.map(currentDomaine=>
-        {return(<Button className="btn-link" color="primary" onClick={()=> this.props.history.replace({ pathname: `/domaines/${currentDomaine._id}`})}>
+        {return(<Button key={currentDomaine._id} className="btn-link" color="primary" onClick={()=> this.props.history.replace({ pathname: `/domaines/${currentDomaine._id}`})}>
             {currentDomaine.nom}
         </Button>
         )})
@@ -203,22 +209,22 @@ export default class ShowSecteur extends Component {
                         />
                     </div>
                     <br/> <br/> <br/>
+
                     <section className="section">
                             <Row>
                                 <Col className="ml-auto mr-auto" lg="6" md="6">
                                     <section>
+                                        <AppComponent id={this.props.match.params.id} history={this.props.history}/>
                                     </section>
                                 </Col>
 
                                 <Col lg="5" md="6">
                                     <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '300px'}}>
-
-
                                         <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
                                             {this.state.nom}
                                         </h1>
                                         <p style={{position: 'absolute',top:50,width:'auto',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
-                                            Catégorie: <a href="#">{this.state.categorie}</a> &nbsp;
+                                            Catégorie: <a href="#" rel="noopener noreferrer">{this.state.categorie}</a> &nbsp;
                                         </p>
 
                                     </div>

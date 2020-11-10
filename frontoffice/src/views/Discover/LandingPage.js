@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useState } from "react";
+import React  from "react";
 import {Link} from "react-router-dom";
 import axios from 'axios';
 
@@ -23,16 +23,14 @@ import axios from 'axios';
 // core components
 import Footer from "components/Footer/Footer.js";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import {Button, Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Row} from 'reactstrap';
+import {Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
 
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import StarIcon from '@material-ui/icons/Star';
 import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,11 +55,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let ps=null
 function TitlebarGridList(props) {
   const classes = useStyles();
   return (
-      <div>
+      <>
         <GridList cols={5} cellHeight={180}>
           {props.val.map((tile) => (
               <GridListTile key={tile.nom}>
@@ -81,7 +78,7 @@ function TitlebarGridList(props) {
           ))}
         </GridList>
 
-      </div>
+      </>
   );
 }
 
@@ -262,17 +259,15 @@ export default class LandingPage extends React.Component {
                   <DropdownMenu>
                     <DropdownItem onClick={this.onSecteurs}>Secteurs ({this.state.secteurs.length})</DropdownItem>
                     <DropdownItem onClick={this.onDomaines}>Domaines d'activité ({this.state.domaines.length})</DropdownItem>
-                    <DropdownItem onClick={this.onChallenges}>Challenges ({this.state.challenges.length})</DropdownItem>
-                    <DropdownItem onClick={this.onStartups}>Startups ({this.state.startups.length})</DropdownItem>
+                    {/*<DropdownItem onClick={this.onChallenges}>Challenges ({this.state.challenges.length})</DropdownItem>*/}
+                    {/*<DropdownItem onClick={this.onStartups}>Startups ({this.state.startups.length})</DropdownItem>*/}
                   </DropdownMenu>
                 </Dropdown>
               </Container>
             </section>
           </section>
           <section>
-            <Table>
               {this.onShow()}
-            </Table>
           </section>
           <Footer />
         </div>

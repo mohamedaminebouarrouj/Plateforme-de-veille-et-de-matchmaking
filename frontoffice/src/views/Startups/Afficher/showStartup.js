@@ -5,216 +5,156 @@ import Footer from "../../../components/Footer/Footer";
 
 import {
     Button, Card, CardBody,
-    Col, Nav, NavItem, NavLink,
+    Col, Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Modal, Nav, NavItem, NavLink,
     Row, TabContent, TabPane,
 } from "reactstrap";
-import classnames from "classnames";
-import Select from "react-select";
-import {Link} from "react-router-dom";
+import TextField from '@material-ui/core/TextField';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import {DialogContentText} from "@material-ui/core";
 
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import AppComponent from "../../../components/Graph/AppComponent";
 
-function Show(props){
-    return (
-        <React.Fragment>
-
-            <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a rel="noopener noreferrer" target='_blank' href={props.tendance.url}>{props.tendance.titre}</a> </p>
-            <p style={{fontSize: '11px' , opacity:'0.7'}}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
-            <p style={{fontSize: '11px' , opacity:'0.2'}}>───────────────────────────────────────────────────────────────────</p>
-        </React.Fragment>
-    );
-}
-function ShowDomaines(props){
-    let errorflag=true
-    return (
-
-        <div>
-            <GridList cols={5} cellHeight={180}>
-                {props.startup.map((tile) => (
-                    <GridListTile key={tile.nom}>
-                        <NavLink tag={Link} to={'/startups/'+tile._id}>
-                            <img style={{opacity:0.7}} alt="" />
-                            {tile.nom}
-                        </NavLink>
-                    </GridListTile>
-                ))}
-            </GridList>
-
-        </div>
-    )
-}
-const customStyles = {
-
-    control: (base, state) => ({
-        ...base,
-        background: "transparent",
-        color:'white',
-        // match with the menu
-        borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
-        // Overwrittes the different states of border
-        borderColor: state.isFocused ? "#344675" : "#344675",
-        // Removes weird border around container
-        boxShadow: state.isFocused ? "#344675" : "#344675",
-        "&:hover": {
-            // Overwrittes the different states of border
-            borderColor: state.isFocused ? "#344675" : "#344675"
-        }
-    }),
-    singleValue: (base) => ({
-    ...base,
-            color: 'white'
-    }),
-    menu: base => ({
-        ...base,
-        // override border radius to match the box
-        borderRadius: 0,
-        // kill the gap
-        marginTop: 0,
-        color:'#ffe600'
-    }),
-    menuList: base => ({
-        ...base,
-        // kill the white space on first and last option
-        padding: 0,
-        color:'#344675'
-    })
-};
 export default class ShowStartup extends Component {
 
     constructor(props) {
         super(props);
-
-        this.FrList=this.FrList.bind(this)
-        this.EnList=this.EnList.bind(this)
-        this.ArList=this.ArList.bind(this)
-        this.onChangeLangage=this.onChangeLangage.bind(this)
-        this.showList=this.showList.bind(this)
-        this.ShowDomaines=this.ShowDomaines.bind(this)
+        this.onSubmitRevendiquer = this.onSubmitRevendiquer.bind(this)
+        this.onChangeEmail = this.onChangeEmail.bind(this)
+        this.onChangeContenu = this.onChangeContenu.bind(this)
 
         this.state = {
             nom: '',
-            dateCreation:'',
+            dateCreation: '',
             description: '',
             logo: '',
-            domainesId:[],
+            domainesId: [],
             fondateurs: [],
-            siteWeb:'',
-            singleSelect:{ value: "fr", label: "Français" },
-            tabs: 1
+            siteWeb: '',
+            adresse:'',
+            pays:'',
+            email:'',
+            facebook:'',
+            twitter:'',
+            linkedin:'',
+            tabs: 1,
+            emailRevendication: '',
+            contenu: '',
+            formModal: false,
+            validationModal:false,
         }
     }
 
-    //nom: {type: String, required: true, unique: true},
-    //         description: {type: String},
-    //         fondateurs :[{type: String}],
-    //         dateCreation: {type: Date},
-    //         logo: {type:String},
-    //         siteWeb:{type:String},
-    //         domainesId:[{type: Schema.ObjectId,ref : 'Domaine'}]
+    toggleModal = modalState => {
+        this.setState({
+            [modalState]: !this.state[modalState]
+        });
+    };
 
     componentDidMount() {
+
+        if(localStorage.getItem('auth-token'))
+        {
+            this.setState({
+                emailRevendication:JSON.parse(localStorage.getItem("loggedUser")).email
+            })
+
+            JSON.parse(localStorage.getItem("loggedUser")).revendicationsId.map(r=>{
+                console.log(r)
+                if(r.startupId===this.props.match.params.id)
+                {
+                    if(r.verified===true)
+                    {
+                        console.log("hedhi heya el startup w verifié")
+                    }
+                    else{
+                        console.log("hedhi heya el startup w mch verifié")
+                    }
+
+                }
+                else{
+                    console.log("mch hedhi el startup")
+                }
+            })
+        }
         document.body.classList.toggle("landing-page");
         axios.get('http://localhost:5000/startups/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
                     fondateurs: response.data.fondateurs,
-                    dateCreation:response.data.dateCreation,
+                    dateCreation: response.data.dateCreation,
                     description: response.data.description,
-                    domainesId : response.data.domainesId,
+                    domainesId: response.data.domainesId,
                     logo: response.data.logo,
-                    siteWeb:response.data.siteWeb
+                    siteWeb: response.data.siteWeb,
+                    email:response.data.email,
+                    facebook:response.data.facebook,
+                    linkedin:response.data.linkedin,
+                    twitter:response.data.twitter,
+                    adresse:response.data.adresse,
+                    pays:response.data.pays
+
                 })
             })
             .catch(function (error) {
                 console.log(error);
             })
+
+
+
     }
 
     componentWillUnmount() {
         document.body.classList.toggle("landing-page");
     }
 
-    toggleTabs = (e, stateName, index) => {
+    onChangeEmail(e) {
+        this.setState({
+            emailRevendication: e.target.value
+        })
+    }
+
+    onChangeContenu(e) {
+        this.setState({
+            contenu: e.target.value
+        })
+    }
+
+    onSubmitRevendiquer(e) {
         e.preventDefault();
-        this.setState({
-            [stateName]: index
-        });
-    };
 
-    FrList(){
-        return this.state.tendances.map(currentTendance => {
-            if (currentTendance.langage==="Français")
-            {
-                return <Show tendance={currentTendance} key={currentTendance._id}/>;
-            }
-            return null
-
-        })
-
-
-    }
-
-    EnList(){
-        return this.state.tendances.map(currentTendance => {
-            if (currentTendance.langage==="Anglais")
-            {
-                return <Show tendance={currentTendance} key={currentTendance._id}/>;
-            }
-            return null
-
-
-        })
-    }
-
-    ArList(){
-        return this.state.tendances.map(currentTendance => {
-            if (currentTendance.langage==="Arabe")
-            {
-                return <Show tendance={currentTendance} key={currentTendance._id}/>;
-            }
-            return null
-
-
-        })
-    }
-    showList(){
-        if(this.state.singleSelect.value==='fr'){
-            return this.FrList()
-        }
-        else if(this.state.singleSelect.value==='en'){
-            return this.EnList()
-        }
-        else{
-            return this.ArList()
+        const revendication = {
+            email: this.state.emailRevendication,
+            contenu: this.state.contenu,
+            traited : false,
+            verified:false,
+            startupId:this.props.match.params.id,
+            userId: JSON.parse(localStorage.getItem("loggedUser"))._id
         }
 
-    }
-    onChangeLangage(e){
-        this.setState({
-            singleSelect:e
-        })
-    }
+        console.log(revendication);
 
-    ShowDomaines() {
-            return (<ShowDomaines domaine={this.state.domaine}/>)
+        axios.post('http://localhost:5000/revendications/add' , revendication)
+            .then(res => {
+                console.log(res.data)
+            });
 
     }
 
-    showSecteurs(){
-        return this.state.secteurs.map(currentSecteur=>
-        {return(<Button className="btn-link" color="primary" onClick={()=> this.props.history.replace({ pathname: `/secteurs/${currentSecteur._id}`})}>
-            {currentSecteur.nom}
-        </Button>)})
-
-    }
 
     render() {
+
+        if(this.state.siteWeb!=="")
+        {
+            if (!this.state.siteWeb.split('//')[1]) {
+                this.setState({
+                    siteWeb: "https://" + this.state.siteWeb
+                })
+            }
+        }
+
         return (
             <>
-                <IndexNavbar />
+                <IndexNavbar/>
                 <div className="wrapper">
                     <div className="page-header">
                         <img
@@ -228,32 +168,242 @@ export default class ShowStartup extends Component {
                             src={require("../../../assets/img/path1.png")}
                         />
                     </div>
-                    <br/>
+                    <br/><br/><br/>
                     <section className="section">
-                      <Row>
-                          <Col>
-                              <h1>{this.state.nom}</h1>
-                              <h4>Fondateurs: </h4>
-                              {this.state.fondateurs.map(fon=>{
-                                  return(<p> • {fon}</p>)
-                              })}
-                          </Col>
+                        <Row>
+                            <Col lg="1">
 
-                          <Col>
-                              <h2>Date de promotion: </h2>
-                              <h3>{this.state.dateCreation.split('-01T')[0]}</h3>
+                            </Col>
+                            <Col md="6">
+                                <Row>
+                                    <Col md="3">
+                                        <img
+                                            src={require("../../../assets/logos/Startups/default.png")}
+                                        />
+                                    </Col>
+                                    <Col>
+                                        <p className="font-weight-bold font-size-35">{this.state.nom} </p>
+                                        <a>
+                                            Depuis
+                                            : {this.state.dateCreation.split('-')[1] + "/" + this.state.dateCreation.split('-')[0]}</a>
+                                        <p>{this.state.pays}</p>
+                                        <br/>
+                                        {/*<Button className="btn btn-default btn-round">*/}
+                                        {/*    <i className="tim-icons icon-heart-2"/>*/}
+                                        {/*    <a> Ajouter au favoris</a>*/}
+                                        {/*</Button>*/}
 
-                              <h5>Domaines:</h5>
-                              {this.state.domainesId.map(d=>{
-                                  console.log(d)
-                                  return(<a href={"/domaines/"+d._id}>{d.nom}</a>)
-                              })}
-                          </Col>
-                      </Row>
+                                        {localStorage.getItem("auth-token")===""?
+                                            <Button className="btn btn-simple btn-round" color="primary"
+                                                    onClick={() => this.toggleModal("demoModal")} disabled>
+                                            <i className="tim-icons icon-spaceship"/>
+                                            <a> Revendiquer cette start-up</a>
+                                        </Button>:<Button className="btn btn-simple btn-round" color="primary"
+                                                          onClick={() => this.toggleModal("demoModal")}>
+                                            <i className="tim-icons icon-spaceship"/>
+                                            <a> Revendiquer cette start-up</a>
+                                        </Button>}
+
+
+                                        <Modal
+                                            isOpen={this.state.demoModal}
+                                            toggle={() => this.toggleModal("demoModal")}
+                                            modalClassName="modal-black"
+                                        >
+                                            <div className="modal-header justify-content-center">
+                                                <button
+                                                    className="close"
+                                                    onClick={() => this.toggleModal("demoModal")}
+                                                >
+                                                    <i className="tim-icons icon-simple-remove" />
+                                                </button>
+                                                <h4 className="title title-up">Revendiquer le profil de cette start-up</h4>
+                                            </div>
+                                            <div className="modal-body">
+                                                <p>
+                                                    Vous pouvez désormais réclamer votre profil d'entreprise. <br/>
+                                                    Nous marquerons ce profil avec un badge vérifié (<CheckCircleIcon style={{color:"#FFDB00", fontSize:"40px"}} />) et vous pourrez modifier votre profil d'entreprise.
+                                                </p>
+                                            </div>
+                                            <div className="text-center">
+                                                <Button
+                                                    className="btn btn-default btn-round"
+                                                    type="button"
+                                                    onClick={() => {this.toggleModal("demoModal")
+                                                        this.toggleModal("formModal")}}
+                                                >
+                                                    OK
+                                                </Button>
+                                            </div>
+                                        </Modal>
+                                        {/* Start Form Modal */}
+                                        <Modal
+                                            isOpen={this.state.formModal}
+                                            toggle={() => this.toggleModal("formModal")}
+                                            size={"lg"}
+                                        >
+                                            <div className="modal-header justify-content-center">
+                                                <div className="modal-header justify-content-center">
+                                                    <button
+                                                        className="close"
+                                                        onClick={() => this.toggleModal("formModal")}
+                                                    >
+                                                        <i className="tim-icons icon-simple-remove" />
+                                                    </button>
+                                                    <h4 className="title title-up">Revendiquer le profil de cette start-up</h4>
+                                                </div>
+                                            </div>
+                                            <div className="modal-body">
+
+                                                <Form onSubmit={this.onSubmitRevendiquer}>
+
+                                                    <FormGroup className="mb-3">
+                                                        <InputGroup>
+                                                            <TextField
+                                                                id="filled-email"
+                                                                label="Votre adresse E-mail"
+                                                                type="email"
+                                                                required
+                                                                fullWidth
+                                                                value={this.state.emailRevendication}
+                                                                onChange={this.onChangeEmail}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                label="Objet"
+                                                                type="text"
+                                                                fullWidth
+                                                                defaultValue={"Revendication du profil de " + this.state.nom}
+                                                                disabled
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                id="outlined-multiline-static"
+                                                                label="Contenu"
+                                                                multiline
+                                                                rows={5}
+                                                                fullWidth
+                                                                required
+                                                                variant="outlined"
+                                                                value={this.state.contenu}
+                                                                onChange={this.onChangeContenu}
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+
+                                                    <div className="text-center">
+                                                        <Button
+                                                            className="btn btn-default btn-round"
+                                                            type="submit"
+                                                        onClick={()=>{this.toggleModal("formModal")
+                                                            this.toggleModal("validationModal")}}>
+                                                            Revendiquez
+                                                        </Button>
+
+                                                    </div>
+                                                </Form>
+                                            </div>
+
+                                        </Modal>
+                                        {/* End Form Modal */}
+
+                                        <Modal
+                                            isOpen={this.state.validationModal}
+                                            toggle={() => this.toggleModal('validationModal')}
+                                            modalClassName="modal-black"
+                                        >
+                                            <div className="modal-header justify-content-center">
+                                                <button
+                                                    className="close"
+                                                    onClick={() => this.toggleModal("validationModal")}
+                                                >
+                                                    <i className="tim-icons icon-simple-remove" />
+                                                </button>
+                                                <h4 className="title title-up">Revendiquer le profil de cette start-up</h4>
+                                            </div>
+                                            <div className="modal-body">
+                                                <p>
+                                                    Votre demande a était prise en considération.
+                                                    Un E-mail de validation vient d'être envoyer à l'adresse : <a style={{fontStyle:'italic'}}>{this.state.emailRevendication}</a>.
+                                                    Nous vous contacterons une fois votre demande traitée.
+                                                </p>
+                                            </div>
+                                            <div className="text-center">
+                                                <Button
+                                                    className="btn btn-default btn-round"
+                                                    type="button"
+                                                    onClick={() => {this.toggleModal("validationModal")
+                                                        window.location.reload(false)
+                                                    }}
+                                                >
+                                                    OK
+                                                </Button>
+                                            </div>
+                                        </Modal>
+
+
+                                    </Col>
+
+                                </Row>
+                                <h4 className="font-weight-bold">Description:</h4>
+                                <p>{this.state.description}</p>
+                                <h4 className="font-weight-bold">Fondateurs: </h4>
+                                {this.state.fondateurs.map(fon => {
+                                    return (<Col><p className="font-italic">• {fon} </p></Col>)
+                                })}
+
+                                <h4 className="font-weight-bold">Domaines d'activité :</h4>
+                                {this.state.domainesId.map(d => {
+                                    return (<a href={"/domaines/" + d._id}>  &nbsp;{d.nom}</a>)
+                                })}
+                            </Col>
+                            <Col lg="1"></Col>
+                            <Col>
+                                <h2 className="font-weight-bold">Contact</h2>
+                                <h4 className="font-weight-bold">Adresse:</h4>
+                                <p>Tunisie</p>
+                                <br/>
+                                <h4 className="font-weight-bold">Site web:</h4>
+                                <a href={this.state.siteWeb} target="_blank">{this.state.siteWeb.split('//')[1]}</a>
+                                <br/>
+                                <h4 className="font-weight-bold">Adresse e-mail:</h4>
+                                <p>{this.state.email}</p>
+                                <br/>
+                                <h4 className="font-weight-bold">Réseaux sociaux:</h4>
+                                <Button className="btn-icon btn-neutral btn-round btn-simple"
+                                        color="default"
+                                        href={this.state.linkedin}
+                                        target="_blank">
+                                    <i className="fab fa-linkedin"/>
+                                </Button>
+
+                                <Button className="btn-icon btn-neutral btn-round btn-simple"
+                                        color="default"
+                                        href={this.state.facebook}
+                                        target="_blank">
+                                    <i className="fab fa-facebook-square"/>
+                                </Button>
+
+                                <Button className="btn-icon btn-neutral btn-round btn-simple"
+                                        color="default"
+                                        href={this.state.twitter}
+                                        target="_blank">
+                                    <i className="fab fa-twitter"/>
+                                </Button>
+
+                            </Col>
+                        </Row>
                     </section>
 
 
-                    <Footer />
+                    <Footer/>
                 </div>
             </>
         )

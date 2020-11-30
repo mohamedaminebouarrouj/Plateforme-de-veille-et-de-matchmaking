@@ -108,7 +108,6 @@ async function getData() {
         // zero width space after dashes to allow for line breaking
         data.name = data.name.replace(/[-]/g, '-\u200B');
     });
-    console.log(data)
     return data
 }
 

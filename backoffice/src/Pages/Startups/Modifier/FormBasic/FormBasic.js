@@ -43,7 +43,7 @@ export default class UpdateStartup extends Component {
                     nom: response.data.nom,
                     description: response.data.description,
                     fondateurs: response.data.fondateurs,
-                    domaines: response.data.domainesId
+                    domaines: response.data.domainesId.map(e=>e._id)
                 })
             })
             .catch(function (error) {
@@ -69,23 +69,22 @@ export default class UpdateStartup extends Component {
                 domaines: []
             })
         }
-        console.log(this.state.domaines)
     }
 
 
     domaineList() {
         let selected= []
-
         const options= this.state.dom.map(currentDomaine => ({value: currentDomaine._id, label:currentDomaine.nom}))
         this.state.dom.map(currentDomaine =>{
-            if (this.state.domaines.includes(currentDomaine._id)){
-                selected.push({value:currentDomaine._id, label:currentDomaine.nom})
-            }
+            this.state.domaines.map(selectedDomaine=>{
+                if (currentDomaine._id===selectedDomaine)
+                    selected.push({value:currentDomaine._id, label:currentDomaine.nom})
+            })
         })
-        console.log(selected)
+        console.log('selec',selected)
         return (
             <Select
-                defaultValue={selected}
+                value={selected}
                 closeMenuOnSelect={false}
                 components={animatedComponents}
                 isMulti
@@ -95,6 +94,19 @@ export default class UpdateStartup extends Component {
                 classNamePrefix="select"
             > </Select>
         )
+        // console.log(this.state.domaines)
+        // return this.state.dom.map(currentDomaine => {
+        //     console.log("current",currentDomaine)
+        //     return (
+        //         <CustomInput type="checkbox"
+        //                      checked= {this.state.domaines.includes(currentDomaine)}
+        //                      label={currentDomaine.nom}
+        //                      value={currentDomaine._id}
+        //                      id={currentDomaine._id}
+        //                      key={currentDomaine._id}
+        //                      onChange={this.onChangeDomaine}/>
+        //     )
+        // })
     }
 
 

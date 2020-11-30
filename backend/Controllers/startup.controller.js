@@ -4,6 +4,7 @@ var Domaines =require('../Models/domaine.model');
 const upload = require("../middleware/upload");
 const path = require('path')
 const {spawn} = require('child_process');
+var DomainesController=require("../Controllers/domaine.controller")
 
 
 
@@ -152,6 +153,7 @@ exports.startup_scraping =async (req,res) =>{
 // print output of script
     subprocess.stdout.on('data', (data) => {
         console.log(`${data}`);
+        DomainesController.domaine_add_picture(req,res);
         res.send(`${data}`);
 
     });

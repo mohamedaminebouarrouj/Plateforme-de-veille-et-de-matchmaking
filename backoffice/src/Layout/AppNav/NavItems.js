@@ -1,3 +1,44 @@
+import React, {Component} from "react";
+import axios from "axios";
+
+
+export class Notification extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            revendication: null,
+            notif:0,
+        }
+    }
+
+
+    componentDidMount() {
+        axios.get('http://localhost:5000/revendications/')
+            .then(response => {
+                this.setState({
+                    revendication:response.data
+                })
+                this.state.revendication.map(r=>{
+                    if (r.traited===false)
+                    {
+                        this.setState({
+                            notif:this.state.notif+1
+                        });
+                    }
+
+                })
+            })
+
+    }
+
+    render() {
+        return(
+                <a>
+                    Revendications {this.state.notif>0?<div className="ml-auto badge badge-pill badge-info">{this.state.notif}</div>:<div></div>}
+                </a>
+        )}
+}
+
 export const MainNav = [
     {
         icon: 'pe-7s-home',
@@ -78,11 +119,15 @@ export const MainNav = [
                 label: 'Afficher les Utilisateurs',
                 to:'#/utilisateurs/afficher'
             },
+            {
+                label: <Notification/>,
+                to:'#/revendications/afficher'
+            },
 
         ],
     },
 ];
-/*
+
 export const ComponentsNav = [
     {
         icon: 'pe-7s-diamond',
@@ -193,4 +238,4 @@ export const ChartsNav = [
         label: 'ChartJS',
         to: '#/charts/chartjs',
     },
-]; */
+];

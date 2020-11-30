@@ -7,9 +7,15 @@ const startupSchema = new Schema({
         description: {type: String},
         fondateurs :[{type: String}],
         dateCreation: {type: Date},
+        pays:{type:String},
+        adresse:{type:String},
         logo: {type:String},
         siteWeb:{type:String},
-        domainesId:[{type: Schema.ObjectId,ref : 'Domaine'}]
+        domainesId:[{type: Schema.ObjectId,ref : 'Domaine'}],
+        email:{type:String},
+        facebook:{type:String},
+        twitter:{type:String},
+        linkedin:{type:String},
     },
     {
         timestamp:true,

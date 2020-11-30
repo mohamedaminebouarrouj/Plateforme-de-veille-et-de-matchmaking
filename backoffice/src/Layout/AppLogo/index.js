@@ -47,7 +47,9 @@ class HeaderLogo extends React.Component {
         return (
             <Fragment>
                 <div className="app-header__logo">
-                    <div className="logo-src"/>
+                    <div className="logo-src" style={{marginTop:-15}}>
+                        <span style={{fontSize:'24px', fontWeight:"bold",color:'#fff'}}><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer• </span>
+                    </div>
                     <div className="header__pane ml-auto">
                         <div onClick={this.toggleEnableClosedSidebar}>
                             <Hamburger

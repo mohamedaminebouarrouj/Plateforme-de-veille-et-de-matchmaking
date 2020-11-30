@@ -1,4 +1,5 @@
 var Secteurs = require('../Models/secteur.model');
+var Domaines= require('../Models/domaine.model');
 const translate = require('@k3rn31p4nic/google-translate-api');
 
 
@@ -95,35 +96,24 @@ exports.secteur_find = function (req,res){
 
 exports.secteur_delete = function (req,res){
     Secteurs.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Secteur deleted.'))
+        .then(secteur=>{
+            secteur.domainesId.map(domId=>{
+                Domaines.findByIdAndUpdate(domId,
+                    {$pull:{secteursId:secteur._id}},
+                    {new: true, useFindAndModify: false})
+                    .then()
+            })
+            res.json("Secteur supprimé")
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
-exports.secteur_delete_2 = function (req,res){
-    Secteurs.findOneAndUpdate({ _id: req.params.id}, { $set : { secteursId : []
-        } }, (err, domaine) => {
-        Domaines.remove({
-            "_id": {
-                $in: domaine.secteursId
-            }
-        }, function(err) {
-            if(err) return next(err);
-            domaine.deleteOne()
-        })
-    })
-}
-
-
-
-
-
-
 exports.img = async (req,res) =>{
     let url=""
-    translate('Agro-alimentaire', { to: 'en' })
+    translate('Gaming', { to: 'en' })
         .then(r => {
             console.log(r.text)
-        unsplash.search.photos(r.text,4, 10, { orientation: "landscape"})
+        unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
         .then(toJson)
         .then(json =>{
             res.json(json)

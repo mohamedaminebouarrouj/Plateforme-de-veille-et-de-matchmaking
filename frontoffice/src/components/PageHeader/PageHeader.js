@@ -18,31 +18,41 @@
 import React from "react";
 
 // reactstrap components
-import { Container } from "reactstrap";
+import {Container} from "reactstrap";
+import Basics from "../../views/IndexSections/Basics";
 
 class PageHeader extends React.Component {
-  render() {
-    return (
-      <div className="page-header header-filter">
-        <div className="squares square1" />
-        <div className="squares square2" />
-        <div className="squares square3" />
-        <div className="squares square4" />
-        <div className="squares square5" />
-        <div className="squares square6" />
-        <div className="squares square7" />
-        <Container>
-          <div className="content-center brand">
-            <h1 className="h1-seo"><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer•</h1>
-            <h4 className="d-none d-sm-block">
-                Une plateforme d'innovation pour les devins.
-                {/*An innovation platform for the Soothsayers.*/}
-            </h4>
-          </div>
-        </Container>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <div className="page-header header-filter">
+                    <div className="squares square1"/>
+                    <div className="squares square2"/>
+                    <div className="squares square3"/>
+                    <div className="squares square4"/>
+                    <div className="squares square5"/>
+                    <div className="squares square6"/>
+                    <div className="squares square7"/>
+                    <Container>
+                        <div className="content-center brand">
+                            <h1 className="h1-seo"><span style={{color: '#ffe600'}}>I</span>nno<span
+                                style={{color: '#ffe600'}}>S</span>eer•</h1>
+                            <h4 className="d-none d-sm-block">
+                                Une plateforme d'innovation pour les devins.
+                                {/*An innovation platform for the Soothsayers.*/}
+                            </h4>
+                        </div>
+                    </Container>
+                </div>
+
+                <div>
+                    "Ajouter votre startup Component"
+                </div>
+            </div>
+
+
+        );
+    }
 }
 
 export default PageHeader;

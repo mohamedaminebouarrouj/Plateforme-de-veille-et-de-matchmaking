@@ -18,7 +18,6 @@ import {Tabs, Tab} from 'react-bootstrap-tabs';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Select from "react-select";
 import styled from "styled-components";
@@ -123,8 +122,9 @@ function FormDialog(props){
             </Button>
             <Dialog open={open}
                     onClose={handleClose}
-            maxWidth="sm"
-            fullWidth={true}>
+                    maxWidth="sm"
+                    fullWidth={true}
+                    >
                 <DialogTitle id="form-dialog-title">Ajouter Tendances autour des domaines</DialogTitle>
                 <DialogContent>
                         <div>
@@ -143,6 +143,7 @@ function FormDialog(props){
                         Selectionnez la(les) langue(s)
                         <br/> <br/>
                         <Select
+                            closeMenuOnSelect={false}
                             isMulti
                             name="langage"
                             id="langage"
@@ -211,6 +212,7 @@ function FormDialogChall(props){
                         Selectionnez la(les) langue(s)
                         <br/> <br/>
                         <Select
+                            closeMenuOnSelect={false}
                             isMulti
                             name="langage"
                             id="langage"
@@ -279,6 +281,7 @@ function FormDialogSect(props){
                         Selectionnez la(les) langue(s)
                         <br/> <br/>
                         <Select
+                            closeMenuOnSelect={false}
                             isMulti
                             name="langage"
                             id="langage"

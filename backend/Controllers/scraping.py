@@ -8,6 +8,7 @@ import pymongo
 from datetime import datetime
 import qwant
 from unidecode import unidecode
+import time
 
 
 ###Get "domaines" wiki urls from qwant.com
@@ -19,7 +20,7 @@ def wiki_url_qwant(tech):
 
     except:
         print('Check qwant.com to remove Captcha')
-        input('Press any key')
+        time.sleep(30)
         url=qwant.items("site: wikipedia.org/ "+tech)[0]['url']
 
     return url
@@ -32,7 +33,7 @@ def get_description(url):
         scraped_data = urllib.request.urlopen(url)
     except:
         print('Wait a little bit')
-        input('Press any key')
+        time.sleep(5)
         scraped_data = urllib.request.urlopen(url)
 
     article = scraped_data.read()
@@ -70,12 +71,19 @@ def changeDate(date):
 def scrap_startups_act():
     names=[]
     descriptions=[]
-    siteWeb=[]
     fondateurs=[]
-    domaines=[]
     date_creation=[]
-    domainesId=[]
+    pays=[]
+    adresse=[]
     logo=[]
+    siteWeb=[]
+    email=[]
+    facebook=[]
+    twitter=[]
+    linkedin=[]
+    domaines=[]
+    domainesId=[]
+
     i=0
     scraped_data = urllib.request.urlopen('https://www.startupact.tn/startups.html')
     article = scraped_data.read()
@@ -94,9 +102,14 @@ def scrap_startups_act():
                 fondateurs.append( [f.split('  ')[-1] for f in (n.get_text(separator=" S ").strip()).split(' S ')])
             if(i==2):
                 domaines.append(n.get_text(separator=" ").strip()
-                                .replace('Industrie robotique','Robotique')
+                                .replace('Industrie Robotique','Robotique')
+
+                                .replace('HealthTech',"Health tech")
                                 .replace('Healthtech',"Health tech")
+                                .replace('Santé',"Health tech")
+
                                 .replace('Cybersecurité','Cyber Securité')
+
                                 .replace('Ecommerce','E-commerce')
                                 .replace('ECommerce','E-commerce')
                                 .replace("EComerce","E-commerce")
@@ -107,20 +120,15 @@ def scrap_startups_act():
 
                                 .replace("Logistqiue","Logistique")
 
-                                .replace("Télécoms","Télécomunication")
-                                .replace("Telecom","Télécomunication")
-
-                                .replace("IT","Information technology")
-                                .replace('Information technology',"Technologies de l'information et de la communication")
+                                .replace("Télécoms","Télécom")
+                                .replace("Telecom","Télécom")
 
                                 .replace("EdtTech",'Edtech')
-                                .replace('Edtech',"Ed tech")
+                                .replace('Edtech',"Edtech")
 
-                                .replace("Blockchain & cryptocurrency","Blockchain")
-                                .replace('Blockchain & Cryptocurrency','Blockchain')
-                                .replace("Cryptocurrency & Blockchain","Cryptocurrency")
-
-                                .replace("Mobile","Application mobile")
+                                .replace("Blockchain & cryptocurrency","Blockchain & Cryptocurrency")
+                                .replace('Blockchain & Cryptocurrency','Blockchain & Cryptocurrency')
+                                .replace("Cryptocurrency & Blockchain","Blockchain & Cryptocurrency")
 
                                 .replace('Biotechnologie','Biotech')
                                 .replace('Biotech','Biotechnologie')
@@ -141,23 +149,33 @@ def scrap_startups_act():
                     img=s.find_all('th',scope="row")[i].find('img').get('src').split('img/')[-1].split('.')[0]
                     if len(re.split('[0-9]+-',img))>1:
                         names.append(re.split('[0-9]+-',img)[1].replace('-',' ').strip().capitalize())
+                        logo.append(re.split('[0-9]+-',img)[1].strip().capitalize()+'.png')
                     else:
                         names.append(img.capitalize())
+                        logo.append(img.strip().capitalize()+'.png')
                 else:
                     names.append(descriptions[i].split(' ')[0])
+                    logo.append('default.png')
             else:
                 names.append(descriptions[i].split(' ')[0])
+                logo.append('default.png')
 
         for n in s.find_all('th',scope=""):
             date_creation.append(re.sub('[^0-9,-]', "",changeDate(n.get_text())))
             domainesId.append([])
-            logo.append('')
+
+            pays.append('Tunisie')
+            email.append('')
+            adresse.append('')
+            facebook.append('https://www.facebook.com')
+            linkedin.append('https://www.linkedin.com')
+            twitter.append('https://www.twitter.com')
 
         for i in range(len(date_creation)):
             date_creation[i]=datetime.strptime(date_creation[i], '%m-%Y')
 
-        df_startups=pd.DataFrame(list(zip(names,descriptions,fondateurs,domaines,siteWeb,domainesId,date_creation,logo)),
-                            columns =['nom','description','fondateurs','domaines','siteWeb','domainesId','dateCreation','logo'])
+        df_startups=pd.DataFrame(list(zip(names,descriptions,fondateurs,pays,adresse,domaines,siteWeb,email,facebook,linkedin,twitter,domainesId,date_creation,logo)),
+                            columns =['nom','description','fondateurs','pays','adresse','domaines','siteWeb','email','facebook','linkedin','twitter','domainesId','dateCreation','logo'])
 
         return df_startups
 
@@ -168,15 +186,20 @@ def create_domaines(data):
     tendancesId=[]
     description=[]
     categorie=[]
+    img=[]
     __v=[]
     nom=[]
     client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
     db = client['<dbname>']
     colDomaines=db.domaines
+    temp=[]
+
+    for doc in colDomaines.find({}):
+        temp.append(doc.get('nom').lower())
 
     for i in range(len(data['domaines'].unique())):
         if data['domaines'].unique()[i]!="":
-            if not colDomaines.find_one({"nom": data['domaines'].unique()[i]}):
+            if (data['domaines'].unique()[i]).lower() not in temp:
                 nom.append(data['domaines'].unique()[i])
                 description.append(get_description(wiki_url_qwant(data['domaines'].unique()[i])))
                 secteursId.append([])
@@ -184,10 +207,11 @@ def create_domaines(data):
                 challengesId.append([])
                 tendancesId.append([])
                 categorie.append('')
+                img.append('')
                 __v.append(0)
 
-    df_domaines = pd.DataFrame(list(zip(__v,nom,description,categorie,secteursId,startupsId,challengesId,tendancesId)),
-                                columns =['__v','nom','description','categorie','secteursId','startupsId','challengesId','tendancesId'])
+    df_domaines = pd.DataFrame(list(zip(__v,nom,description,categorie,secteursId,startupsId,challengesId,tendancesId,img)),
+                                columns =['__v','nom','description','categorie','secteursId','startupsId','challengesId','tendancesId','img'])
 
     return df_domaines
 
@@ -221,7 +245,7 @@ if __name__ == "__main__":
     colStartups.create_index([('nom', pymongo.ASCENDING)],unique=True)
     records = df_startups.to_dict('records')
     try:
-        colStartups.insert_many(records)
+        colStartups.insert_many(records,ordered=False)
 
         df_startups = pd.DataFrame(list(colStartups.find()))
 

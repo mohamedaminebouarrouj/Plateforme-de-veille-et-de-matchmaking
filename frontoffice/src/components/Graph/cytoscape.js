@@ -1,10 +1,9 @@
 import React,{Component } from 'react';
-import memoize from "lodash.memoize";
 
 class Cytoscape extends Component {
 
   render(){
-    return <div id="cy"/>
+    return <div id="cy" />
   }
 
   componentDidMount(){
@@ -12,17 +11,17 @@ class Cytoscape extends Component {
     const container = document.getElementById('cy');
 
     cy.mount(container);
-    cy.fit(3);
-
     cy.on('ready',this.onTabStart = e =>{
       e.target._private.elements.forEach(x=>{
         if(x._private.data.id===this.props.id)
         {
           controller.highlight(x);
+          cy.maxZoom(5)
           cy.userZoomingEnabled(false)
 
         }
       })
+
     })
 
     cy.on('tap', this.onTap = e => {
@@ -30,16 +29,6 @@ class Cytoscape extends Component {
       {
         this.props.history.replace({ pathname: `/${e.target._private.data.NodeType}s/${e.target._private.data.id}`})
       }
-      if( e.target === cy ){
-        controller.unhighlight();
-        controller.hideInfo();
-        controller.closeMenu();
-      } else {
-
-        controller.highlight(e.target);
-        cy.userZoomingEnabled(false)
-      }
-
     });
   }
 

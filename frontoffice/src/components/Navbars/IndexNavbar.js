@@ -76,6 +76,8 @@ class ComponentsNavbar extends React.Component {
         })
             .then(response => {
                 this.setState({user: response.data.user})
+                localStorage.setItem('loggedUser', JSON.stringify(response.data.user))
+
             })
             .catch((error) => {
                 console.log(error);
@@ -187,7 +189,8 @@ class ComponentsNavbar extends React.Component {
 
     onSubmitLogout() {
         localStorage.setItem('auth-token', '')
-        window.location.replace('/');
+        localStorage.setItem('loggedUser', '')
+        window.location.reload(false);
     }
 
     onSubmitRegister(e) {
@@ -531,7 +534,7 @@ class ComponentsNavbar extends React.Component {
                             tag={Link}
                             id="navbar-brand"
                         >
-                            <span style={{fontSize:'20px'}}><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer• </span>
+                            <span style={{fontSize:'20px'}}><span style={{color: '#FFDB00'}}>I</span>nno<span style={{color: '#FFDB00'}}>S</span>eer• </span>
                         </NavbarBrand>
                     </div>
                     <Collapse

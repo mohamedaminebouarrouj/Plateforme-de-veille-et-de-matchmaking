@@ -11,15 +11,13 @@ import {
 import classnames from "classnames";
 import Select from "react-select";
 import AppComponent from "../../../components/Graph/AppComponent";
-
+import { Scrollbars } from 'react-custom-scrollbars';
 
 function Show(props){
     return (
         <React.Fragment>
-
             <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a target='_blank' rel="noopener noreferrer" href={props.tendance.url}>{props.tendance.titre}</a> </p>
             <p style={{fontSize: '11px' , opacity:'0.7'}}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
-            <p style={{fontSize: '11px' , opacity:'0.2'}}>───────────────────────────────────────────────────────────────────</p>
         </React.Fragment>
     );
 }
@@ -208,28 +206,26 @@ export default class ShowSecteur extends Component {
                             src={require("assets/img/cercuri.png")}
                         />
                     </div>
-                    <br/> <br/> <br/>
-
+                    <br/>
                     <section className="section">
                             <Row>
-                                <Col className="ml-auto mr-auto" lg="6" md="6">
-                                    <section>
+                                <Col lg="7">
                                         <AppComponent id={this.props.match.params.id} history={this.props.history}/>
-                                    </section>
                                 </Col>
 
-                                <Col lg="5" md="6">
-                                    <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '300px'}}>
-                                        <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
+                                <Col lg="5">
+                                    <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '200px'}}>
+
+                                        <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.5)'}}>
                                             {this.state.nom}
                                         </h1>
-                                        <p style={{position: 'absolute',top:50,width:'auto',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
+                                        <p style={{position: 'absolute',top:50,width:'auto',backgroundColor:'rgba(0, 0, 0, 0.5)'}}>
                                             Catégorie: <a href="#" rel="noopener noreferrer">{this.state.categorie}</a> &nbsp;
                                         </p>
 
                                     </div>
                                     <br/>
-                                    <p style={{position:'relative',backgroundColor:'rgba(0, 0, 0, 0.5)'}}>
+                                    <p>
                                         {this.state.description}
                                     </p>
 
@@ -287,15 +283,29 @@ export default class ShowSecteur extends Component {
                                                     </div>
                                                     <br/> <br/> <br/>
 
+                                                    <Scrollbars
+                                                        autoHeight
+                                                        autoHeightMin={300}
+                                                        autoHeightMax={300}
+                                                        universal>
                                                     <div>
-                                                        {this.showList()}
-                                                    </div>
 
+                                                        {this.showList()}
+
+                                                    </div>
+                                                    </Scrollbars>
                                                 </TabPane>
 
                                                 <TabPane tabId="tab2">
                                                     <div>
+
+                                                        <Scrollbars
+                                                            autoHeight
+                                                            autoHeightMin={400}
+                                                            autoHeightMax={400}
+                                                            universal>
                                                         {this.showDomaines()}
+                                                        </Scrollbars>
                                                     </div>
 
                                                 </TabPane>

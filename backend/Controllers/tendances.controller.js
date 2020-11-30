@@ -76,7 +76,6 @@ exports.get_news_domaine = async (req,res) => {
             else if (req.params.language==="ar")
             {
                 translate(response.nom, { to: 'ar' }).then(r => {
-                    console.log(res.text)
                     newsapi.v2.everything({
                         source: '',
                         q: r.text,
@@ -84,7 +83,6 @@ exports.get_news_domaine = async (req,res) => {
                         from: lastMonth,
                         sortBy: 'relevancy'
                     }).then(ress => {
-                        console.log(ress.articles)
                         ress.articles.map((currentArticle)=> {
                             if (['Euronews','BBC News','Electrony.net'].includes(currentArticle.source.name)) {
                                 const titre = currentArticle.title
@@ -237,7 +235,6 @@ exports.get_news_challenge = async (req,res) => {
                         from: lastMonth,
                         sortBy: 'relevancy'
                     }).then(ress => {
-                        console.log(ress.articles)
                         ress.articles.map((currentArticle)=> {
                             if (['Euronews','BBC News','Electrony.net'].includes(currentArticle.source.name)) {
                                 const titre = currentArticle.title
@@ -384,7 +381,6 @@ exports.get_news_secteur = async (req,res) => {
             else if (req.params.language==="ar")
             {
                 translate(response.nom, { to: 'ar' }).then(r => {
-                    console.log(res.text)
                     newsapi.v2.everything({
                         source: '',
                         q: r.text,
@@ -392,7 +388,6 @@ exports.get_news_secteur = async (req,res) => {
                         from: lastMonth,
                         sortBy: 'relevancy'
                     }).then(ress => {
-                        console.log(ress.articles)
                         ress.articles.map((currentArticle)=> {
                             if (['Euronews','BBC News','Electrony.net'].includes(currentArticle.source.name)) {
                                 const titre = currentArticle.title
@@ -440,7 +435,6 @@ exports.get_news_secteur = async (req,res) => {
                     from: lastMonth,
                     sortBy: 'relevancy'
                 }).then(ress => {
-                    console.log(ress)
                     ress.articles.map((currentArticle) => {
                         if (['Lefigaro.fr', 'Frandroid', 'Le Monde','Les Echos', "L'Usine Nouvelle", "Clubic", "JDN",'Euronews','BBC News','Sciences et Avenir'].includes(currentArticle.source.name)) {
                             const titre = currentArticle.title

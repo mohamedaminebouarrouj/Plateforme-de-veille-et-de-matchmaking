@@ -26,6 +26,7 @@ const domaineRouter = require('./Routes/domaines');
 const challengeRouter = require('./Routes/challenges');
 const startupRouter = require('./Routes/startups');
 const tendanceRouter = require('./Routes/tendances');
+const revendicationRouter=require('./Routes/revendications');
 
 
 app.use('/secteurs',secteursRouter);
@@ -34,6 +35,8 @@ app.use('/domaines',domaineRouter);
 app.use('/challenges',challengeRouter);
 app.use('/startups',startupRouter);
 app.use('/tendances',tendanceRouter);
+app.use('/revendications',revendicationRouter);
+
 
 
 

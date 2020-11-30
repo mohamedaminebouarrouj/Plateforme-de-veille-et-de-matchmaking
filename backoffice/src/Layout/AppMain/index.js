@@ -10,10 +10,12 @@ import Challenges from "../../Pages/Challenges";
 import Startups from "../../Pages/Startups";
 import Tendances from "../../Pages/Tendances";
 import Utilisateurs from "../../Pages/Utilisateurs";
-
+import Revendications from '../../Pages/Revendications';
+import Login from '../../Pages/Login';
 
 const Dashboards = lazy(() => import('../../Pages/Dashboards'));
-const Login = lazy(() => import('../../Pages/Login'));
+
+
 
 
 const Widgets = lazy(() => import('../../Pages/Widgets'));
@@ -134,6 +136,14 @@ const AppMain = () => {
                 <Route path="/login" component={Login}/>
             </Suspense>
 
+            {/* Revendications */}
+            <Suspense fallback={
+                <div className="loader-container">
+
+                </div>
+            }>
+                <Route path="/revendications" component={Revendications}/>
+            </Suspense>
             {/* Elements */}
 
             <Suspense fallback={

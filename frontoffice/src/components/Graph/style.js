@@ -8,18 +8,18 @@ edge {
 	curve-style: haystack;
 	haystack-radius: 0;
 	opacity: 0.333;
-	width: 0.01;
+	width: 0.1;
 	z-index: 0;
 	overlay-opacity: 0;
   events: no;
 }
 
 node {
-	width: 30;
-	height: 20;
-	font-size: 4;
-	shape:round-rectangle;
-	min-zoomed-font-size: 0;
+	width: 32;
+	height: 32;
+	font-size: 3;
+	font-family: "Poppins", sans-serif;
+	min-zoomed-font-size: 3;
 	label: data(name);
 	text-wrap: wrap;
 	text-max-width: 20;
@@ -34,57 +34,38 @@ node {
 }
 
 edge[interaction = "sd"] {
-	line-color: #FACD37;
+	line-color: #FFDB00;
 	opacity: 0.666;
-	z-index: 9;
-	width: 1;
+	z-index: 0;
+	width: 0.5;
 }
 
 node[NodeType = "secteur"],
 node[NodeType = "secteur"] {
-	background-color: #ffe600;
-	text-outline-color: #ffe600;
+    
+    shape:round-rectangle;
+    width: 35;
+	height: 25;
+    color: #333333;
+	background-color: #FFDB00;
+	text-outline-color: #FFDB00;
 }
 
-node[NodeType = "Cheese"][Quality],
-node[NodeType = "CheeseType"][Quality] {
-	width: mapData(Quality, 70, 100, 20, 50);
-	height: mapData(Quality, 70, 100, 20, 50);
-}
-
-node[NodeType = "WhiteWine"] {
-	background-color: white;
-	text-outline-color: white;
-}
-
-edge[interaction = "cw"] {
-	line-color: white;
-}
 
 node[NodeType = "domaine"] {
-    color: #fff;
-	background-opacity:1;
-	background-color: #222a42;
-	text-outline-color: #222a42;
-}
-
-edge[interaction = "cr"] {
-	line-color: #DE3128;
-}
-
-node[NodeType = "Cider"] {
-	background-color: #A4EB34;
-	text-outline-color: #A4EB34;
+    color: #333333;
+    font-size:3.5;
+	background-color: #fff;
+	text-outline-color: #fff;
 }
 
 node.highlighted {
 	min-zoomed-font-size: 0;
-  z-index: 9999;
 }
 
 edge.highlighted {
-	opacity: 1;
-	width: 0.5;
+	opacity: 0.8;
+	width: 0.2;
 	z-index: 9999;
 }
 

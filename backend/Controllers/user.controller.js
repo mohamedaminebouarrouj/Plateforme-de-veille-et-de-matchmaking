@@ -4,7 +4,11 @@ const auth = require('../middleware/authentification')
 
 exports.getConnectedUser = async (req,res) => {
     try {
-        let user = await User.findOne({_id: req.user._id})
+        let user = await User.findOne({_id: req.user._id}).populate({
+            path: 'revendicationsId',
+            model: 'Revendication',
+
+        })
         if (user) {
             res.status(200).json({ user: user })
         }

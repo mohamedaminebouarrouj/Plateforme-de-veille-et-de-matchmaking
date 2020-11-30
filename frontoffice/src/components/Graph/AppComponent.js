@@ -17,28 +17,15 @@ class AppComponent extends Component {
             style,
             layout: { name: 'preset' },
             selectionType: 'single',
-            boxSelectionEnabled: true
+            boxSelectionEnabled: false
         });
 
-
-        var j = cy.nodes('node[id="'+this.props.secteurId+'"]');
-        console.log("j",j)
-
-        cy.center(j)
+        cy.nodes().panify().ungrabify();
 
         const controller = new Controller({ cy });
         const bus = controller.bus;
 
         this.state = { controller, cy };
-
-
-    bus.on('showInfo', this.onShowInfo = (node => {
-        this.setState({ infoNode: node });
-    }));
-
-    bus.on('hideInfo', this.onHideInfo = (() => {
-        this.setState({ infoNode: null });
-    }));
     }
 
     getNodeSelected() {
@@ -60,8 +47,6 @@ componentWillUnmount(){
     render(){
         return (
             <div className='app'>
-                <script type="text/javascript" src="dist/polyfills.js"/>
-                <script type="text/javascript" src="dist/bundle.js"/>
                 <CytoscapeComponent id={this.props.id} history={this.props.history} cy={this.state.cy} controller={this.state.controller}/>
             </div>
         )

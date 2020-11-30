@@ -1,4 +1,4 @@
-import React, { Component , Fragment} from 'react';
+import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import axios from 'axios';
 
@@ -10,6 +10,10 @@ import {
     Card, CardBody,
     CardTitle, CustomInput,
 } from 'reactstrap';
+import Select from "react-select";
+import makeAnimated from "react-select/animated/dist/react-select.esm";
+
+const animatedComponents = makeAnimated();
 
 export default class UpdateDomaine extends Component {
     constructor(props) {
@@ -19,7 +23,7 @@ export default class UpdateDomaine extends Component {
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangeCategorie = this.onChangeCategorie.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.onChangeSecteur=this.onChangeSecteur.bind(this);
+        this.onChangeSecteur = this.onChangeSecteur.bind(this);
 
         this.state = {
             nom: '',
@@ -51,29 +55,57 @@ export default class UpdateDomaine extends Component {
             .catch((error) => {
                 console.log(error);
             })
+        console.log("sect", this.state.secteurs)
     }
+
     onChangeSecteur(e) {
-        //let value = Array.of(e.target.value);
-        //console.log(e.target.value)
-        if (e.target.checked == true) {
-
+        if (e != null) {
             this.setState({
-                secteurs: [...this.state.secteurs, e.target.value]
+                secteurs: e.map((o) => o.value)
             })
-
         } else {
-            this.state.secteurs.pop(e.target.value)
             this.setState({
-                secteurs: this.state.secteurs
+                secteurs: []
             })
         }
     }
 
 
     secteurList() {
-        return this.state.sect.map(currentSecteur => {
-            return <CustomInput type="checkbox" checked= {this.state.secteurs.includes(currentSecteur._id)} label={currentSecteur.nom} value={currentSecteur._id} id={currentSecteur._id} key={currentSecteur._id} onChange={this.onChangeSecteur}/>;
+
+        let selected = []
+        const options = this.state.sect.map(currentSecteur => ({value: currentSecteur._id, label: currentSecteur.nom}))
+        this.state.sect.map(currentSecteur => {
+            this.state.secteurs.map(selectedSecteur => {
+                if (currentSecteur._id === selectedSecteur)
+                    selected.push({value: currentSecteur._id, label: currentSecteur.nom})
+            })
         })
+        console.log('selec', selected)
+        return (
+            <Select
+                value={selected}
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                options={options}
+                onChange={this.onChangeSecteur}
+                className="basic-multi-select"
+                classNamePrefix="select"
+            > </Select>
+        )
+
+        // return this.state.sect.map(currentSecteur => {
+        //     return (
+        //             <CustomInput type="checkbox"
+        //                          checked= {this.state.secteurs.includes(currentSecteur._id)}
+        //                          label={currentSecteur.nom}
+        //                          value={currentSecteur._id}
+        //                          id={currentSecteur._id}
+        //                          key={currentSecteur._id}
+        //                          onChange={this.onChangeSecteur}/>
+        //                         )
+        // })
     }
 
 
@@ -102,7 +134,7 @@ export default class UpdateDomaine extends Component {
             nom: this.state.nom,
             description: this.state.description,
             categorie: this.state.categorie,
-            secteursId : this.state.secteurs
+            secteursId: this.state.secteurs
         }
 
         axios.post('http://localhost:5000/domaines/update/' + this.props.id, domaine)
@@ -148,11 +180,11 @@ export default class UpdateDomaine extends Component {
                                             </FormGroup>
 
                                             <FormGroup>
-                                            <Label for="exampleText"><b>Secteurs reliés</b></Label>
-                                            <div>
-                                                {this.secteurList()}
-                                            </div>
-                                        </FormGroup>
+                                                <Label for="exampleText"><b>Secteurs reliés</b></Label>
+                                                <div>
+                                                    {this.secteurList()}
+                                                </div>
+                                            </FormGroup>
 
                                             <FormGroup>
                                                 <Label for="exampleCustomSelect"><b>Catégorie</b></Label>

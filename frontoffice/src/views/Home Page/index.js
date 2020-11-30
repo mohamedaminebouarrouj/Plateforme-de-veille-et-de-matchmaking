@@ -21,6 +21,9 @@ import React from "react";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import PageHeader from "components/PageHeader/PageHeader.js";
 import Footer from "components/Footer/Footer.js";
+import Basics from "../IndexSections/Basics";
+import NucleoIcons from "../IndexSections/NucleoIcons";
+import JavaScript from "../IndexSections/JavaScript";
 
 class Index extends React.Component {
   componentDidMount() {
@@ -36,6 +39,9 @@ class Index extends React.Component {
         <div className="wrapper">
           <PageHeader />
           <div className="main">
+            <Basics/>
+            <NucleoIcons/>
+            <JavaScript/>
           </div>
           <Footer />
         </div>

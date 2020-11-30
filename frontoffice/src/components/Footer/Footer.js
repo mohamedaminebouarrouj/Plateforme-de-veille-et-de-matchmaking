@@ -36,7 +36,7 @@ class Footer extends React.Component {
         <Container>
           <Row>
             <Col md="3">
-              <h1 className="title"><span style={{color: '#ffe600'}}>I</span>nno<span style={{color: '#ffe600'}}>S</span>eer•</h1>
+              <h1 className="title"><span style={{color:'#FFDB00'}} >I</span>nno<span style={{color: '#FFDB00'}}>S</span>eer•</h1>
             </Col>
             <Col md="3">
               <Nav>

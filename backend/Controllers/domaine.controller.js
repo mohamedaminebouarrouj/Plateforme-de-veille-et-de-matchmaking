@@ -2,6 +2,8 @@ var Domaines= require('../Models/domaine.model');
 var Challenges= require('../Models/challenge.model');
 var Secteurs= require('../Models/secteur.model');
 var Startups = require('../Models/startup.model');
+var Tendances = require('../Models/tendance.model');
+
 const translate = require('@k3rn31p4nic/google-translate-api');
 const fetch = require('node-fetch');
 global.fetch = fetch;
@@ -174,6 +176,15 @@ exports.domaine_delete = function (req,res){
                         {new: true, useFindAndModify: false})
                         .then()
                 })
+                domaine.tendancesId.map((tendId) => {
+                    Tendances.findByIdAndDelete(tendId,function (err, docs) {
+                            if (err) {
+                                console.log(err)
+                            } else {
+                                console.log("Deleted : ", docs);
+                            }
+                        })
+                })
 
             })
         })
@@ -214,19 +225,20 @@ exports.domaine_add_picture = async (req,res)=>{
                         .then(json =>
                         {
                             var img=''
-                            img = json.results[0].urls.regular
+                            if(json.results[0].urls.regular)
+                                img = json.results[0].urls.regular
 
                             Domaines.findByIdAndUpdate(currentDomaine._id,
-                                {$push: {img: img}},
+                                {$set: {img: img}},
                                 {new: true, useFindAndModify: false})
                                 .then()
 
                         })
-                        .catch(err => res.status(400).json('Error: ' + err + ' :' + r.text));
+                        .catch();
                 })
                 .catch(err => res.status(401).json('Error: ' + err));
             })
             res.json('Updated')
         })
-        .catch(err => res.status(402).json('Error: ' + err));
+        .catch();
 }

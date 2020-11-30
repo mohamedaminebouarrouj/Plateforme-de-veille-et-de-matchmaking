@@ -29,7 +29,8 @@ const userSchema = new Schema({
         },
         avatar:{
             type:String
-        }
+        },
+        revendicationsId:[{type:Schema.ObjectId, ref: 'revendication'}]
 
     },
 
@@ -40,7 +41,13 @@ const userSchema = new Schema({
 
 const User = mongoose.model('User',userSchema);
 User.findByCredentials = async (email, password) => {
-    const user = await User.findOne({email: email}).exec();
+    const user = await User.findOne({email: email})
+        .populate({
+            path: 'revendicationsId',
+            model: 'Revendication',
+
+        })
+        .exec();
     if (!user) {
         return false;
     }

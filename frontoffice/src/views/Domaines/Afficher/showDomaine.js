@@ -15,6 +15,7 @@ import {Link} from "react-router-dom";
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import AppComponent from "../../../components/Graph/AppComponent";
+import {Scrollbars} from "react-custom-scrollbars";
 
 function Show(props){
     return (
@@ -22,21 +23,21 @@ function Show(props){
 
             <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a rel="noopener noreferrer" target='_blank' href={props.tendance.url}>{props.tendance.titre}</a> </p>
             <p style={{fontSize: '11px' , opacity:'0.7'}}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
-            <p style={{fontSize: '11px' , opacity:'0.2'}}>───────────────────────────────────────────────────────────────────</p>
+
         </React.Fragment>
     );
 }
 function ShowStartup(props){
-    let errorflag=true
     return (
 
         <div>
-            <GridList cols={5} cellHeight={180}>
+            <GridList cols={5} cellHeight={120}>
                 {props.startup.map((tile) => (
                     <GridListTile key={tile.nom}>
                         <NavLink tag={Link} to={'/startups/'+tile._id}>
-                            <img style={{opacity:0.7}} alt="" />
-                            {tile.nom}
+                            <img style={{opacity:0.7}} src={require("../../../assets/logos/Startups/default.png")} />
+                            <p style={{fontSize:'12px',textAlignVertical: "center",
+                                textAlign: "center"}}>{tile.nom}</p>
                         </NavLink>
                     </GridListTile>
                 ))}
@@ -225,16 +226,12 @@ export default class ShowDomaine extends Component {
                     <br/>
                     <section className="section">
                             <Row>
-                                <Col className="ml-auto mr-auto" lg="6" md="6">
-                                    <section>
+                                <Col lg="7">
                                         <AppComponent id={this.props.match.params.id} history={this.props.history}/>
-                                    </section>
                                 </Col>
 
-                                <Col lg="5" md="6">
-                                    <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '300px'}}>
-
-
+                                <Col lg="5">
+                                    <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '200px'}}>
                                         <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
                                             {this.state.nom}
                                         </h1>
@@ -313,21 +310,34 @@ export default class ShowDomaine extends Component {
                                                     <br/> <br/> <br/>
 
                                                     <div>
+                                                        <Scrollbars
+                                                            autoHeight
+                                                            universal>
                                                         {this.showList()}
+                                                        </Scrollbars>
                                                     </div>
 
                                                 </TabPane>
 
                                                 <TabPane tabId="tab2">
                                                     <div>
+                                                        <Scrollbars
+                                                            autoHeight
+                                                            autoHeightMin={300}
+                                                            universal>
                                                         {this.showStartups()}
+                                                        </Scrollbars>
                                                     </div>
 
                                                 </TabPane>
 
                                                 <TabPane tabId="tab3">
                                                     <div>
+                                                        <Scrollbars
+                                                            autoHeight
+                                                            universal>
                                                         {this.showSecteurs()}
+                                                        </Scrollbars>
                                                     </div>
 
                                                 </TabPane>

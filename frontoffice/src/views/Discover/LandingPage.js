@@ -260,7 +260,7 @@ export default class LandingPage extends React.Component {
                     <DropdownItem onClick={this.onSecteurs}>Secteurs ({this.state.secteurs.length})</DropdownItem>
                     <DropdownItem onClick={this.onDomaines}>Domaines d'activité ({this.state.domaines.length})</DropdownItem>
                     {/*<DropdownItem onClick={this.onChallenges}>Challenges ({this.state.challenges.length})</DropdownItem>*/}
-                    {/*<DropdownItem onClick={this.onStartups}>Startups ({this.state.startups.length})</DropdownItem>*/}
+                    <DropdownItem onClick={this.onStartups}>Startups ({this.state.startups.length})</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               </Container>

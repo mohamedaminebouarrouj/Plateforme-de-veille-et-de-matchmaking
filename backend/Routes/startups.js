@@ -9,6 +9,8 @@ router.delete('/:id',startupController.startup_delete);
 
 router.post('/update/:id',startupController.startup_update_post);
 
+router.post('/updateUser/:id',startupController.startup_update_post_user);
+
 router.get('/scraping/',startupController.startup_scraping);
 
 router.get('/:id',startupController.startup_find);

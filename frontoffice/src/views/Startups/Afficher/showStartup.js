@@ -20,6 +20,15 @@ export default class ShowStartup extends Component {
         this.onSubmitRevendiquer = this.onSubmitRevendiquer.bind(this)
         this.onChangeEmail = this.onChangeEmail.bind(this)
         this.onChangeContenu = this.onChangeContenu.bind(this)
+        this.onChangeNom=this.onChangeNom.bind(this)
+        this.onChangeDescription=this.onChangeDescription.bind(this)
+        this.onChangeAdresse=this.onChangeAdresse.bind(this)
+        this.onChangeEmailStartup=this.onChangeEmailStartup.bind(this)
+        this.onChangeSiteWeb=this.onChangeSiteWeb.bind(this)
+        this.onChangeFacebook=this.onChangeFacebook.bind(this)
+        this.onChangeLinkedin=this.onChangeLinkedin.bind(this)
+        this.onChangeTwitter=this.onChangeTwitter.bind(this)
+        this.onSubmitModifier=this.onSubmitModifier.bind(this)
 
         this.state = {
             nom: '',
@@ -29,17 +38,19 @@ export default class ShowStartup extends Component {
             domainesId: [],
             fondateurs: [],
             siteWeb: '',
-            adresse:'',
-            pays:'',
-            email:'',
-            facebook:'',
-            twitter:'',
-            linkedin:'',
+            adresse: '',
+            pays: '',
+            email: '',
+            facebook: '',
+            twitter: '',
+            linkedin: '',
             tabs: 1,
             emailRevendication: '',
             contenu: '',
             formModal: false,
-            validationModal:false,
+            validationModal: false,
+            verifiedStartup: false,
+            userStartup: false,
         }
     }
 
@@ -51,27 +62,25 @@ export default class ShowStartup extends Component {
 
     componentDidMount() {
 
-        if(localStorage.getItem('auth-token'))
-        {
+        if (localStorage.getItem('auth-token')) {
             this.setState({
-                emailRevendication:JSON.parse(localStorage.getItem("loggedUser")).email
+                emailRevendication: JSON.parse(localStorage.getItem("loggedUser")).email
             })
 
-            JSON.parse(localStorage.getItem("loggedUser")).revendicationsId.map(r=>{
+            JSON.parse(localStorage.getItem("loggedUser")).revendicationsId.map(r => {
                 console.log(r)
-                if(r.startupId===this.props.match.params.id)
-                {
-                    if(r.verified===true)
-                    {
-                        console.log("hedhi heya el startup w verifié")
-                    }
-                    else{
-                        console.log("hedhi heya el startup w mch verifié")
+                if (r.startupId === this.props.match.params.id) {
+                    if (r.verified === true) {
+                        this.setState({
+                            verifiedStartup: true,
+                            userStartup: true
+                        })
+                    } else {
+                        this.setState({
+                            userStartup: true
+                        })
                     }
 
-                }
-                else{
-                    console.log("mch hedhi el startup")
                 }
             })
         }
@@ -86,19 +95,18 @@ export default class ShowStartup extends Component {
                     domainesId: response.data.domainesId,
                     logo: response.data.logo,
                     siteWeb: response.data.siteWeb,
-                    email:response.data.email,
-                    facebook:response.data.facebook,
-                    linkedin:response.data.linkedin,
-                    twitter:response.data.twitter,
-                    adresse:response.data.adresse,
-                    pays:response.data.pays
+                    email: response.data.email,
+                    facebook: response.data.facebook,
+                    linkedin: response.data.linkedin,
+                    twitter: response.data.twitter,
+                    adresse: response.data.adresse,
+                    pays: response.data.pays
 
                 })
             })
             .catch(function (error) {
                 console.log(error);
             })
-
 
 
     }
@@ -119,21 +127,101 @@ export default class ShowStartup extends Component {
         })
     }
 
+    onChangeNom(e)
+    {
+        this.setState({
+            nom: e.target.value
+        })
+    }
+
+    onChangeDescription(e)
+    {
+        this.setState({
+            description: e.target.value
+        })
+    }
+
+    onChangeAdresse(e)
+    {
+        this.setState({
+            adresse: e.target.value
+        })
+    }
+
+    onChangeSiteWeb(e)
+    {
+        this.setState({
+            siteWeb: e.target.value
+        })
+    }
+
+    onChangeEmailStartup(e)
+    {
+        this.setState({
+            email: e.target.value
+        })
+    }
+
+    onChangeFacebook(e)
+    {
+        this.setState({
+            facebook: e.target.value
+        })
+    }
+
+    onChangeLinkedin(e)
+    {
+        this.setState({
+            linkedin: e.target.value
+        })
+    }
+
+    onChangeTwitter(e)
+    {
+        this.setState({
+            twitter: e.target.value
+        })
+    }
+
+    onSubmitModifier(e)
+    {
+        e.preventDefault();
+
+        const startup = {
+            nom: this.state.nom,
+            description: this.state.description,
+            adresse : this.state.adresse,
+            email: this.state.email,
+            siteWeb:this.state.siteWeb,
+            facebook: this.state.facebook,
+            linkedin: this.state.linkedin,
+            twitter: this.state.twitter
+        }
+
+
+        axios.post('http://localhost:5000/startups/updateUser/' + this.props.match.params.id, startup)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload(false)
+            });
+
+    }
+
     onSubmitRevendiquer(e) {
         e.preventDefault();
 
         const revendication = {
             email: this.state.emailRevendication,
             contenu: this.state.contenu,
-            traited : false,
-            verified:false,
-            startupId:this.props.match.params.id,
+            traited: false,
+            verified: false,
+            startupId: this.props.match.params.id,
             userId: JSON.parse(localStorage.getItem("loggedUser"))._id
         }
 
         console.log(revendication);
 
-        axios.post('http://localhost:5000/revendications/add' , revendication)
+        axios.post('http://localhost:5000/revendications/add', revendication)
             .then(res => {
                 console.log(res.data)
             });
@@ -143,8 +231,7 @@ export default class ShowStartup extends Component {
 
     render() {
 
-        if(this.state.siteWeb!=="")
-        {
+        if (this.state.siteWeb !== "") {
             if (!this.state.siteWeb.split('//')[1]) {
                 this.setState({
                     siteWeb: "https://" + this.state.siteWeb
@@ -193,16 +280,25 @@ export default class ShowStartup extends Component {
                                         {/*    <a> Ajouter au favoris</a>*/}
                                         {/*</Button>*/}
 
-                                        {localStorage.getItem("auth-token")===""?
+                                        {localStorage.getItem('auth-token') !== "" ? (this.state.userStartup ? (this.state.verifiedStartup ?
                                             <Button className="btn btn-simple btn-round" color="primary"
-                                                    onClick={() => this.toggleModal("demoModal")} disabled>
-                                            <i className="tim-icons icon-spaceship"/>
-                                            <a> Revendiquer cette start-up</a>
-                                        </Button>:<Button className="btn btn-simple btn-round" color="primary"
-                                                          onClick={() => this.toggleModal("demoModal")}>
-                                            <i className="tim-icons icon-spaceship"/>
-                                            <a> Revendiquer cette start-up</a>
-                                        </Button>}
+                                                    onClick={() => this.toggleModal("modificationModal")}>
+                                                <i className="tim-icons icon-spaceship"/>
+                                                <a> Modifier Startup</a>
+                                            </Button> : <Button className="btn btn-simple btn-round" color="primary" disabled>
+                                                <i className="tim-icons icon-spaceship"/>
+                                                <a> Revendiquer cette start-up</a>
+                                            </Button>) : <Button className="btn btn-simple btn-round" color="primary"
+                                                                     onClick={() => this.toggleModal("demoModal")}>
+                                                <i className="tim-icons icon-spaceship"/>
+                                                <a> Revendiquer cette start-up</a>
+                                            </Button>)
+                                            :
+                                            <Button className="btn btn-simple btn-round" color="primary" disabled>
+                                                <i className="tim-icons icon-spaceship"/>
+                                                <a> Revendiquer cette start-up</a>
+                                            </Button>
+                                        }
 
 
                                         <Modal
@@ -215,28 +311,35 @@ export default class ShowStartup extends Component {
                                                     className="close"
                                                     onClick={() => this.toggleModal("demoModal")}
                                                 >
-                                                    <i className="tim-icons icon-simple-remove" />
+                                                    <i className="tim-icons icon-simple-remove"/>
                                                 </button>
-                                                <h4 className="title title-up">Revendiquer le profil de cette start-up</h4>
+                                                <h4 className="title title-up">Revendiquer le profil de cette
+                                                    start-up</h4>
                                             </div>
                                             <div className="modal-body">
                                                 <p>
                                                     Vous pouvez désormais réclamer votre profil d'entreprise. <br/>
-                                                    Nous marquerons ce profil avec un badge vérifié (<CheckCircleIcon style={{color:"#FFDB00", fontSize:"40px"}} />) et vous pourrez modifier votre profil d'entreprise.
+                                                    Nous marquerons ce profil avec un badge vérifié (<CheckCircleIcon
+                                                    style={{color: "#FFDB00", fontSize: "40px"}}/>) et vous pourrez
+                                                    modifier votre profil d'entreprise.
                                                 </p>
                                             </div>
                                             <div className="text-center">
                                                 <Button
                                                     className="btn btn-default btn-round"
                                                     type="button"
-                                                    onClick={() => {this.toggleModal("demoModal")
-                                                        this.toggleModal("formModal")}}
+                                                    onClick={() => {
+                                                        this.toggleModal("demoModal")
+                                                        this.toggleModal("formModal")
+                                                    }}
                                                 >
                                                     OK
                                                 </Button>
                                             </div>
                                         </Modal>
+
                                         {/* Start Form Modal */}
+
                                         <Modal
                                             isOpen={this.state.formModal}
                                             toggle={() => this.toggleModal("formModal")}
@@ -248,9 +351,10 @@ export default class ShowStartup extends Component {
                                                         className="close"
                                                         onClick={() => this.toggleModal("formModal")}
                                                     >
-                                                        <i className="tim-icons icon-simple-remove" />
+                                                        <i className="tim-icons icon-simple-remove"/>
                                                     </button>
-                                                    <h4 className="title title-up">Revendiquer le profil de cette start-up</h4>
+                                                    <h4 className="title title-up">Revendiquer le profil de cette
+                                                        start-up</h4>
                                                 </div>
                                             </div>
                                             <div className="modal-body">
@@ -302,8 +406,10 @@ export default class ShowStartup extends Component {
                                                         <Button
                                                             className="btn btn-default btn-round"
                                                             type="submit"
-                                                        onClick={()=>{this.toggleModal("formModal")
-                                                            this.toggleModal("validationModal")}}>
+                                                            onClick={() => {
+                                                                this.toggleModal("formModal")
+                                                                this.toggleModal("validationModal")
+                                                            }}>
                                                             Revendiquez
                                                         </Button>
 
@@ -324,14 +430,16 @@ export default class ShowStartup extends Component {
                                                     className="close"
                                                     onClick={() => this.toggleModal("validationModal")}
                                                 >
-                                                    <i className="tim-icons icon-simple-remove" />
+                                                    <i className="tim-icons icon-simple-remove"/>
                                                 </button>
-                                                <h4 className="title title-up">Revendiquer le profil de cette start-up</h4>
+                                                <h4 className="title title-up">Revendiquer le profil de cette
+                                                    start-up</h4>
                                             </div>
                                             <div className="modal-body">
                                                 <p>
                                                     Votre demande a était prise en considération.
-                                                    Un E-mail de validation vient d'être envoyer à l'adresse : <a style={{fontStyle:'italic'}}>{this.state.emailRevendication}</a>.
+                                                    Un E-mail de validation vient d'être envoyer à l'adresse : <a
+                                                    style={{fontStyle: 'italic'}}>{this.state.emailRevendication}</a>.
                                                     Nous vous contacterons une fois votre demande traitée.
                                                 </p>
                                             </div>
@@ -339,12 +447,164 @@ export default class ShowStartup extends Component {
                                                 <Button
                                                     className="btn btn-default btn-round"
                                                     type="button"
-                                                    onClick={() => {this.toggleModal("validationModal")
+                                                    onClick={() => {
+                                                        this.toggleModal("validationModal")
                                                         window.location.reload(false)
                                                     }}
                                                 >
                                                     OK
                                                 </Button>
+                                            </div>
+                                        </Modal>
+
+                                        {/* Modification Modal */}
+
+                                        <Modal
+                                            isOpen={this.state.modificationModal}
+                                            toggle={() => this.toggleModal('modificationModal')}
+                                            backdrop={false}
+                                            keyboard={false}
+                                            size={"lg"}
+                                            centered={false}
+                                        >
+                                            <div className="modal-header justify-content-center">
+                                                <button
+                                                    className="close"
+                                                    onClick={() => this.toggleModal("modificationModal")}
+                                                >
+                                                    <i className="tim-icons icon-simple-remove"/>
+                                                </button>
+                                                <h4 className="title title-up">Modifier le profil de votre
+                                                    start-up</h4>
+                                            </div>
+                                            <div className="modal-body">
+
+                                                <Form onSubmit={this.onSubmitModifier}>
+
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                id="filled-email"
+                                                                label="Nom de la startup"
+                                                                type="text"
+                                                                required
+                                                                fullWidth
+                                                                value={this.state.nom}
+                                                                onChange={this.onChangeNom}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <br/>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                label="Description"
+                                                                multiline
+                                                                row={5}
+                                                                type="text"
+                                                                required
+                                                                fullWidth
+                                                                value={this.state.description}
+                                                                onChange={this.onChangeDescription}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <br/>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                label="Adresse"
+                                                                type="text"
+                                                                fullWidth
+                                                                value={this.state.adresse}
+                                                                onChange={this.onChangeAdresse}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <br/>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                label="Site Web"
+                                                                type="text"
+                                                                fullWidth
+                                                                value={this.state.siteWeb}
+                                                                onChange={this.onChangeSiteWeb}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <br/>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                id="filled-email"
+                                                                label="Adresse E-mail"
+                                                                type="email"
+                                                                fullWidth
+                                                                value={this.state.email}
+                                                                onChange={this.onChangeEmailStartup}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <br/>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                id="filled-email"
+                                                                label="Profil Facebook de la startup"
+                                                                type="text"
+                                                                fullWidth
+                                                                value={this.state.facebook}
+                                                                onChange={this.onChangeFacebook}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                id="filled-email"
+                                                                label="Profil Linkedin de la startup"
+                                                                type="text"
+                                                                fullWidth
+                                                                value={this.state.linkedin}
+                                                                onChange={this.onChangeLinkedin}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+
+                                                    <FormGroup>
+                                                        <InputGroup>
+                                                            <TextField
+                                                                id="filled-email"
+                                                                label="Profil Facebook de la startup"
+                                                                type="text"
+                                                                fullWidth
+                                                                value={this.state.twitter}
+                                                                onChange={this.onChangeTwitter}
+
+                                                            />
+                                                        </InputGroup>
+                                                    </FormGroup>
+
+                                                    <div className="text-center">
+                                                        <Button
+                                                            className="btn btn-default btn-round"
+                                                            type="submit"
+                                                            onClick={() => {
+                                                                this.toggleModal("modificationModal")
+                                                            }}>
+                                                            Modifier
+                                                        </Button>
+
+                                                    </div>
+                                                </Form>
                                             </div>
                                         </Modal>
 
@@ -368,7 +628,7 @@ export default class ShowStartup extends Component {
                             <Col>
                                 <h2 className="font-weight-bold">Contact</h2>
                                 <h4 className="font-weight-bold">Adresse:</h4>
-                                <p>Tunisie</p>
+                                <p>{this.state.adresse}</p>
                                 <br/>
                                 <h4 className="font-weight-bold">Site web:</h4>
                                 <a href={this.state.siteWeb} target="_blank">{this.state.siteWeb.split('//')[1]}</a>

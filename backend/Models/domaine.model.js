@@ -5,36 +5,19 @@ const Schema = mongoose.Schema;
 const domaineSchema = new Schema({
         nom: {type: String, required: true, unique: true},
         description: {type: String},
-        categorie: {
-            type: String,
-        },
-        secteursId:
-            [
-            { type: Schema.ObjectId,
-            ref: 'Secteur' }
-            ],
+        categorie: {type: String},
 
-        startupsId:[{
-            type: Schema.ObjectId,
-            ref : 'Startup'
-        }],
+        startupsId: [{type: Schema.ObjectId, ref: 'Startup'}],
 
-        challengesId:[{
-            type : Schema.ObjectId,
-            ref: 'Challenge'
-        }],
-        tendancesId:[{
-            type : Schema.ObjectId,
-            ref: 'Tendance'
-        }],
+        tendancesId: [{type: Schema.ObjectId, ref: 'Tendance'}],
 
-        img:{type:String},
+        img: {type: String},
     },
     {
-        timestamp:true,
+        timestamp: true,
     },
 );
 
-const Domaine = mongoose.model('Domaine',domaineSchema);
+const Domaine = mongoose.model('Domaine', domaineSchema);
 
 module.exports = Domaine;

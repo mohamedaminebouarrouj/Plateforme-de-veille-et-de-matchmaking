@@ -61,21 +61,6 @@ export const MainNav = [
         ],
     },
     {
-        icon: 'pe-7s-box2',
-        label: 'Domaines',
-        content: [
-            {
-                label: 'Afficher les Domaines',
-                to:'#/domaines/afficher'
-            },
-            {
-                label: 'Ajouter un nouveau Domaine',
-                to:'#/domaines/ajouter'
-            },
-
-        ],
-    },
-    {
         icon: 'pe-7s-target',
         label: 'Challenges',
         content: [
@@ -105,6 +90,22 @@ export const MainNav = [
 
         ],
     },
+    {
+        icon: 'pe-7s-box2',
+        label: "Domaines des startups",
+        content: [
+            {
+                label: 'Afficher les Domaines',
+                to:'#/domaines/afficher'
+            },
+            {
+                label: 'Ajouter un nouveau Domaine',
+                to:'#/domaines/ajouter'
+            },
+
+        ],
+    },
+
     {
         icon: 'pe-7s-news-paper',
         label: 'Tendances',

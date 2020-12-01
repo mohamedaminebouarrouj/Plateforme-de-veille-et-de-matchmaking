@@ -32,7 +32,6 @@ const Secteur= props =>(
             {props.secteur.nom}
         </TableCell>
         <TableCell>{props.secteur.description}</TableCell>
-        <TableCell>{props.secteur.categorie}</TableCell>
         <TableCell>
             <Button outline className="mb-2 mr-2 btn-transition" color="info"><Link to={"/secteurs/update/"+props.secteur._id}>Modifier</Link> </Button>
         </TableCell>
@@ -96,7 +95,6 @@ export default class secteursList extends Component {
                 <TableRow>
                     <TableCell><b>Nom du Secteur</b></TableCell>
                     <TableCell><b>Description</b></TableCell>
-                    <TableCell><b>Catégorie</b></TableCell>
                     <TableCell><b>Modifier</b></TableCell>
                     <TableCell><b>Supprimer</b></TableCell>
                 </TableRow>

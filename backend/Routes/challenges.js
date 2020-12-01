@@ -12,4 +12,10 @@ router.delete('/:id',challengeController.challenge_delete);
 router.post('/update/:id',challengeController.challenge_update_post);
 
 router.get('/:id',challengeController.challenge_find);
+
+router.get('/findUpdate/:id',challengeController.challenge_findUpdate);
+
+
+router.post('/update_image',challengeController.challenge_add_picture);
+
 module.exports =router;

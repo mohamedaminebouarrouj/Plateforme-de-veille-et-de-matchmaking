@@ -34,52 +34,11 @@ function Row(props){
                     {props.domaine.nom}
                 </TableCell>
                 <TableCell width='50%'>{props.domaine.description.split('.')[0]+"."}</TableCell>
-                <TableCell width='20%'>{props.domaine.categorie}</TableCell>
-                <TableCell width='12%'>{props.domaine.secteursId.length}
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                </TableCell>
                 <TableCell>
                     <Button outline className="mb-2 mr-2 btn-transition" color="info"><Link to={"/domaines/update/"+props.domaine._id}>Modifier</Link> </Button>
                 </TableCell>
                 <TableCell>
                     <Button outline className="mb-2 mr-2 btn-transition" color="danger" onClick={() => { props.deleteDomaine(props.domaine._id) }}>Supprimer</Button>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                <b>Secteurs Reliés</b>
-                            </Typography>
-                            <Table size="small" aria-label="purchases">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell><b>Nom</b></TableCell>
-                                        <TableCell><b>Description</b></TableCell>
-                                        <TableCell><b>Categorie</b></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                            {props.domaine.secteursId.map((currentSect)=>
-                                                <TableRow>
-                                                    <TableCell>
-                                                        {currentSect.nom}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {currentSect.description.split('.')[0]}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {currentSect.categorie}
-                                                    </TableCell>
-                                                </TableRow>)}
-                                </TableBody>
-
-                            </Table>
-                        </Box>
-                    </Collapse>
                 </TableCell>
             </TableRow>
         </React.Fragment>
@@ -130,8 +89,6 @@ export default class domainesList extends Component {
           <TableRow>
             <TableCell><b>Nom du Domaine</b></TableCell>
             <TableCell><b>Description</b></TableCell>
-            <TableCell><b>Catégorie</b></TableCell>
-            <TableCell><b>Secteurs reliés</b></TableCell>
             <TableCell><b>Modifier</b></TableCell>
             <TableCell><b>Supprimer</b></TableCell>
           </TableRow>

@@ -17,13 +17,11 @@ export default class CreateSecteur extends Component {
 
         this.onChangeNom = this.onChangeNom.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
-        this.onChangeCategorie = this.onChangeCategorie.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             nom: '',
-            description: '',
-            categorie: ''
+            description: ''
         }
     }
 
@@ -39,19 +37,13 @@ export default class CreateSecteur extends Component {
         })
     }
 
-    onChangeCategorie(e) {
-        this.setState({
-            categorie: e.target.value
-        })
-    }
 
     onSubmit(e) {
         e.preventDefault();
 
         const secteur = {
             nom: this.state.nom,
-            description: this.state.description,
-            categorie: this.state.categorie
+            description: this.state.description
         }
 
 
@@ -96,20 +88,6 @@ export default class CreateSecteur extends Component {
                                                        onChange={this.onChangeDescription}/>
                                             </FormGroup>
 
-                                            <FormGroup>
-                                                <Label for="exampleCustomSelect"><b>Catégorie</b></Label>
-                                                <CustomInput type="select" id="categorie"
-                                                             name="categorie"
-                                                             value={this.state.categorie}
-                                                             onChange={this.onChangeCategorie}
-                                                required>
-                                                    <option>Selectionner une catégorie</option>
-                                                    <option value="Agriculture et pêche">Agriculture et pêche</option>
-                                                    <option value="Industrie">Industrie</option>
-                                                    <option value="Commerce">Commerce</option>
-                                                    <option value="Services">Services</option>
-                                                </CustomInput>
-                                            </FormGroup>
                                             <Button color="primary" className="mt-1" type="submit">Submit</Button>
                                         </Form>
                                     </CardBody>

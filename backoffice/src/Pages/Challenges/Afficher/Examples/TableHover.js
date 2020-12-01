@@ -35,8 +35,8 @@ function Row(props){
                     {props.challenge.nom}
                 </TableCell>
                 <TableCell width='45%'>{props.challenge.description.split('.')[0]}</TableCell>
-                <TableCell width='20%'>{props.challenge.type}</TableCell>
-                <TableCell width='15%'>{props.challenge.domainesId.length}
+                <TableCell width='20%'>{props.challenge.categorie}</TableCell>
+                <TableCell width='15%'>{props.challenge.secteursId.length}
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
@@ -45,7 +45,7 @@ function Row(props){
                     <Button outline className="mb-2 mr-2 btn-transition" color="info"><Link to={"/challenges/update/"+props.challenge._id}>Modifier</Link> </Button>
                 </TableCell>
                 <TableCell>
-                    <Button outline className="mb-2 mr-2 btn-transition" color="danger" onClick={() => { props.deleteDomaine(props.challenge._id) }}>Supprimer</Button>
+                    <Button outline className="mb-2 mr-2 btn-transition" color="danger" onClick={() => { props.deleteChallenge(props.challenge._id) }}>Supprimer</Button>
                 </TableCell>
             </TableRow>
             <TableRow>
@@ -53,7 +53,7 @@ function Row(props){
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
-                                <b>Domaines Reliés</b>
+                                <b>Secteurs Reliés</b>
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
@@ -64,16 +64,16 @@ function Row(props){
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.challenge.domainesId.map((currentDom)=>
+                                    {props.challenge.secteursId.map((currentSect)=>
                                         <TableRow>
                                             <TableCell>
-                                                {currentDom.nom}
+                                                {currentSect.nom}
                                             </TableCell>
                                             <TableCell>
-                                                {currentDom.description.split('.')[0]}
+                                                {currentSect.description.split('.')[0]}
                                             </TableCell>
                                             <TableCell>
-                                                {currentDom.categorie}
+                                                {currentSect.categorie}
                                             </TableCell>
                                         </TableRow>)}
                                 </TableBody>
@@ -132,8 +132,8 @@ export default class challengesList extends Component {
           <TableRow>
             <TableCell><b>Nom du Challenge</b></TableCell>
             <TableCell><b>Description</b></TableCell>
-            <TableCell><b>Type</b></TableCell>
-            <TableCell><b>Domaines Reliés</b></TableCell>
+            <TableCell><b>Catégorie</b></TableCell>
+            <TableCell><b>Secteurs Reliés</b></TableCell>
             <TableCell><b>Modifier</b></TableCell>
               <TableCell><b>Supprimer</b></TableCell>
           </TableRow>

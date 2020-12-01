@@ -1,10 +1,12 @@
 var Secteurs = require('../Models/secteur.model')
 var Startups = require('../Models/startup.model');
 var Domaines = require('../Models/domaine.model');
+var Challanges = require('../Models/challenge.model');
 const upload = require("../middleware/upload");
 const path = require('path')
 const {spawn} = require('child_process');
 var DomainesController = require("../Controllers/domaine.controller")
+var ChallengesController = require('../Controllers/challenge.controller')
 
 
 exports.startup_create_post = function (req, res) {
@@ -14,6 +16,7 @@ exports.startup_create_post = function (req, res) {
     const dateCreation = Date.parse(req.body.dateCreation);
     const logo = req.body.logo;
     const domainesId = req.body.domainesId;
+    const challengesId=req.body.challengesId
 
     const newStartup = new Startups({
         nom,
@@ -22,12 +25,19 @@ exports.startup_create_post = function (req, res) {
         dateCreation,
         logo,
         domainesId,
+        challengesId
     })
 
     Startups.create(newStartup)
         .then((startup) => {
             startup.domainesId.map((domId) => {
                 Domaines.findByIdAndUpdate(domId,
+                    {$push: {startupsId: startup._id}},
+                    {new: true, useFindAndModify: false})
+                    .then()
+            })
+            startup.challengesId.map((challId) => {
+                Challanges.findByIdAndUpdate(challId,
                     {$push: {startupsId: startup._id}},
                     {new: true, useFindAndModify: false})
                     .then()
@@ -42,10 +52,10 @@ exports.startup_list = function (req, res) {
         .populate({
             path: 'domainesId',
             model: 'Domaine',
-            populate: {
-                path: 'secteursId',
-                model: 'Secteur'
-            }
+        })
+        .populate({
+            path: 'challengesId',
+            model: 'Challenge',
         })
         .exec()
         .then(startup => res.json(startup))
@@ -69,16 +79,41 @@ exports.startup_update_post = function (req, res) {
                 })
             }
 
+            const diffPullChall = startup.challengesId.filter(x => !req.body.challengesId.includes(x))
+
+            if (diffPullChall.length > 0) {
+                diffPullChall.map(d => {
+                    Challanges.findByIdAndUpdate(d,
+                        {$pull: {startupsId: startup._id}},
+                        {new: true, useFindAndModify: false})
+                        .then()
+
+                })
+            }
+
             startup.nom = req.body.nom;
             startup.description = req.body.description;
             startup.logo = req.body.logo;
             startup.domainesId = req.body.domainesId;
+            startup.challengesId = req.body.challengesId;
 
             startup.domainesId.map((domId) => {
                 Domaines.findById(domId)
                     .then(domaine => {
-                        if (!domaine.domainesId.includes(startup._id)) {
-                            Secteurs.findByIdAndUpdate(sect,
+                        if (!domaine.startupsId.includes(startup._id)) {
+                            Domaines.findByIdAndUpdate(domaine._id,
+                                {$push: {startupsId: startup._id}},
+                                {new: true, useFindAndModify: false})
+                                .then()
+                        }
+                    })
+            })
+
+            startup.challengesId.map((challId) => {
+                Challanges.findById(challId)
+                    .then(challenge => {
+                        if (!challenge.startupsId.includes(startup._id)) {
+                            Challanges.findByIdAndUpdate(challenge._id,
                                 {$push: {startupsId: startup._id}},
                                 {new: true, useFindAndModify: false})
                                 .then()
@@ -98,12 +133,12 @@ exports.startup_update_post_user = function (req, res) {
         .then(startup => {
             startup.nom = req.body.nom;
             startup.description = req.body.description;
-            startup.adresse = req.body.adresse
-            startup.email = req.body.email
-            startup.siteWeb = req.body.siteWeb
-            startup.facebook = req.body.facebook
-            startup.linkedin = req.body.linkedin
-            startup.twitter = req.body.twitter
+            startup.adresse = req.body.adresse;
+            startup.email = req.body.email;
+            startup.siteWeb = req.body.siteWeb;
+            startup.facebook = req.body.facebook;
+            startup.linkedin = req.body.linkedin;
+            startup.twitter = req.body.twitter;
 
             startup.save()
                 .then(() => res.json('Startup updated!'))
@@ -117,10 +152,10 @@ exports.startup_find = function (req, res) {
         .populate({
             path: 'domainesId',
             model: 'Domaine',
-            populate: {
-                path: 'secteursId',
-                model: 'Secteur'
-            }
+        })
+        .populate({
+            path: 'challengesId',
+            model: 'Challenge',
         })
         .exec()
         .then(startup => res.json(startup))
@@ -132,7 +167,14 @@ exports.startup_delete = function (req, res) {
         .then((startup) => {
             startup.domainesId.map((domId) => {
                 Domaines.findByIdAndUpdate(domId,
-                    {$pull: {startupsId: domId._id}},
+                    {$pull: {startupsId: startup._id}},
+                    {new: true, useFindAndModify: false})
+                    .then()
+            })
+
+            startup.challengesId.map((challId) => {
+                Challanges.findByIdAndUpdate(challId,
+                    {$pull: {startupsId: startup._id}},
                     {new: true, useFindAndModify: false})
                     .then()
             })
@@ -170,6 +212,7 @@ exports.startup_scraping = async (req, res) => {
     subprocess.stdout.on('data', (data) => {
         console.log(`${data}`);
         DomainesController.domaine_add_picture(req, res);
+        ChallengesController.challenge_add_picture(req, res);
         res.send(`${data}`);
 
     });

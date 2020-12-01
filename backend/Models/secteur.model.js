@@ -5,16 +5,10 @@ const Schema = mongoose.Schema;
 const secteurSchema = new Schema({
     nom: {type: String, required: true, unique: true},
     description: {type: String},
-    categorie: {
-        type: String,
-        enum: ['Agriculture et pêche', 'Industrie', 'Commerce', 'Services'],
-        default: 'Autre',
-        required: true,
-    },
 
     img:{type:String},
 
-    domainesId : [{ type: Schema.ObjectId, ref: 'Domaine' }],
+    challengesId : [{ type: Schema.ObjectId, ref: 'Challenge' }],
 
     tendancesId:[{type: Schema.ObjectId,ref : 'Tendance'}]
 },

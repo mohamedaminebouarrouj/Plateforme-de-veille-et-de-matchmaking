@@ -67,6 +67,17 @@ def changeDate(date):
         if mois[i] in date:
             return((str(i+1)+'-'+date.split(mois[i])[1]).replace(' ',''))
 
+def create_dict_domaineTochall():
+    colDomaineToChall=db.domtochall
+    df_match= pd.DataFrame(list(colDomaineToChall.find()))
+
+    return {list(df_match['Secteur startup act'])[i]: list(df_match['Challenge finale'])[i] for i in range(len(list(df_match['Secteur startup act'])))}
+
+def create_dict_categorieChall():
+    colCategorieChall=db.categoriechall
+    df= pd.DataFrame(list(colCategorieChall.find()))
+
+    return {list(df['Challenge'])[i]: list(df['Famille challenge'])[i] for i in range(len(list(df['Famille challenge'])))}
 
 def scrap_startups_act():
     names=[]
@@ -82,8 +93,10 @@ def scrap_startups_act():
     twitter=[]
     linkedin=[]
     domaines=[]
+    challenges=[]
     domainesId=[]
-
+    challengesId=[]
+    dic=create_dict_domaineTochall()
     i=0
     scraped_data = urllib.request.urlopen('https://www.startupact.tn/startups.html')
     article = scraped_data.read()
@@ -163,7 +176,7 @@ def scrap_startups_act():
         for n in s.find_all('th',scope=""):
             date_creation.append(re.sub('[^0-9,-]', "",changeDate(n.get_text())))
             domainesId.append([])
-
+            challengesId.append([])
             pays.append('Tunisie')
             email.append('')
             adresse.append('')
@@ -173,11 +186,16 @@ def scrap_startups_act():
 
         for i in range(len(date_creation)):
             date_creation[i]=datetime.strptime(date_creation[i], '%m-%Y')
+            if (domaines[i]!=''):
+                challenges.append(dic[domaines[i]])
+            else:
+                challenges.append('')
 
-        df_startups=pd.DataFrame(list(zip(names,descriptions,fondateurs,pays,adresse,domaines,siteWeb,email,facebook,linkedin,twitter,domainesId,date_creation,logo)),
-                            columns =['nom','description','fondateurs','pays','adresse','domaines','siteWeb','email','facebook','linkedin','twitter','domainesId','dateCreation','logo'])
+    df_startups=pd.DataFrame(list(zip(names,descriptions,fondateurs,pays,adresse,domaines,challenges,siteWeb,email,facebook,linkedin,twitter,domainesId,challengesId,date_creation,logo)),
+                            columns =['nom','description','fondateurs','pays','adresse','domaines','challenges','siteWeb','email','facebook','linkedin','twitter','domainesId','challengesId','dateCreation','logo'])
 
-        return df_startups
+    return df_startups
+
 
 def create_domaines(data):
     secteursId=[]
@@ -215,6 +233,42 @@ def create_domaines(data):
 
     return df_domaines
 
+def create_challenges(data):
+
+    secteursId=[]
+    startupsId=[]
+    tendancesId=[]
+    description=[]
+    categorie=[]
+    img=[]
+    __v=[]
+    nom=[]
+    dic=create_dict_categorieChall()
+    client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    db = client['<dbname>']
+    colChallenges=db.challenges
+    temp=[]
+
+    for doc in colChallenges.find({}):
+        temp.append(doc.get('nom').lower())
+
+    for i in range(len(data['challenges'].unique())):
+        if data['challenges'].unique()[i]!="":
+            if (data['challenges'].unique()[i]).lower() not in temp:
+                nom.append(data['challenges'].unique()[i])
+                description.append(get_description(wiki_url_qwant(data['challenges'].unique()[i])))
+                secteursId.append([])
+                startupsId.append([])
+                tendancesId.append([])
+                categorie.append(dic[data['challenges'].unique()[i]])
+                img.append('')
+                __v.append(0)
+
+    df_challenges = pd.DataFrame(list(zip(__v,nom,description,categorie,secteursId,startupsId,tendancesId,img)),
+                                columns =['__v','nom','description','categorie','secteursId','startupsId','tendancesId','img'])
+
+    return df_challenges
+
 
 if __name__ == "__main__":
     ####Connection to DB
@@ -222,17 +276,30 @@ if __name__ == "__main__":
     db = client['<dbname>']
     colDomaines=db.domaines
     colStartups=db.startups
+    colChallenges=db.challenges
 
     df_startups = scrap_startups_act()
     df_domaines = create_domaines(df_startups)
+    df_challenges = create_challenges(df_startups)
+
     colDomaines.create_index([('nom', pymongo.ASCENDING)],unique=True)
     records = json.loads(df_domaines.T.to_json()).values()
+    print(len(df_startups))
 
     try:
         colDomaines.insert_many(records)
     except:
         print('Domaines déjà ajouté')
 
+    colChallenges.create_index([('nom', pymongo.ASCENDING)],unique=True)
+    records = json.loads(df_challenges.T.to_json()).values()
+
+    try:
+        colChallenges.insert_many(records)
+    except:
+        print('Challenges déjà ajouté')
+
+    df_challenges = pd.DataFrame(list(colChallenges.find()))
     df_domaines = pd.DataFrame(list(colDomaines.find()))
 
     for i in range(len(df_domaines)):
@@ -240,7 +307,14 @@ if __name__ == "__main__":
             if df_startups['domaines'][j]==df_domaines['nom'][i]:
                 df_startups['domainesId'][j].append(df_domaines['_id'][i])
 
+    for i in range(len(df_challenges)):
+            for j in range(len(df_startups)):
+                if df_startups['challenges'][j]==df_challenges['nom'][i]:
+                    df_startups['challengesId'][j].append(df_challenges['_id'][i])
+
     df_startups.drop(columns='domaines',inplace=True)
+    df_startups.drop(columns='challenges',inplace=True)
+
 
     colStartups.create_index([('nom', pymongo.ASCENDING)],unique=True)
     records = df_startups.to_dict('records')
@@ -255,8 +329,17 @@ if __name__ == "__main__":
                     if df_startups['domainesId'][j][k]==df_domaines['_id'][i]:
                         df_domaines['startupsId'][i].append(df_startups['_id'][j])
 
+        for i in range(len(df_challenges)):
+            for j in range(len(df_startups)):
+                for k in range(len(df_startups['challengesId'][j])):
+                    if df_startups['challengesId'][j][k]==df_challenges['_id'][i]:
+                        df_challenges['startupsId'][i].append(df_startups['_id'][j])
+
         colDomaines.delete_many({})
+        colChallenges.delete_many({})
+
         colDomaines.insert_many(df_domaines.to_dict('records'))
+        colChallenges.insert_many(df_challenges.to_dict('records'))
         print("Startups ajoutées")
 
     except:

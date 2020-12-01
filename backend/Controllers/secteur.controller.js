@@ -1,5 +1,5 @@
 var Secteurs = require('../Models/secteur.model');
-var Domaines= require('../Models/domaine.model');
+var Challenges= require('../Models/challenge.model');
 const translate = require('@k3rn31p4nic/google-translate-api');
 
 
@@ -17,7 +17,6 @@ const unsplash = new Unsplash({ accessKey: APP_ACCESS_KEY });
 exports.secteur_create_post = function (req,res) {
     const nom = req.body.nom;
     const description = req.body.description;
-    const categorie = req.body.categorie;
     var img=''
     translate(nom, { to: 'en' })
         .then(r => {
@@ -28,7 +27,6 @@ exports.secteur_create_post = function (req,res) {
                     const newSecteur = new Secteurs({
                         nom,
                         description,
-                        categorie,
                         img
                     });
 
@@ -49,8 +47,8 @@ exports.secteur_list = function (req,res) {
 
         })
         .populate ({
-            path:'domainesId',
-            model: 'Domaine'
+            path:'challengesId',
+            model: 'Challenge'
         })
         .exec()
         .then(secteurs => res.json(secteurs))
@@ -68,8 +66,6 @@ exports.secteur_update_post= function (req,res){
         .then(secteur => {
             secteur.nom = req.body.nom;
             secteur.description = req.body.description;
-            secteur.categorie = req.body.categorie;
-            secteur.domainesId=[]
 
             secteur.save()
                 .then(() => res.json('Secteur updated!'))
@@ -86,8 +82,8 @@ exports.secteur_find = function (req,res){
 
         })
         .populate ({
-            path:'domainesId',
-            model: 'Domaine'
+            path:'challengesId',
+            model: 'Challenge'
         })
         .exec()
         .then(secteur => res.json(secteur))
@@ -97,8 +93,8 @@ exports.secteur_find = function (req,res){
 exports.secteur_delete = function (req,res){
     Secteurs.findByIdAndDelete(req.params.id)
         .then(secteur=>{
-            secteur.domainesId.map(domId=>{
-                Domaines.findByIdAndUpdate(domId,
+            secteur.challengesId.map(challId=>{
+                Challenges.findByIdAndUpdate(challId,
                     {$pull:{secteursId:secteur._id}},
                     {new: true, useFindAndModify: false})
                     .then()
@@ -110,7 +106,7 @@ exports.secteur_delete = function (req,res){
 
 exports.img = async (req,res) =>{
     let url=""
-    translate('Gaming', { to: 'en' })
+    translate('Education tech', { to: 'en' })
         .then(r => {
             console.log(r.text)
         unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})

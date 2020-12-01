@@ -46,7 +46,9 @@ function Row(props){
 
                 </TableCell>
                 <TableCell width='45%'>{props.startup.description}</TableCell>
-                <TableCell width='15%'>{props.startup.domainesId.length}
+                <TableCell width='15%'>{props.startup.domainesId.map(d=>d.nom)}
+                </TableCell>
+                <TableCell width='15%'>{props.startup.challengesId.length}
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
@@ -66,7 +68,7 @@ function Row(props){
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
-                                <b>Domaines Reliés</b>
+                                <b>Challenges Reliés</b>
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
@@ -77,16 +79,16 @@ function Row(props){
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.startup.domainesId.map((currentDom)=>
+                                    {props.startup.challengesId.map((currentChall)=>
                                         <TableRow>
                                             <TableCell>
-                                                {currentDom.nom}
+                                                {currentChall.nom}
                                             </TableCell>
                                             <TableCell>
-                                                {currentDom.description.split('.')[0]}
+                                                {currentChall.description.split('.')[0]}
                                             </TableCell>
                                             <TableCell>
-                                                {currentDom.categorie}
+                                                {currentChall.categorie}
                                             </TableCell>
                                         </TableRow>)}
                                 </TableBody>
@@ -148,6 +150,8 @@ export default class startupsList extends Component {
         .catch((error) => {
           console.log(error);
         })
+
+
   }
 
   deleteStartup(id) {
@@ -182,12 +186,11 @@ export default class startupsList extends Component {
     }
 
   render() {
-    return (
+      return (
         <Table>
             <TableHead>
                 <TableRow>
                     <Table hover className="mb-0">
-
                         <TableHead>
                             <TableRow>
                                 <TableCell width="18%"/>
@@ -195,16 +198,17 @@ export default class startupsList extends Component {
                                 <TableCell width="15%"/>
                                 <TableCell/>
                                 <TableCell/>
+                                <TableCell/>
                                 <TableCell align="right">
                                     <Button onClick={this.ajouterButton} variant="outlined" className="mb-2 mr-2" color="success">+</Button>
                                     {this.state.loading? <LoadingSpinner/>: null}
                                 </TableCell>
-
                             </TableRow>
                             <TableRow>
                                 <TableCell><b>Nom de la Startup</b></TableCell>
                                 <TableCell><b>Description</b></TableCell>
                                 <TableCell><b>Domaines Reliés</b></TableCell>
+                                <TableCell><b>Challenges Reliés</b></TableCell>
                                 <TableCell><b>Date de labélisation</b></TableCell>
                                 <TableCell><b>Modifier</b></TableCell>
                                 <TableCell><b>Supprimer</b></TableCell>

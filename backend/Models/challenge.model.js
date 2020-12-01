@@ -5,14 +5,10 @@ const Schema = mongoose.Schema;
 const challengeSchema = new Schema({
         nom: {type: String, required: true, unique: true},
         description: {type: String},
-        type: {
-            type: String,
-            enum: ['Business','Général', 'Autre'],
-            default: 'Autre',
-            required: true,
-        },
-        domainesId:[{type: Schema.ObjectId,ref : 'Domaine'}],
-    
+        categorie: {type: String},
+
+        secteursId: [{type: Schema.ObjectId, ref: 'Secteur'}],
+
         tendancesId:[{type: Schema.ObjectId,ref : 'Tendance'}],
 
         img:{type:String},

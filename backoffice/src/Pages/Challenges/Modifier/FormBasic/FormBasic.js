@@ -1,4 +1,4 @@
-import React, { Component , Fragment} from 'react';
+import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import axios from 'axios';
 import Select from "react-select";
@@ -13,6 +13,7 @@ import {
 } from 'reactstrap';
 
 import makeAnimated from "react-select/animated/dist/react-select.esm";
+
 const animatedComponents = makeAnimated();
 
 export default class UpdateChallenge extends Component {
@@ -23,78 +24,75 @@ export default class UpdateChallenge extends Component {
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangeType = this.onChangeType.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.onChangeDomaine=this.onChangeDomaine.bind(this);
+        this.onChangeSecteur = this.onChangeSecteur.bind(this);
 
         this.state = {
             nom: '',
             description: '',
-            type: '',
-            domaines: [],
-            dom: []
+            categorie: '',
+            secteurs: [],
+            sect: []
         }
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/challenges/' + this.props.id)
+        axios.get('http://localhost:5000/challenges/findUpdate/' + this.props.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
                     description: response.data.description,
-                    type: response.data.type,
-                    domaines: response.data.domainesId
+                    secteurs: response.data.secteursId
                 })
             })
             .catch(function (error) {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/domaines/')
+        axios.get('http://localhost:5000/secteurs/')
             .then(response => {
-                this.setState({dom: response.data})
+                this.setState({sect: response.data})
             })
             .catch((error) => {
                 console.log(error);
             })
     }
-    onChangeDomaine(e) {
-        if (e!=null){
+
+    onChangeSecteur(e) {
+        if (e != null) {
             this.setState({
-                domaines: e.map((o)=>o.value)
+                secteurs: e.map((o) => o.value)
+            })
+        } else {
+            this.setState({
+                secteurs: []
             })
         }
-        else{
-            this.setState({
-                domaines: []
-            })
-        }
-        console.log(this.state.domaines)
     }
 
 
     domaineList() {
-        const selected= []
-        const options= this.state.dom.map(currentDomaine => ({value: currentDomaine._id, label:currentDomaine.nom}))
-        this.state.dom.map(currentDomaine =>{
-            if (this.state.domaines.includes(currentDomaine._id)){
-                selected.push({value:currentDomaine._id, label:currentDomaine.nom})
-            }
+        let selected = []
+        const options = this.state.sect.map(currentSecteur => ({value: currentSecteur._id, label: currentSecteur.nom}))
+        this.state.sect.map(currentSecteur => {
+            this.state.secteurs.map(selectedSecteur => {
+                if (currentSecteur._id === selectedSecteur){
+                    selected.push({value: currentSecteur._id, label: currentSecteur.nom})
+                }
+            })
         })
-        console.log("selected:",selected)
-        console.log([options[0],options[1]])
+        console.log(this.state.sect)
+
         return (
             <Select
                 closeMenuOnSelect={false}
                 components={animatedComponents}
-                defaultValue={selected}
+                value={selected}
                 isMulti
                 options={options}
-                onChange={this.onChangeDomaine}
+                onChange={this.onChangeSecteur}
             > </Select>
         )
 
-      /*  return this.state.dom.map(currentDomaine => {
-            return <CustomInput type="checkbox" checked= {this.state.domaines.includes(currentDomaine._id)} label={currentDomaine.nom} value={currentDomaine._id} id={currentDomaine._id} key={currentDomaine._id} onChange={this.onChangeDomaine}/>;
-        }) */
     }
 
 
@@ -123,16 +121,16 @@ export default class UpdateChallenge extends Component {
             nom: this.state.nom,
             description: this.state.description,
             type: this.state.type,
-            domainesId : this.state.domaines
+            secteursId: this.state.secteurs
         }
 
-        console.log(challenge);
 
         axios.post('http://localhost:5000/challenges/update/' + this.props.id, challenge)
-            .then(res => console.log(res.data));
+            .then(res => {
+                console.log(res.data)
+                window.location.replace('#/challenges/afficher');
+            });
 
-        window.location.replace('#/challenges/afficher');
-        window.location.reload(false);
     }
 
     render() {
@@ -169,23 +167,10 @@ export default class UpdateChallenge extends Component {
                                             </FormGroup>
 
                                             <FormGroup>
-                                            <Label for="exampleText"><b>Domaines reliés</b></Label>
-                                            <div>
-                                                {this.domaineList()}
-                                            </div>
-                                        </FormGroup>
-
-                                            <FormGroup>
-                                                <Label for="exampleCustomSelect"><b>Type</b></Label>
-                                                <CustomInput type="select" id="type"
-                                                             name="type"
-                                                             value={this.state.type}
-                                                             onChange={this.onChangeType}
-                                                required>
-                                                    <option>Selectionner un Type</option>
-                                                    <option value="Business">Business</option>
-                                                    <option value="Général">Général</option>
-                                                </CustomInput>
+                                                <Label for="exampleText"><b>Secteurs reliés</b></Label>
+                                                <div>
+                                                    {this.domaineList()}
+                                                </div>
                                             </FormGroup>
                                             <Button color="primary" className="mt-1" type="submit">Submit</Button>
                                         </Form>

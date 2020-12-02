@@ -17,7 +17,7 @@ edge {
 node {
 	width: 32;
 	height: 32;
-	font-size: 3;
+	font-size: 5;
 	font-family: "Poppins", sans-serif;
 	min-zoomed-font-size: 3;
 	label: data(name);
@@ -33,7 +33,7 @@ node {
 	overlay-color: #fff;
 }
 
-edge[interaction = "sd"] {
+edge[interaction = "sc"] {
 	line-color: #FFDB00;
 	opacity: 0.666;
 	z-index: 0;
@@ -46,13 +46,14 @@ node[NodeType = "secteur"] {
     shape:round-rectangle;
     width: 35;
 	height: 25;
+	font-size: 3;
     color: #333333;
 	background-color: #FFDB00;
 	text-outline-color: #FFDB00;
 }
 
 
-node[NodeType = "domaine"] {
+node[NodeType = "challenge"] {
     color: #333333;
     font-size:3.5;
 	background-color: #fff;

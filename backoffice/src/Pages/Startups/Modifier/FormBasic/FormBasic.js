@@ -21,9 +21,9 @@ export default class UpdateStartup extends Component {
 
         this.onChangeNom = this.onChangeNom.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
-        this.onChangeType = this.onChangeType.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onChangeDomaine=this.onChangeDomaine.bind(this);
+        this.onChangeChallenge=this.onChangeChallenge.bind(this);
 
         this.state = {
             nom: '',
@@ -32,7 +32,9 @@ export default class UpdateStartup extends Component {
             fond:[],
             nomfond : '',
             domaines: [],
-            dom: []
+            challenges:[],
+            dom: [],
+            chall:[]
         }
     }
 
@@ -43,7 +45,8 @@ export default class UpdateStartup extends Component {
                     nom: response.data.nom,
                     description: response.data.description,
                     fondateurs: response.data.fondateurs,
-                    domaines: response.data.domainesId.map(e=>e._id)
+                    domaines: response.data.domainesId.map(e=>e._id),
+                    challenges: response.data.challengesId.map(e=>e._id)
                 })
             })
             .catch(function (error) {
@@ -53,6 +56,14 @@ export default class UpdateStartup extends Component {
         axios.get('http://localhost:5000/domaines/')
             .then(response => {
                 this.setState({dom: response.data})
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+        axios.get('http://localhost:5000/challenges/')
+            .then(response => {
+                this.setState({chall: response.data})
             })
             .catch((error) => {
                 console.log(error);
@@ -71,6 +82,19 @@ export default class UpdateStartup extends Component {
         }
     }
 
+    onChangeChallenge(e) {
+        if (e!=null){
+            this.setState({
+                challenges: e.map((o)=>o.value)
+            })
+        }
+        else{
+            this.setState({
+                challenges: []
+            })
+        }
+    }
+
 
     domaineList() {
         let selected= []
@@ -81,7 +105,6 @@ export default class UpdateStartup extends Component {
                     selected.push({value:currentDomaine._id, label:currentDomaine.nom})
             })
         })
-        console.log('selec',selected)
         return (
             <Select
                 value={selected}
@@ -94,21 +117,30 @@ export default class UpdateStartup extends Component {
                 classNamePrefix="select"
             > </Select>
         )
-        // console.log(this.state.domaines)
-        // return this.state.dom.map(currentDomaine => {
-        //     console.log("current",currentDomaine)
-        //     return (
-        //         <CustomInput type="checkbox"
-        //                      checked= {this.state.domaines.includes(currentDomaine)}
-        //                      label={currentDomaine.nom}
-        //                      value={currentDomaine._id}
-        //                      id={currentDomaine._id}
-        //                      key={currentDomaine._id}
-        //                      onChange={this.onChangeDomaine}/>
-        //     )
-        // })
     }
 
+    challengeList() {
+        let selected= []
+        const options= this.state.chall.map(currentChallenge => ({value: currentChallenge._id, label:currentChallenge.nom}))
+        this.state.chall.map(currentChallenge =>{
+            this.state.challenges.map(selectedChallenge=>{
+                if (currentChallenge._id===selectedChallenge)
+                    selected.push({value:currentChallenge._id, label:currentChallenge.nom})
+            })
+        })
+        return (
+            <Select
+                value={selected}
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                options={options}
+                onChange={this.onChangeChallenge}
+                className="basic-multi-select"
+                classNamePrefix="select"
+            > </Select>
+        )
+    }
 
     onChangeNom(e) {
         this.setState({
@@ -122,19 +154,14 @@ export default class UpdateStartup extends Component {
         })
     }
 
-    onChangeType(e) {
-        this.setState({
-            type: e.target.value
-        })
-    }
-
     onSubmit(e) {
         e.preventDefault();
 
         const startup = {
             nom: this.state.nom,
             description: this.state.description,
-            domainesId : this.state.domaines
+            domainesId : this.state.domaines,
+            challengesId: this.state.challenges
         }
 
         console.log(startup);
@@ -177,6 +204,13 @@ export default class UpdateStartup extends Component {
                                                        required
                                                        value={this.state.description}
                                                        onChange={this.onChangeDescription}/>
+                                            </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="exampleText"><b>Challenges reliés</b></Label>
+                                                <div>
+                                                    {this.challengeList()}
+                                                </div>
                                             </FormGroup>
 
                                             <FormGroup>

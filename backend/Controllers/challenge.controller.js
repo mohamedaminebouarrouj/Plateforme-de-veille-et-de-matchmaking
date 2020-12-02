@@ -1,5 +1,5 @@
 var Challenges= require('../Models/challenge.model');
-var Secteurs =require('../Models/domaine.model');
+var Secteurs =require('../Models/secteur.model');
 var Startups = require('../Models/startup.model');
 var Tendances = require('../Models/tendance.model');
 

@@ -36,6 +36,7 @@ export default class ShowStartup extends Component {
             description: '',
             logo: '',
             domainesId: [],
+            challengesId:[],
             fondateurs: [],
             siteWeb: '',
             adresse: '',
@@ -93,6 +94,7 @@ export default class ShowStartup extends Component {
                     dateCreation: response.data.dateCreation,
                     description: response.data.description,
                     domainesId: response.data.domainesId,
+                    challengesId:response.data.challengesId,
                     logo: response.data.logo,
                     siteWeb: response.data.siteWeb,
                     email: response.data.email,
@@ -269,10 +271,12 @@ export default class ShowStartup extends Component {
                                         />
                                     </Col>
                                     <Col>
-                                        <p className="font-weight-bold font-size-35">{this.state.nom} </p>
+                                        <p className="font-weight-bold font-size-35">{this.state.nom}
+                                            {localStorage.getItem('auth-token')!==""?(this.state.userStartup? (this.state.verifiedStartup?<CheckCircleIcon
+                                                style={{color: "#FFDB00", fontSize: "40px"}}/>:<div></div>):<div></div>):<div></div>}</p>
                                         <a>
                                             Depuis
-                                            : {this.state.dateCreation.split('-')[1] + "/" + this.state.dateCreation.split('-')[0]}</a>
+                                            : {this.state.dateCreation?this.state.dateCreation.split('-')[1] + "/" + this.state.dateCreation.split('-')[0]:''}</a>
                                         <p>{this.state.pays}</p>
                                         <br/>
                                         {/*<Button className="btn btn-default btn-round">*/}
@@ -622,6 +626,11 @@ export default class ShowStartup extends Component {
                                 <h4 className="font-weight-bold">Domaines d'activité :</h4>
                                 {this.state.domainesId.map(d => {
                                     return (<a href={"/domaines/" + d._id}>  &nbsp;{d.nom}</a>)
+                                })}
+
+                                <h4 className="font-weight-bold">Challenges :</h4>
+                                {this.state.challengesId.map(d => {
+                                    return (<a href={"/challenges/" + d._id}>  &nbsp;{d.nom}</a>)
                                 })}
                             </Col>
                             <Col lg="1"></Col>

@@ -226,11 +226,11 @@ export default class ShowDomaine extends Component {
                     <br/>
                     <section className="section">
                             <Row>
-                                <Col lg="7">
-                                        <AppComponent id={this.props.match.params.id} history={this.props.history}/>
+                                <Col lg="2">
+                                        {/*<AppComponent id={this.props.match.params.id} history={this.props.history}/>*/}
                                 </Col>
 
-                                <Col lg="5">
+                                <Col lg="7" style={{padding:'100px'}}>
                                     <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '200px'}}>
                                         <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
                                             {this.state.nom}
@@ -272,17 +272,17 @@ export default class ShowDomaine extends Component {
                                                         Startups ({this.state.startups.length})
                                                     </NavLink>
                                                 </NavItem>
-                                                <NavItem>
-                                                    <NavLink
-                                                        className={classnames({
-                                                            active: this.state.tabs === 3
-                                                        })}
-                                                        onClick={e => this.toggleTabs(e, "tabs", 3)}
-                                                        href=""
-                                                    >
-                                                        Secteurs ({this.state.secteurs.length})
-                                                    </NavLink>
-                                                </NavItem>
+                                                {/*<NavItem>*/}
+                                                {/*    <NavLink*/}
+                                                {/*        className={classnames({*/}
+                                                {/*            active: this.state.tabs === 3*/}
+                                                {/*        })}*/}
+                                                {/*        onClick={e => this.toggleTabs(e, "tabs", 3)}*/}
+                                                {/*        href=""*/}
+                                                {/*    >*/}
+                                                {/*        Secteurs ({this.state.secteurs.length})*/}
+                                                {/*    </NavLink>*/}
+                                                {/*</NavItem>*/}
 
                                             </Nav>
                                             <TabContent

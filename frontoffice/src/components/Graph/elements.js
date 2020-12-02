@@ -34,8 +34,8 @@ async function getData() {
 
 
 
-        if (element.domainesId.length > 0) {
-            element.domainesId.forEach(item => {
+        if (element.challengesId.length > 0) {
+            element.challengesId.forEach(item => {
                 edge_id += 1
                 axis_x += 20
                 axis_y += 20
@@ -44,7 +44,7 @@ async function getData() {
                         id: item._id,
                         selected: false,
                         SUID: item._id,
-                        NodeType: "domaine",
+                        NodeType: "challenge",
                         name: item.nom,
                         shared_name: item.nom
                     },position: {
@@ -59,12 +59,12 @@ async function getData() {
                         source: element._id,
                         target: item._id,
                         selected: false,
-                        canonicalName: element.nom + "(sd)" + item.nom,
+                        canonicalName: element.nom + "(sc)" + item.nom,
                         SUID: edge_id,
-                        name: element.nom + "(sd)" + item.nom,
-                        interaction: "sd",
-                        shared_interaction: "sd",
-                        shared_name: element.nom + "(sd)" + item.nom
+                        name: element.nom + "(sc)" + item.nom,
+                        interaction: "sc",
+                        shared_interaction: "sc",
+                        shared_name: element.nom + "(sc)" + item.nom
                     }, selected: false
                 }
 
@@ -91,8 +91,8 @@ async function getData() {
         data.NodeTypeFormatted = data.NodeType;
 
         // the source data for types isn't formatted well for reading
-        if( data.NodeTypeFormatted === 'domaine' ){
-            data.NodeTypeFormatted = 'domaine';
+        if( data.NodeTypeFormatted === 'challenge' ){
+            data.NodeTypeFormatted = 'challenge';
         } else if( data.NodeTypeFormatted === 'WhiteWine' ){
             data.NodeTypeFormatted = 'White Wine';
         } else if( data.NodeTypeFormatted === 'secteur' ){
@@ -108,6 +108,8 @@ async function getData() {
         // zero width space after dashes to allow for line breaking
         data.name = data.name.replace(/[-]/g, '-\u200B');
     });
+
+    console.log(data)
     return data
 }
 

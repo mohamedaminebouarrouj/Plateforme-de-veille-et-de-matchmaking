@@ -106,16 +106,24 @@ exports.secteur_delete = function (req,res){
 
 exports.img = async (req,res) =>{
     let url=""
-    translate('Education tech', { to: 'en' })
-        .then(r => {
-            console.log(r.text)
-        unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
+    unsplash.search.photos('Government',1, 10, { orientation: "landscape"})
         .then(toJson)
         .then(json =>{
-            res.json(json)
-            url=json.results[0].urls.full
+                res.json(json)
+                url=json.results[0].urls.regular
                 console.log("url",url)
-        }
+            }
         )
-        })
+    // translate('Approvisionnement', { to: 'en' })
+    //     .then(r => {
+    //         console.log(r.text)
+    //     unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
+    //     .then(toJson)
+    //     .then(json =>{
+    //         res.json(json)
+    //         url=json.results[0].urls.full
+    //             console.log("url",url)
+    //     }
+    //     )
+    //     })
 }

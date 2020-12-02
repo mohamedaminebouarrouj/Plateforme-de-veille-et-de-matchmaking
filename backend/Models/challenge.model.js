@@ -8,6 +8,8 @@ const challengeSchema = new Schema({
         categorie: {type: String},
 
         secteursId: [{type: Schema.ObjectId, ref: 'Secteur'}],
+        startupsId: [{type: Schema.ObjectId, ref: 'Startup'}],
+
 
         tendancesId:[{type: Schema.ObjectId,ref : 'Tendance'}],
 

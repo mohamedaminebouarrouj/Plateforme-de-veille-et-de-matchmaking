@@ -31,6 +31,10 @@ function Row(props) {
                     <Button outline className="mb-2 mr-2 btn-transition" color="light"><Link
                         to={"/revendications/update/" + props.revendication._id}>Consulter</Link> </Button>
                 </TableCell>
+
+                <TableCell>
+                    <Button outline className="mb-2 mr-2 btn-transition" color="danger" onClick={() => { props.deleteRevendication(props.revendication._id) }}>Supprimer</Button>
+                </TableCell>
             </TableRow>
             <TableRow>
             </TableRow>
@@ -86,6 +90,8 @@ export default class domainesList extends Component {
                         <TableCell><b>Compte verifié</b></TableCell>
                         <TableCell><b>Date de la demande</b></TableCell>
                         <TableCell><b>Consulter la demande</b></TableCell>
+                        <TableCell><b>Supprimer la demande</b></TableCell>
+
                     </TableRow>
                 </TableHead>
                 <tbody>

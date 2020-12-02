@@ -29,6 +29,7 @@ import ProfilePage from "views/examples/ProfilePage.js";
 import ShowSecteur from "./views/Secteurs/Afficher/showSecteur";
 import ShowDomaine from "./views/Domaines/Afficher/showDomaine";
 import ShowStartup from "./views/Startups/Afficher/showStartup";
+import ShowChallenge from "./views/Challenges/Afficher/showChallenge";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -50,6 +51,10 @@ ReactDOM.render(
       <Route
           path="/domaines/:id"
           render={props => <ShowDomaine {...props} />} />
+
+      <Route
+          path="/challenges/:id"
+          render={props => <ShowChallenge {...props} />} />
 
       <Route
           path="/startups/:id"

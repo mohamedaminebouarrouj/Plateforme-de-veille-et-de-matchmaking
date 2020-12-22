@@ -22,7 +22,8 @@ async function getData() {
                 SUID: element._id,
                 NodeType: "secteur",
                 name: element.nom,
-                shared_name: element.nom
+                shared_name: element.nom,
+                img:element.img,
             },position: {
                 x: axis_x,
                 y: axis_y
@@ -46,7 +47,9 @@ async function getData() {
                         SUID: item._id,
                         NodeType: "challenge",
                         name: item.nom,
-                        shared_name: item.nom
+                        shared_name: item.nom,
+                        img:item.img,
+
                     },position: {
                         x: axis_x,
                         y: axis_y
@@ -109,7 +112,6 @@ async function getData() {
         data.name = data.name.replace(/[-]/g, '-\u200B');
     });
 
-    console.log(data)
     return data
 }
 

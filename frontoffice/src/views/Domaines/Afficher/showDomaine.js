@@ -20,10 +20,26 @@ import {Scrollbars} from "react-custom-scrollbars";
 function Show(props){
     return (
         <React.Fragment>
+            <Row>
 
-            <p style={{fontSize: '12px'}}><img src={props.tendance.urlToImage} alt='•' style={{height: 'auto', width:'20%'}}/> <a rel="noopener noreferrer" target='_blank' href={props.tendance.url}>{props.tendance.titre}</a> </p>
-            <p style={{fontSize: '11px' , opacity:'0.7'}}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
 
+                <Col lg="4">
+                    <img src={props.tendance.urlToImage} alt='•'/>
+                </Col>
+                <Col>
+                    <p style={{fontSize: '12px'}}>
+                        <a target='_blank' rel="noopener noreferrer" href={props.tendance.url}>{props.tendance.titre}</a>
+                        <p style={{
+                            fontSize: '11px'
+                        }}>{props.tendance.resume}</p>
+                        <p style={{
+                            fontSize: '10px',
+                            opacity: '0.7'
+                        }}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
+                    </p>
+                </Col>
+            </Row>
+            <hr/>
         </React.Fragment>
     );
 }
@@ -210,27 +226,15 @@ export default class ShowDomaine extends Component {
         return (
             <>
                 <IndexNavbar />
-                <div className="wrapper">
-                    <div className="page-header">
-                        <img
-                            alt="..."
-                            className="dots"
-                            src={require("../../../assets/img/dots.png")}
-                        />
-                        <img
-                            alt="..."
-                            className="path"
-                            src={require("../../../assets/img/path1.png")}
-                        />
-                    </div>
-                    <br/>
-                    <section className="section">
+                <section className="section section-lg" id="main">
+
+                <section className="section">
                             <Row>
-                                <Col lg="2">
+                                <Col lg="1">
                                         {/*<AppComponent id={this.props.match.params.id} history={this.props.history}/>*/}
                                 </Col>
 
-                                <Col lg="7" style={{padding:'100px'}}>
+                                <Col lg="6">
                                     <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '200px'}}>
                                         <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
                                             {this.state.nom}
@@ -241,9 +245,11 @@ export default class ShowDomaine extends Component {
 
                                     </div>
                                     <br/>
-                                    <p style={{position:'relative',backgroundColor:'rgba(0, 0, 0, 0.5)'}}>
+                                    <p style={{position:'relative'}}>
                                         {this.state.description}
                                     </p>
+                                </Col>
+                                    <Col lg="4">
                                     <Card className="card-coin card-plain">
                                         <CardBody>
                                             <Nav
@@ -347,11 +353,11 @@ export default class ShowDomaine extends Component {
                                     </Card>
                                 </Col>
                             </Row>
+
+
                     </section>
-
-
                     <Footer />
-                </div>
+                </section>
             </>
         )
     }

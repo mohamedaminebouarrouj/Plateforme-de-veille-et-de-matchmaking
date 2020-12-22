@@ -13,4 +13,7 @@ router.get('/:id',secteurController.secteur_find);
 
 router.get('/img/img',secteurController.img);
 
+router.get('/search/:nom',secteurController.search);
+
+
 module.exports =router;

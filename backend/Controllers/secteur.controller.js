@@ -1,7 +1,9 @@
 var Secteurs = require('../Models/secteur.model');
-var Challenges= require('../Models/challenge.model');
-const translate = require('@k3rn31p4nic/google-translate-api');
+var Challenges = require('../Models/challenge.model');
+var Startups = require('../Models/startup.model');
+var Domaines = require('../Models/domaine.model');
 
+const translate = require('@k3rn31p4nic/google-translate-api');
 
 
 // require syntax
@@ -10,17 +12,17 @@ global.fetch = fetch;
 
 const Unsplash = require('unsplash-js').default;
 const toJson = require('unsplash-js').toJson;
-const APP_ACCESS_KEY= 'w4cwJK1-Trq5L4sDHOraWA-1LgFjp88Plis7ShcHrgE'
+const APP_ACCESS_KEY = 'w4cwJK1-Trq5L4sDHOraWA-1LgFjp88Plis7ShcHrgE'
 
-const unsplash = new Unsplash({ accessKey: APP_ACCESS_KEY });
+const unsplash = new Unsplash({accessKey: APP_ACCESS_KEY});
 
-exports.secteur_create_post = function (req,res) {
+exports.secteur_create_post = function (req, res) {
     const nom = req.body.nom;
     const description = req.body.description;
-    var img=''
-    translate(nom, { to: 'en' })
+    var img = ''
+    translate(nom, {to: 'en'})
         .then(r => {
-            unsplash.search.photos(r.text,1, 10, { orientation: "landscape"})
+            unsplash.search.photos(r.text, 1, 10, {orientation: "landscape"})
                 .then(toJson)
                 .then(json => {
                     img = json.results[0].urls.regular
@@ -31,37 +33,37 @@ exports.secteur_create_post = function (req,res) {
                     });
 
                     Secteurs.create(newSecteur)
-                        .then(()=> res.json('Secteur ajouté!'))
-                        .catch(err=> res.status(400).json('Error: '+err))
+                        .then(() => res.json('Secteur ajouté!'))
+                        .catch(err => res.status(400).json('Error: ' + err))
                 })
         })
 
 
 };
 
-exports.secteur_list = function (req,res) {
+exports.secteur_list = function (req, res) {
     Secteurs.find()
         .populate({
             path: 'tendancesId',
             model: 'Tendance',
 
         })
-        .populate ({
-            path:'challengesId',
+        .populate({
+            path: 'challengesId',
             model: 'Challenge'
         })
         .exec()
         .then(secteurs => res.json(secteurs))
-        .catch(err => res.status(400).json('Error: '+err));
+        .catch(err => res.status(400).json('Error: ' + err));
 };
 
-exports.secteur_update_get = function (req,res) {
+exports.secteur_update_get = function (req, res) {
     Secteurs.find()
         .then(secteurs => res.json(secteurs))
-        .catch(err => res.status(400).json('Error: '+err));
+        .catch(err => res.status(400).json('Error: ' + err));
 };
 
-exports.secteur_update_post= function (req,res){
+exports.secteur_update_post = function (req, res) {
     Secteurs.findById(req.params.id)
         .then(secteur => {
             secteur.nom = req.body.nom;
@@ -74,15 +76,15 @@ exports.secteur_update_post= function (req,res){
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
-exports.secteur_find = function (req,res){
+exports.secteur_find = function (req, res) {
     Secteurs.findById(req.params.id)
         .populate({
             path: 'tendancesId',
             model: 'Tendance',
 
         })
-        .populate ({
-            path:'challengesId',
+        .populate({
+            path: 'challengesId',
             model: 'Challenge'
         })
         .exec()
@@ -90,12 +92,12 @@ exports.secteur_find = function (req,res){
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
-exports.secteur_delete = function (req,res){
+exports.secteur_delete = function (req, res) {
     Secteurs.findByIdAndDelete(req.params.id)
-        .then(secteur=>{
-            secteur.challengesId.map(challId=>{
+        .then(secteur => {
+            secteur.challengesId.map(challId => {
                 Challenges.findByIdAndUpdate(challId,
-                    {$pull:{secteursId:secteur._id}},
+                    {$pull: {secteursId: secteur._id}},
                     {new: true, useFindAndModify: false})
                     .then()
             })
@@ -104,14 +106,14 @@ exports.secteur_delete = function (req,res){
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
-exports.img = async (req,res) =>{
-    let url=""
-    unsplash.search.photos('Government',1, 10, { orientation: "landscape"})
+exports.img = async (req, res) => {
+    let url = ""
+    unsplash.search.photos('Government', 1, 10, {orientation: "landscape"})
         .then(toJson)
-        .then(json =>{
+        .then(json => {
                 res.json(json)
-                url=json.results[0].urls.regular
-                console.log("url",url)
+                url = json.results[0].urls.regular
+                console.log("url", url)
             }
         )
     // translate('Approvisionnement', { to: 'en' })
@@ -126,4 +128,22 @@ exports.img = async (req,res) =>{
     //     }
     //     )
     //     })
+}
+
+exports.search = async (req, res) => {
+
+    var result= {}
+    Challenges.find({'nom': new RegExp("^"+req.params.nom, 'i')}, function (err, docs) {
+        Object.assign(result, {"challenges":docs})
+    });
+    Startups.find({'nom': new RegExp("^"+req.params.nom, 'i')}, function (err, docs) {
+        Object.assign(result,{"startups":docs})
+    });
+    Domaines.find({'nom': new RegExp("^"+req.params.nom, 'i')}, function (err, docs) {
+        Object.assign(result,{"domaines":docs})
+    });
+    Secteurs.find({'nom': new RegExp("^"+req.params.nom, 'i')}, function (err, docs) {
+        Object.assign(result,{"secteurs":docs})
+        res.json(result)
+    });
 }

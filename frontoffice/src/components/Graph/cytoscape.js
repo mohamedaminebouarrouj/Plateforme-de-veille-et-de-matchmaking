@@ -16,7 +16,9 @@ class Cytoscape extends Component {
         if(x._private.data.id===this.props.id)
         {
           controller.highlight(x);
-          cy.maxZoom(5)
+          x._private.selected=true;
+          cy.maxZoom(3)
+          cy.center()
           cy.userZoomingEnabled(false)
 
         }

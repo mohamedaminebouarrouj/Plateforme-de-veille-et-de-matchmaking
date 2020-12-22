@@ -39,19 +39,22 @@ function Row(props){
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
-                <TableCell component="th" scope="row" width='18%'>
+                <TableCell component="th" scope="row">
                     {
-                        props.startup.siteWeb==="" ? props.startup.nom : <a href={"https://"+props.startup.siteWeb} target='_blank'>{props.startup.nom}</a>
+                        props.startup.siteWeb==="" ? props.startup.nom : <a href={props.startup.siteWeb} target='_blank'>{props.startup.nom}</a>
                     }
 
                 </TableCell>
-                <TableCell width='45%'>{props.startup.description}</TableCell>
-                <TableCell width='15%'>{props.startup.domainesId.map(d=>d.nom)}
+                <TableCell >{props.startup.description}</TableCell>
+                <TableCell >{props.startup.domainesId.map(d=>d.nom)}
                 </TableCell>
-                <TableCell width='15%'>{props.startup.challengesId.length}
+                <TableCell>{props.startup.challengesId.length}
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
+                </TableCell>
+                <TableCell>
+                    {props.startup.pays}
                 </TableCell>
                 <TableCell>
                     {dateCreation.toISOString().split('-01T')[0]}
@@ -173,11 +176,9 @@ export default class startupsList extends Component {
 
   ajouterButton(){
       this.setState({loading:true},()=>{
-          console.log(this.state.loading)
           axios.get('http://localhost:5000/startups/scraping/')
               .then(res =>{
                   console.log(res.data)
-                  loading:false
                   window.location.replace('#/startups/afficher');
                   window.location.reload(false);
               });
@@ -199,6 +200,7 @@ export default class startupsList extends Component {
                                 <TableCell/>
                                 <TableCell/>
                                 <TableCell/>
+                                <TableCell/>
                                 <TableCell align="right">
                                     <Button onClick={this.ajouterButton} variant="outlined" className="mb-2 mr-2" color="success">+</Button>
                                     {this.state.loading? <LoadingSpinner/>: null}
@@ -209,6 +211,7 @@ export default class startupsList extends Component {
                                 <TableCell><b>Description</b></TableCell>
                                 <TableCell><b>Domaines Reliés</b></TableCell>
                                 <TableCell><b>Challenges Reliés</b></TableCell>
+                                <TableCell><b>Pays</b></TableCell>
                                 <TableCell><b>Date de labélisation</b></TableCell>
                                 <TableCell><b>Modifier</b></TableCell>
                                 <TableCell><b>Supprimer</b></TableCell>

@@ -443,6 +443,8 @@ export default class tendancesList extends Component {
                         window.location.replace('#/tendances/afficher');
                         window.location.reload();
                     })
+                window.location.replace('#/tendances/afficher');
+                window.location.reload(false);
             })
         })
 
@@ -490,6 +492,8 @@ export default class tendancesList extends Component {
                         window.location.replace('#/tendances/afficher');
                         window.location.reload(false);
                     })
+                window.location.replace('#/tendances/afficher');
+                window.location.reload(false);
             })
         })
 
@@ -541,6 +545,8 @@ export default class tendancesList extends Component {
                         window.location.replace('#/tendances/afficher');
                         window.location.reload(false);
                         })
+                window.location.replace('#/tendances/afficher');
+                window.location.reload(false);
             })
         })
 

@@ -30,6 +30,8 @@ import ShowSecteur from "./views/Secteurs/Afficher/showSecteur";
 import ShowDomaine from "./views/Domaines/Afficher/showDomaine";
 import ShowStartup from "./views/Startups/Afficher/showStartup";
 import ShowChallenge from "./views/Challenges/Afficher/showChallenge";
+import ShowRecherche from "./views/Recherche/Afficher/showRecherche";
+
 
 ReactDOM.render(
   <BrowserRouter>
@@ -59,6 +61,10 @@ ReactDOM.render(
       <Route
           path="/startups/:id"
           render={props => <ShowStartup {...props} />} />
+
+      <Route
+          path="/search/:query"
+          render={props => <ShowRecherche {...props} />} />
 
 
 

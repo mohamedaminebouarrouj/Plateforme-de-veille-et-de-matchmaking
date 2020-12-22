@@ -34,6 +34,9 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import {NavLink} from "react-router-dom";
 import {Button} from "@material-ui/core";
 
+import Select from "react-select";
+import Particles from "react-particles-js";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -56,43 +59,77 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const customStyles = {
+
+    control: (base, state) => ({
+        ...base,
+        color: 'white',
+        // match with the menu
+        borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
+        // Overwrittes the different states of border
+        borderColor: state.isFocused ? "#344675" : "#344675",
+        // Removes weird border around container
+        boxShadow: state.isFocused ? "#344675" : "#344675",
+        "&:hover": {
+            // Overwrittes the different states of border
+            borderColor: state.isFocused ? "#344675" : "#344675"
+        }
+    }),
+    singleValue: (base) => ({
+        ...base,
+        color: '#344675'
+    }),
+    menu: base => ({
+        ...base,
+        // override border radius to match the box
+        borderRadius: 0,
+        // kill the gap
+        marginTop: 0,
+        color: '#ffe600'
+    }),
+    menuList: base => ({
+        ...base,
+        // kill the white space on first and last option
+        padding: 0,
+        color: '#344675'
+    })
+};
+
 function TitlebarGridList(props) {
     const classes = useStyles();
     return (
         <>
             {props.sel === "startups" ?
                 <>
-                    <Button onClick={()=>{
-                        props.val.filter(e=>e.pays==="Tunisie")
-                    }
-                    }>Tunisie</Button>
-                <GridList cols={5} cellHeight={180}>
-                    {props.val.map((tile) => (
-                        <GridListTile key={tile.nom}>
-                            <NavLink tag={Link} to={'/' + props.sel + '/' + tile._id}>
-                                <img src={tile.img ? tile.img : require("../../assets/logos/Startups/default.png")}
-                                     style={{opacity: 0.7}} alt={tile.nom}/>
-                            </NavLink>
+                    <GridList cols={5} cellHeight={180}>
+                        {props.val.map((tile) => (
+                            <GridListTile key={tile.nom}>
+                                <NavLink tag={Link} to={'/' + props.sel + '/' + tile._id}>
+                                    <img src={tile.img ? tile.img : require("../../assets/logos/Startups/default.png")}
+                                         alt={tile.nom}/>
+                                </NavLink>
 
-                            <GridListTileBar
-                                title={tile.nom}
-                                actionIcon={
-                                    <IconButton aria-label={`star ${tile.nom}`}>
-                                        <StarBorderIcon className={classes.title}/>
-                                    </IconButton>
-                                }
-                            />
-                        </GridListTile>
-                    ))}
-                </GridList>
-                    </>
+                                <GridListTileBar
+                                    title={tile.nom}
+                                    subtitle={tile.domainesId.map(d => d.nom)}
+                                    actionIcon={
+                                        <IconButton aria-label={`star ${tile.nom}`}>
+                                            <StarBorderIcon className={classes.title}/>
+                                        </IconButton>
+                                    }
+                                />
+                                {tile.domainesId.map(d => d.nom)}
+                            </GridListTile>
+                        ))}
+                    </GridList>
+                </>
                 :
                 <GridList cols={5} cellHeight={180}>
                     {props.val.map((tile) => (
                         <GridListTile key={tile.nom}>
                             <NavLink tag={Link} to={'/' + props.sel + '/' + tile._id}>
                                 <img src={tile.img ? tile.img : require("../../assets/logos/Startups/default.png")}
-                                     style={{opacity: 0.7}} alt={tile.nom}/>
+                                     alt={tile.nom}/>
                             </NavLink>
 
                             <GridListTileBar
@@ -111,6 +148,18 @@ function TitlebarGridList(props) {
     );
 }
 
+function compare(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.nom.toUpperCase().trim();
+    const bandB = b.nom.toUpperCase().trim();
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
 
 export default class LandingPage extends React.Component {
     constructor(props) {
@@ -125,6 +174,7 @@ export default class LandingPage extends React.Component {
         this.domainesList = this.domainesList.bind(this)
         this.challengesList = this.challengesList.bind(this)
         this.startupsList = this.startupsList.bind(this)
+        this.filterStartup = this.filterStartup.bind(this)
 
         this.onShow = this.onShow.bind(this)
         this.toggle = this.toggle.bind(this)
@@ -135,6 +185,7 @@ export default class LandingPage extends React.Component {
             domaines: [],
             challenges: [],
             startups: [],
+            startupsAff: [],
             dropdownOpen: false
         };
     }
@@ -168,11 +219,16 @@ export default class LandingPage extends React.Component {
 
         axios.get('http://localhost:5000/startups/')
             .then(response => {
-                this.setState({startups: response.data})
+                this.setState({
+                    startups: response.data,
+                    startupsAff: response.data
+                })
             })
             .catch((error) => {
                 console.log(error);
             })
+
+
     }
 
     componentWillUnmount() {
@@ -193,6 +249,7 @@ export default class LandingPage extends React.Component {
 
     secteursList() {
 
+        this.state.secteurs.sort(compare)
         return <TitlebarGridList val={this.state.secteurs} sel={'secteurs'}/>
     }
 
@@ -203,16 +260,45 @@ export default class LandingPage extends React.Component {
 
     challengesList() {
 
+        this.state.challenges.sort(compare)
         return <TitlebarGridList val={this.state.challenges} sel={'challenges'}/>
     }
 
     startupsList() {
-        return <TitlebarGridList val={this.state.startups} sel={'startups'}/>
+        var pays = []
+        this.state.startups.map(s => {
+            pays.push(s.pays)
+        })
+        let op = [...new Set(pays)].map(e => ({value: e, label: e}))
+        op.unshift({value: 'All', label: 'All'})
+        this.state.startupsAff.sort(compare)
+
+        return (
+            <>
+                <div style={{width: '250px', float: 'right', marginTop: '-50px'}}>
+
+                    <Select
+                        styles={customStyles}
+                        options={op}
+                        onChange={this.filterStartup}
+                        isSearchable={false}
+                        placeholder="Selectionnez le pays"
+                    > </Select>
+                </div>
+                <TitlebarGridList val={this.state.startupsAff} sel={'startups'}/>
+            </>)
     }
 
-    filterStartup()
-    {
-
+    filterStartup(pays) {
+        if (pays.value !== "All") {
+            this.setState({
+                startupsAff: this.state.startups.filter(el => el.pays === pays.value)
+            })
+        } else {
+            this.setState({
+                startupsAff: this.state.startups
+            })
+        }
     }
 
     onDomaines() {
@@ -228,7 +314,6 @@ export default class LandingPage extends React.Component {
             {selected: 'Challenges'}
         )
 
-        console.log(this.state.challenges)
     }
 
     onStartups() {
@@ -256,60 +341,29 @@ export default class LandingPage extends React.Component {
             <>
                 <IndexNavbar/>
 
-                <div className="wrapper">
-
-                    <div className="page-header">
-                        <img
-                            alt="..."
-                            className="path"
-                            src={require("assets/img/blob.png")}
-                        />
-                        <img
-                            alt="..."
-                            className="path2"
-                            src={require("assets/img/path2.png")}
-                        />
-                        <img
-                            alt="..."
-                            className="shapes wave"
-                            src={require("assets/img/waves.png")}
-                        />
-                        <img
-                            alt="..."
-                            className="shapes squares"
-                            src={require("assets/img/patrat.png")}
-                        />
-                        <img
-                            alt="..."
-                            className="shapes circle"
-                            src={require("assets/img/cercuri.png")}
-                        />
-                    </div>
-                    <section className="section section-lg">
-                        <section className="section">
-                            <Container>
-                                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                                    <DropdownToggle caret>
-                                        {this.state.selected}
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem onClick={this.onSecteurs}>Secteurs
-                                            ({this.state.secteurs.length})</DropdownItem>
-                                        {/*<DropdownItem onClick={this.onDomaines}>Domaines d'activité ({this.state.domaines.length})</DropdownItem>*/}
-                                        <DropdownItem onClick={this.onChallenges}>Challenges
-                                            ({this.state.challenges.length})</DropdownItem>
-                                        <DropdownItem onClick={this.onStartups}>Startups
-                                            ({this.state.startups.length})</DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
-                            </Container>
-                        </section>
-                    </section>
-                    <section>
+                <section className="section section-lg" id="main">
+                    <section className="section">
+                        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                            <DropdownToggle caret>
+                                {this.state.selected}
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem onClick={this.onSecteurs}>Secteurs
+                                    ({this.state.secteurs.length})</DropdownItem>
+                                {/*<DropdownItem onClick={this.onDomaines}>Domaines d'activité ({this.state.domaines.length})</DropdownItem>*/}
+                                <DropdownItem onClick={this.onChallenges}>Challenges
+                                    ({this.state.challenges.length})</DropdownItem>
+                                <DropdownItem onClick={this.onStartups}>Startups
+                                    ({this.state.startups.length})</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                        <br/>
                         {this.onShow()}
                     </section>
+
                     <Footer/>
-                </div>
+                </section>
+
             </>
         );
     }

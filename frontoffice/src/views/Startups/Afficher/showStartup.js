@@ -20,15 +20,15 @@ export default class ShowStartup extends Component {
         this.onSubmitRevendiquer = this.onSubmitRevendiquer.bind(this)
         this.onChangeEmail = this.onChangeEmail.bind(this)
         this.onChangeContenu = this.onChangeContenu.bind(this)
-        this.onChangeNom=this.onChangeNom.bind(this)
-        this.onChangeDescription=this.onChangeDescription.bind(this)
-        this.onChangeAdresse=this.onChangeAdresse.bind(this)
-        this.onChangeEmailStartup=this.onChangeEmailStartup.bind(this)
-        this.onChangeSiteWeb=this.onChangeSiteWeb.bind(this)
-        this.onChangeFacebook=this.onChangeFacebook.bind(this)
-        this.onChangeLinkedin=this.onChangeLinkedin.bind(this)
-        this.onChangeTwitter=this.onChangeTwitter.bind(this)
-        this.onSubmitModifier=this.onSubmitModifier.bind(this)
+        this.onChangeNom = this.onChangeNom.bind(this)
+        this.onChangeDescription = this.onChangeDescription.bind(this)
+        this.onChangeAdresse = this.onChangeAdresse.bind(this)
+        this.onChangeEmailStartup = this.onChangeEmailStartup.bind(this)
+        this.onChangeSiteWeb = this.onChangeSiteWeb.bind(this)
+        this.onChangeFacebook = this.onChangeFacebook.bind(this)
+        this.onChangeLinkedin = this.onChangeLinkedin.bind(this)
+        this.onChangeTwitter = this.onChangeTwitter.bind(this)
+        this.onSubmitModifier = this.onSubmitModifier.bind(this)
 
         this.state = {
             nom: '',
@@ -36,7 +36,7 @@ export default class ShowStartup extends Component {
             description: '',
             logo: '',
             domainesId: [],
-            challengesId:[],
+            challengesId: [],
             fondateurs: [],
             siteWeb: '',
             adresse: '',
@@ -52,6 +52,7 @@ export default class ShowStartup extends Component {
             validationModal: false,
             verifiedStartup: false,
             userStartup: false,
+            revendications:[],
         }
     }
 
@@ -62,6 +63,7 @@ export default class ShowStartup extends Component {
     };
 
     componentDidMount() {
+        document.body.classList.toggle("landing-page");
 
         if (localStorage.getItem('auth-token')) {
             this.setState({
@@ -69,7 +71,6 @@ export default class ShowStartup extends Component {
             })
 
             JSON.parse(localStorage.getItem("loggedUser")).revendicationsId.map(r => {
-                console.log(r)
                 if (r.startupId === this.props.match.params.id) {
                     if (r.verified === true) {
                         this.setState({
@@ -81,11 +82,30 @@ export default class ShowStartup extends Component {
                             userStartup: true
                         })
                     }
-
                 }
             })
         }
-        document.body.classList.toggle("landing-page");
+        axios.get('http://localhost:5000/revendications/')
+            .then(response => {
+                response.data.map(r=>{
+
+                    if(r.startupId._id===this.props.match.params.id)
+                    {
+                        if(r.verified)
+                        {
+                            console.log("verified")
+                            this.setState({
+                                verifiedStartup: true
+                            })
+                        }
+                    }
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+
         axios.get('http://localhost:5000/startups/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
@@ -94,7 +114,7 @@ export default class ShowStartup extends Component {
                     dateCreation: response.data.dateCreation,
                     description: response.data.description,
                     domainesId: response.data.domainesId,
-                    challengesId:response.data.challengesId,
+                    challengesId: response.data.challengesId,
                     logo: response.data.logo,
                     siteWeb: response.data.siteWeb,
                     email: response.data.email,
@@ -129,72 +149,63 @@ export default class ShowStartup extends Component {
         })
     }
 
-    onChangeNom(e)
-    {
+    onChangeNom(e) {
         this.setState({
             nom: e.target.value
         })
     }
 
-    onChangeDescription(e)
-    {
+    onChangeDescription(e) {
         this.setState({
             description: e.target.value
         })
     }
 
-    onChangeAdresse(e)
-    {
+    onChangeAdresse(e) {
         this.setState({
             adresse: e.target.value
         })
     }
 
-    onChangeSiteWeb(e)
-    {
+    onChangeSiteWeb(e) {
         this.setState({
             siteWeb: e.target.value
         })
     }
 
-    onChangeEmailStartup(e)
-    {
+    onChangeEmailStartup(e) {
         this.setState({
             email: e.target.value
         })
     }
 
-    onChangeFacebook(e)
-    {
+    onChangeFacebook(e) {
         this.setState({
             facebook: e.target.value
         })
     }
 
-    onChangeLinkedin(e)
-    {
+    onChangeLinkedin(e) {
         this.setState({
             linkedin: e.target.value
         })
     }
 
-    onChangeTwitter(e)
-    {
+    onChangeTwitter(e) {
         this.setState({
             twitter: e.target.value
         })
     }
 
-    onSubmitModifier(e)
-    {
+    onSubmitModifier(e) {
         e.preventDefault();
 
         const startup = {
             nom: this.state.nom,
             description: this.state.description,
-            adresse : this.state.adresse,
+            adresse: this.state.adresse,
             email: this.state.email,
-            siteWeb:this.state.siteWeb,
+            siteWeb: this.state.siteWeb,
             facebook: this.state.facebook,
             linkedin: this.state.linkedin,
             twitter: this.state.twitter
@@ -244,20 +255,8 @@ export default class ShowStartup extends Component {
         return (
             <>
                 <IndexNavbar/>
-                <div className="wrapper">
-                    <div className="page-header">
-                        <img
-                            alt="..."
-                            className="dots"
-                            src={require("../../../assets/img/dots.png")}
-                        />
-                        <img
-                            alt="..."
-                            className="path"
-                            src={require("../../../assets/img/path1.png")}
-                        />
-                    </div>
-                    <br/><br/><br/>
+                <section className="section section-lg" id="main">
+
                     <section className="section">
                         <Row>
                             <Col lg="1">
@@ -272,11 +271,12 @@ export default class ShowStartup extends Component {
                                     </Col>
                                     <Col>
                                         <p className="font-weight-bold font-size-35">{this.state.nom}
-                                            {localStorage.getItem('auth-token')!==""?(this.state.userStartup? (this.state.verifiedStartup?<CheckCircleIcon
-                                                style={{color: "#FFDB00", fontSize: "40px"}}/>:<div></div>):<div></div>):<div></div>}</p>
+                                            {this.state.verifiedStartup ?
+                                                <CheckCircleIcon
+                                                    style={{color: "#FFDB00", fontSize: "40px"}}/> : <div></div>}</p>
                                         <a>
                                             Depuis
-                                            : {this.state.dateCreation?this.state.dateCreation.split('-')[1] + "/" + this.state.dateCreation.split('-')[0]:''}</a>
+                                            : {this.state.dateCreation ? this.state.dateCreation.split('-')[1] + "/" + this.state.dateCreation.split('-')[0] : ''}</a>
                                         <p>{this.state.pays}</p>
                                         <br/>
                                         {/*<Button className="btn btn-default btn-round">*/}
@@ -289,7 +289,8 @@ export default class ShowStartup extends Component {
                                                     onClick={() => this.toggleModal("modificationModal")}>
                                                 <i className="tim-icons icon-spaceship"/>
                                                 <a> Modifier Startup</a>
-                                            </Button> : <Button className="btn btn-simple btn-round" color="primary" disabled>
+                                            </Button> :
+                                            <Button className="btn btn-simple btn-round" color="primary" disabled>
                                                 <i className="tim-icons icon-spaceship"/>
                                                 <a> Revendiquer cette start-up</a>
                                             </Button>) : <Button className="btn btn-simple btn-round" color="primary"
@@ -453,7 +454,7 @@ export default class ShowStartup extends Component {
                                                     type="button"
                                                     onClick={() => {
                                                         this.toggleModal("validationModal")
-                                                        window.location.reload(false)
+                                                        window.parent.location = window.parent.location.href
                                                     }}
                                                 >
                                                     OK
@@ -670,10 +671,10 @@ export default class ShowStartup extends Component {
                             </Col>
                         </Row>
                     </section>
-
-
                     <Footer/>
-                </div>
+                </section>
+
+
             </>
         )
     }

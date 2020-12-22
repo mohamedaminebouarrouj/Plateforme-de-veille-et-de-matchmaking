@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const revendicationSchema = new Schema({
 
-        email:{type:String,required: true, unique: true},
-        contenu:{type: String,required: true, unique: true},
+        email:{type:String,required: true},
+        contenu:{type: String,required: true},
         date:{type:Date},
         traited:{type:Boolean},
         verified:{type:Boolean},

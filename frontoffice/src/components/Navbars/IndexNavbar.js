@@ -16,7 +16,9 @@
 
 */
 import React from "react";
+import ReactDom from "react";
 import {Link} from "react-router-dom";
+
 // reactstrap components
 import {
     Button,
@@ -26,7 +28,17 @@ import {
     NavItem,
     NavLink,
     Nav,
-    Container, Modal, Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Input,
+    Container,
+    Modal,
+    Form,
+    FormGroup,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
+    Input,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem, UncontrolledDropdown,
 } from "reactstrap";
 
 import classnames from "classnames";
@@ -34,6 +46,8 @@ import classnames from "classnames";
 
 import axios from "axios";
 import GoogleBtn from '../GoogleBtn';
+
+import ShowRecherche from "../../views/Recherche/Afficher/showRecherche";
 
 class ComponentsNavbar extends React.Component {
     constructor(props) {
@@ -45,7 +59,10 @@ class ComponentsNavbar extends React.Component {
         this.onChangePassword = this.onChangePassword.bind(this);
         this.onSubmitLogin = this.onSubmitLogin.bind(this)
         this.onSubmitRegister = this.onSubmitRegister.bind(this)
-        this.onSubmitLogout=this.onSubmitLogout.bind(this)
+        this.onSubmitLogout = this.onSubmitLogout.bind(this)
+
+        this.onSearch=this.onSearch.bind(this)
+        this.showRecherche=this.showRecherche.bind(this)
 
         this.state = {
             nom: '',
@@ -54,6 +71,9 @@ class ComponentsNavbar extends React.Component {
             email: '',
             password: '',
             user: null,
+            allData: [],
+            search:'',
+            modified:false,
 
             registerModal: false,
             formModal: false,
@@ -83,6 +103,7 @@ class ComponentsNavbar extends React.Component {
                 console.log(error);
             })
         window.addEventListener("scroll", this.changeColor);
+
     }
 
     componentWillUnmount() {
@@ -152,6 +173,37 @@ class ComponentsNavbar extends React.Component {
             organisation: e.target.value
         })
     }
+    onSearch(e)
+    {
+        this.setState({
+            search:e.target.value,
+            modified:true
+        })
+
+    }
+
+    showRecherche()
+    {
+        if (this.state.search.length>0)
+        {
+            document.getElementById("main").style.display = "none";
+            if(document.getElementById("particles"))
+            document.getElementById("particles").style.display = "none";
+
+
+            return(<ShowRecherche query={this.state.search} />)
+
+
+        }
+
+        if(this.state.search.length===0 && this.state.modified===true)
+        {
+            document.getElementById("main").style.display="initial";
+            if(document.getElementById("particles"))
+            document.getElementById("particles").style.display = "initial";
+
+        }
+    }
 
     onChangeEmail(e) {
         this.setState({
@@ -176,7 +228,6 @@ class ComponentsNavbar extends React.Component {
             .then(res => {
                 if (res.data.user) {
                     localStorage.setItem('auth-token', res.data.token)
-                    console.log(res.data)
                     window.location.replace('/');
                 } else {
                     window.location.replace('/');
@@ -205,7 +256,6 @@ class ComponentsNavbar extends React.Component {
 
         axios.post('http://localhost:5000/users/register', user)
             .then(res => {
-                console.log(res.data);
                 window.location.replace('/');
             }).catch(() => {
             console.log("le")
@@ -215,28 +265,67 @@ class ComponentsNavbar extends React.Component {
     }
 
     render() {
+        const styles = theme => ({
+            textField: {
+                width: '90%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                paddingBottom: 0,
+                marginTop: 0,
+                fontWeight: 500
+            },
+            input: {
+                color: 'white'
+            }
+        });
         const isLoggedIn = this.state.user;
         let navitem;
         if (isLoggedIn) {
             navitem =
                 <Nav>
-                    <NavItem className="active">
-                        <NavLink tag={Link} to="/profile-page">
-                            <i className="tim-icons icon-single-02"/>
-                            {this.state.user.nom}
-                        </NavLink>
-
-                    </NavItem>
-                    <NavItem>
-                            <NavLink tag={Link} onClick={this.onSubmitLogout} to='/logout'>
-                                Se déconnecter
-                            </NavLink>
-                    </NavItem>
+                    <UncontrolledDropdown nav style={{top:'10px'}}>
+                        <DropdownToggle
+                            caret
+                            color="default"
+                            data-toggle="dropdown"
+                            href="#pablo"
+                            id="navbarDropdownMenuLink"
+                            nav
+                            onClick={e => e.preventDefault()}
+                        >
+                            <i className="tim-icons icon-single-02"/> {this.state.user.nom} &nbsp;
+                        </DropdownToggle>
+                        <DropdownMenu
+                            aria-labelledby="navbarDropdownMenuLink"
+                            right
+                        >
+                            <DropdownItem
+                                href="/profile-page"
+                                style={{color: "#000"}}
+                            >
+                                <i className="tim-icons icon-single-02"/> Mon compte
+                            </DropdownItem>
+                            <DropdownItem
+                                style={{color: "#000"}}
+                                href="#pablo"
+                                onClick={e => e.preventDefault()}
+                            >
+                                <i className="tim-icons icon-key-25"/> Réinisialiser le mot de passe
+                            </DropdownItem>
+                            <DropdownItem
+                                style={{color: "#000"}}
+                                onClick={this.onSubmitLogout}
+                                to='/logout'
+                            >
+                                <i className="tim-icons icon-button-power"/> <b>Se déconnecter</b>
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
                 </Nav>
-                ;
+            ;
         } else {
-            navitem = <NavItem>
-                <Button
+            navitem = <NavItem >
+                <Button style={{top:'10px'}}
                     className="btn-neutral"
                     color="link"
                     onClick={() => this.toggleModal("formModal")}>
@@ -522,19 +611,22 @@ class ComponentsNavbar extends React.Component {
             </NavItem>;
         }
         return (
+
+            <>
             <Navbar
                 className={"fixed-top " + this.state.color}
                 color-on-scroll="100"
                 expand="lg"
             >
-                <Container>
+                <Container >
                     <div className="navbar-translate">
                         <NavbarBrand
                             to="/"
                             tag={Link}
                             id="navbar-brand"
                         >
-                            <span style={{fontSize:'20px'}}><span style={{color: '#FFDB00'}}>I</span>nno<span style={{color: '#FFDB00'}}>S</span>eer• </span>
+                            <span style={{fontSize: '25px'}}><span style={{color: '#FFDB00'}}>I</span>nno<span
+                                style={{color: '#FFDB00'}}>S</span>eer• </span>
                         </NavbarBrand>
                     </div>
                     <Collapse
@@ -544,22 +636,46 @@ class ComponentsNavbar extends React.Component {
                         onExiting={this.onCollapseExiting}
                         onExited={this.onCollapseExited}
                     >
+                        {/*<Autocomplete*/}
+                        {/*    freeSolo*/}
+                        {/*    fullWidth*/}
+                        {/*    options={this.state.allData.map((option) => option.nom)}*/}
+                        {/*    renderInput={(params) => (*/}
+                        {/*        <TextField {...params}  margin="normal" variant="outlined"*/}
+                        {/*        />*/}
+                        {/*    )}*/}
+                        {/*    onChange={(e)=>console.log(e.target)}*/}
+                        {/*/>*/}
 
-                        <Nav navbar>
-
-                            <NavItem className="active">
-                                <NavLink tag={Link} to="/discover">
-                                    <i className="tim-icons icon-world"/>
-                                    Découvrir
-                                </NavLink>
-                            </NavItem>
-                            {navitem}
-                        </Nav>
+                            <Nav navbar>
+                                <NavItem>
+                                    <div className="form-control-lg input-group">
+                                        <input placeholder="Recherche..." type="text" className="form-control"
+                                        onChange={this.onSearch}/>
+                                        <div className="input-group-append">
+                                <span className="input-group-text">
+                                <i className="tim-icons icon-zoom-split"></i>
+                                </span>
+                                        </div>
+                                    </div>
+                                </NavItem>
+                                <NavItem className="active"
+                                         >
+                                    <NavLink tag={Link} to="/discover" style={{top:'10px'}}>
+                                        <i className="tim-icons icon-world"/>
+                                        Découvrir
+                                    </NavLink>
+                                </NavItem>
+                                {navitem}
+                            </Nav>
                     </Collapse>
                 </Container>
             </Navbar>
-        );
-    }
-}
 
-export default ComponentsNavbar;
+                        {this.showRecherche()}
+       </>
+    );
+    }
+    }
+
+    export default ComponentsNavbar;

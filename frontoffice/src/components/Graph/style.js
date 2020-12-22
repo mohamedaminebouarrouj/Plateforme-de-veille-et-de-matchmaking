@@ -2,21 +2,24 @@ export default `
 core {
 	active-bg-color: #fff;
 	active-bg-opacity: 0.333;
+
 }
 
 edge {
 	curve-style: haystack;
 	haystack-radius: 0;
 	opacity: 0.333;
-	width: 0.1;
+	width: 0.01;
 	z-index: 0;
 	overlay-opacity: 0;
-  events: no;
+    events: no;
+    line-style:dotted;
+
 }
 
 node {
-	width: 32;
-	height: 32;
+	width: 50;
+	height: 50;
 	font-size: 5;
 	font-family: "Poppins", sans-serif;
 	min-zoomed-font-size: 3;
@@ -34,39 +37,53 @@ node {
 }
 
 edge[interaction = "sc"] {
-	line-color: #FFDB00;
-	opacity: 0.666;
+	line-color: #FFF;
+	opacity: 0.1;
 	z-index: 0;
-	width: 0.5;
+	width: 0.01;
 }
 
-node[NodeType = "secteur"],
 node[NodeType = "secteur"] {
-    
-    shape:round-rectangle;
-    width: 35;
-	height: 25;
-	font-size: 3;
     color: #333333;
-	background-color: #FFDB00;
-	text-outline-color: #FFDB00;
+    font-size:5;
+	background-color: #fff;
+	text-outline-color: #fff;
 }
 
 
 node[NodeType = "challenge"] {
     color: #333333;
-    font-size:3.5;
+    font-size:5;
 	background-color: #fff;
 	text-outline-color: #fff;
+	
 }
 
 node.highlighted {
 	min-zoomed-font-size: 0;
 }
 
+:selected {
+    background-image: data(img);
+    background-image-opacity:0.4;
+    background-fit:cover;
+	color:#2E2E38;
+	background-color: #FFDB00;
+	text-outline-color: #2E2E38;
+}
+
+:unselected {
+    background-image: data(img);
+    background-image-opacity:0.4;
+    background-fit:cover;
+	color:#F6F6FA;
+	background-color: #747480;
+	text-outline-color: #F6F6FA;
+}
+
 edge.highlighted {
-	opacity: 0.8;
-	width: 0.2;
+	opacity: 0.3;
+	width: 0.4;
 	z-index: 9999;
 }
 

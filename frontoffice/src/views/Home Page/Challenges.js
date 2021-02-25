@@ -21,22 +21,29 @@ import axios from 'axios';
 
 
 // core components
-import Footer from "components/Footer/Footer.js";
-import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import {Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import {Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Row, Col} from 'reactstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import {NavLink} from "react-router-dom";
 import {Button} from "@material-ui/core";
 
-import Select from "react-select";
-import Particles from "react-particles-js";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {
+    Grid,
+    Card,
+    CardContent,
+    Typography,
+    CardHeader,
+    CardActions,
+    CardActionArea,
+    CardMedia,
+} from '@material-ui/core/'
+
+import HoverCard from "../../components/Hover Card/hoverCard";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,68 +67,80 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const customStyles = {
 
-    control: (base, state) => ({
-        ...base,
-        background: "transparent",
-        color: 'white',
-        // match with the menu
-        borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
-        // Overwrittes the different states of border
-        borderColor: state.isFocused ? "#344675" : "#344675",
-        // Removes weird border around container
-        boxShadow: state.isFocused ? "#344675" : "#344675",
-        "&:hover": {
-            // Overwrittes the different states of border
-            borderColor: state.isFocused ? "#344675" : "#344675"
-        }
-    }),
-    singleValue: (base) => ({
-        ...base,
-        color: 'white'
-    }),
-    menu: base => ({
-        ...base,
-        // override border radius to match the box
-        borderRadius: 0,
-        // kill the gap
-        marginTop: 0,
-        color: '#ffe600'
-    }),
-    menuList: base => ({
-        ...base,
-        // kill the white space on first and last option
-        padding: 0,
-        color: '#344675'
-    })
-};
+function TitlebarGridList2(props) {
+    const classes = useStyles();
+    return (
+        <>
+            <Grid
+                container
+                spacing={1}
+                direction="row"
+                justify="flex-start"
+                alignItems="flex-start"
+            >
+                {props.val.map(elem => (
+                    <Grid item xs={12} sm={6} md={3} key={elem.nom}>
+                        <Card style={{height: "520px"}}>
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                className={classes.media}
+                                image={elem.img}
+                                title={elem.nom}
+                            />
+                            <CardContent>
+                                <Typography gutterBottom style={{color: '#344675'}} variant="h5" component="h2">
+                                    {elem.nom}
+                                </Typography>
+                                <p style={{color: 'rgb(0,0,0,0.5)'}}>
+                                    {elem.description.slice(0, 100) + '...'}
+                                </p>
+                                <a>
+                                    <b style={{color: '#344675'}}>Catégorie</b> : {elem.categorie}
+                                </a>
+                            </CardContent>
+                            <CardActions style={{float: 'right'}}>
+                                <Button size="large" color="primary" href={'/challenges/' + elem._id}>
+                                    Consulter
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        </>
+    )
+}
 
 function TitlebarGridList(props) {
     const classes = useStyles();
     return (
         <>
-            {props.val.length>0?<GridList cols={5} cellHeight={180}>
-                {props.val.map((tile) => (
-                    <GridListTile key={tile.nom}>
-                        <NavLink tag={Link} to={'/challenges/'+ tile._id}>
-                            <img src={tile.img ? tile.img : require("../../assets/logos/Startups/default.png")}
-                                 alt={tile.nom}/>
-                        </NavLink>
+            {props.val.length > 0 ?
+                <GridList cols={5} cellHeight={180}>
+                    {props.val.map((tile) => (
+                        <GridListTile key={tile.nom}>
+                            <NavLink tag={Link} to={'/challenges/' + tile._id}>
+                                <img src={tile.img}
+                                     alt={tile.nom}/>
+                            </NavLink>
 
-                        <GridListTileBar
-                            title={tile.nom}
-                            subtitle={<span>Catégorie : <a href='#'>{tile.categorie}</a></span>}
-                        />
-                    </GridListTile>
-                ))}
-            </GridList>:<div style={{
-                position: 'absolute', left: '50%', top: '100%',
-                transform: 'translate(-50%, -50%)'}}><CircularProgress/> Loading...</div>}
+                            <GridListTileBar
+                                title={tile.nom}
+                                subtitle={<span>Catégorie : <a href='#'>{tile.categorie}</a></span>}
+                            />
+                        </GridListTile>
+                    ))}
+                </GridList> : <div style={{
+                    position: 'absolute', left: '50%', top: '100%',
+                    transform: 'translate(-50%, -50%)'
+                }}><CircularProgress/> Loading...</div>}
 
         </>
     );
 }
+
 function compare(a, b) {
     // Use toUpperCase() to ignore character casing
     // const bandA = a.nom.toUpperCase().trim();
@@ -135,7 +154,7 @@ function compare(a, b) {
     } else if (bandA < bandB) {
         comparison = -1;
     }
-    return comparison*-1;
+    return comparison * -1;
 }
 
 
@@ -143,7 +162,7 @@ export default class Challenges extends React.Component {
     constructor(props) {
         super(props);
         this.challengesList = this.challengesList.bind(this)
-
+        this.hoverCardShow = this.hoverCardShow.bind(this)
         this.state = {
             challenges: [],
             dropdownOpen: false
@@ -154,7 +173,7 @@ export default class Challenges extends React.Component {
         document.body.classList.toggle("landing-page");
         axios.get('http://localhost:5000/challenges/')
             .then(response => {
-                this.setState({challenges:response.data})
+                this.setState({challenges: response.data})
             })
             .catch((error) => {
                 console.log(error);
@@ -167,21 +186,25 @@ export default class Challenges extends React.Component {
     }
 
 
-
     challengesList() {
 
         this.state.challenges.sort(compare)
-        return <TitlebarGridList val={this.state.challenges.slice(0,5)}/>
+        return <TitlebarGridList2 val={this.state.challenges.slice(0, 8)}/>
+    }
+
+    hoverCardShow() {
+        this.state.challenges.sort(compare)
+        return <HoverCard val={this.state.challenges.slice(0, 8)}/>
     }
 
     render() {
         return (
             <>
-                <section className="section" style={{top: '-50px', left: '10px'}}>
-                    <h1>Les challenges à la une</h1>
-
-                    {this.challengesList()}
+                <section className="section content-center" style={{top: '-50px', left: '10px'}}>
+                    <h1 className="text-center">Les challenges à la une</h1>
+                    {this.hoverCardShow()}
                 </section>
+
             </>
         );
     }

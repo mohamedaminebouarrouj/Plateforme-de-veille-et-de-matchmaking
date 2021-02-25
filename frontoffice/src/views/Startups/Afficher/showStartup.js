@@ -6,11 +6,12 @@ import Footer from "../../../components/Footer/Footer";
 import {
     Button, Card, CardBody,
     Col, Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Modal, Nav, NavItem, NavLink,
-    Row, TabContent, TabPane,
+    Row, TabContent, TabPane, Label, Input
 } from "reactstrap";
 import TextField from '@material-ui/core/TextField';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {DialogContentText} from "@material-ui/core";
+import Particles from "react-particles-js";
 
 
 export default class ShowStartup extends Component {
@@ -52,7 +53,8 @@ export default class ShowStartup extends Component {
             validationModal: false,
             verifiedStartup: false,
             userStartup: false,
-            revendications:[],
+            loggedUserRole: '',
+            revendications: [],
         }
     }
 
@@ -67,7 +69,8 @@ export default class ShowStartup extends Component {
 
         if (localStorage.getItem('auth-token')) {
             this.setState({
-                emailRevendication: JSON.parse(localStorage.getItem("loggedUser")).email
+                emailRevendication: JSON.parse(localStorage.getItem("loggedUser")).email,
+                loggedUserRole: JSON.parse(localStorage.getItem("loggedUser")).role
             })
 
             JSON.parse(localStorage.getItem("loggedUser")).revendicationsId.map(r => {
@@ -87,12 +90,10 @@ export default class ShowStartup extends Component {
         }
         axios.get('http://localhost:5000/revendications/')
             .then(response => {
-                response.data.map(r=>{
+                response.data.map(r => {
 
-                    if(r.startupId._id===this.props.match.params.id)
-                    {
-                        if(r.verified)
-                        {
+                    if (r.startupId._id === this.props.match.params.id) {
+                        if (r.verified) {
                             console.log("verified")
                             this.setState({
                                 verifiedStartup: true
@@ -255,18 +256,132 @@ export default class ShowStartup extends Component {
         return (
             <>
                 <IndexNavbar/>
+                <Particles style={{position: 'absolute', top: '100px'}} params={
+                    {
+                        "particles": {
+                            "number": {
+                                "value": 100,
+                                "density": {
+                                    "enable": true,
+                                    "value_area": 800
+                                }
+                            },
+                            "color": {
+                                "value": "#ffffff"
+                            },
+                            "shape": {
+                                "type": "circle",
+                                "stroke": {
+                                    "width": 0,
+                                    "color": "#000000"
+                                },
+                                "polygon": {
+                                    "nb_sides": 5
+                                },
+                                "image": {
+                                    "src": "img/github.svg",
+                                    "width": 100,
+                                    "height": 100
+                                }
+                            },
+                            "opacity": {
+                                "value": 0.5,
+                                "random": false,
+                                "anim": {
+                                    "enable": false,
+                                    "speed": 1,
+                                    "opacity_min": 0.1,
+                                    "sync": false
+                                }
+                            },
+                            "size": {
+                                "value": 3,
+                                "random": true,
+                                "anim": {
+                                    "enable": false,
+                                    "speed": 40,
+                                    "size_min": 0.1,
+                                    "sync": false
+                                }
+                            },
+                            "line_linked": {
+                                "enable": true,
+                                "distance": 150,
+                                "color": "#ffffff",
+                                "opacity": 0.4,
+                                "width": 1
+                            },
+                            "move": {
+                                "enable": true,
+                                "speed": 1,
+                                "direction": "none",
+                                "random": true,
+                                "straight": false,
+                                "out_mode": "out",
+                                "bounce": false,
+                                "attract": {
+                                    "enable": false,
+                                    "rotateX": 600,
+                                    "rotateY": 1200
+                                }
+                            }
+                        },
+                        "interactivity": {
+                            "detect_on": "window",
+                            "events": {
+                                "onhover": {
+                                    "enable": false,
+                                    "mode": "repulse"
+                                },
+                                "onclick": {
+                                    "enable": false,
+                                    "mode": "push"
+                                },
+                                "resize": true
+                            },
+                            "modes": {
+                                "grab": {
+                                    "distance": 400,
+                                    "line_linked": {
+                                        "opacity": 1
+                                    }
+                                },
+                                "bubble": {
+                                    "distance": 400,
+                                    "size": 40,
+                                    "duration": 2,
+                                    "opacity": 8,
+                                    "speed": 1
+                                },
+                                "repulse": {
+                                    "distance": 200,
+                                    "duration": 0.4
+                                },
+                                "push": {
+                                    "particles_nb": 4
+                                },
+                                "remove": {
+                                    "particles_nb": 2
+                                }
+                            }
+                        },
+                        "retina_detect": true
+                    }}/>
                 <section className="section section-lg" id="main">
 
                     <section className="section">
                         <Row>
                             <Col lg="1">
-
                             </Col>
                             <Col md="6">
                                 <Row>
                                     <Col md="3">
                                         <img
-                                            src={require("../../../assets/logos/Startups/default.png")}
+                                            style={{
+                                                height: '120px', position: 'absolute', left: '50%', top: '50%',
+                                                transform: 'translate(-50%, -50%)'
+                                            }}
+                                            src={this.state.logo ? require("../../../assets/logos/Startups/" + this.state.logo) : require("../../../assets/logos/Startups/default.png")}
                                         />
                                     </Col>
                                     <Col>
@@ -284,20 +399,23 @@ export default class ShowStartup extends Component {
                                         {/*    <a> Ajouter au favoris</a>*/}
                                         {/*</Button>*/}
 
-                                        {localStorage.getItem('auth-token') !== "" ? (this.state.userStartup ? (this.state.verifiedStartup ?
-                                            <Button className="btn btn-simple btn-round" color="primary"
-                                                    onClick={() => this.toggleModal("modificationModal")}>
-                                                <i className="tim-icons icon-spaceship"/>
-                                                <a> Modifier Startup</a>
-                                            </Button> :
-                                            <Button className="btn btn-simple btn-round" color="primary" disabled>
-                                                <i className="tim-icons icon-spaceship"/>
-                                                <a> Revendiquer cette start-up</a>
-                                            </Button>) : <Button className="btn btn-simple btn-round" color="primary"
-                                                                     onClick={() => this.toggleModal("demoModal")}>
-                                                <i className="tim-icons icon-spaceship"/>
-                                                <a> Revendiquer cette start-up</a>
-                                            </Button>)
+                                        {localStorage.getItem('auth-token') !== "" ? this.state.loggedUserRole !== "Startup" ?
+                                            <div><br/><br/></div> :
+                                            (this.state.userStartup ? (this.state.verifiedStartup ?
+                                                <Button className="btn btn-simple btn-round" color="primary"
+                                                        onClick={() => this.toggleModal("modificationModal")}>
+                                                    <i className="tim-icons icon-spaceship"/>
+                                                    <a> Modifier Startup</a>
+                                                </Button> :
+                                                <Button className="btn btn-simple btn-round" color="primary" disabled>
+                                                    <i className="tim-icons icon-spaceship"/>
+                                                    <a> Revendiquer cette start-up</a>
+                                                </Button>) :
+                                                <Button className="btn btn-simple btn-round" color="primary"
+                                                        onClick={() => this.toggleModal("demoModal")}>
+                                                    <i className="tim-icons icon-spaceship"/>
+                                                    <a> Revendiquer cette start-up</a>
+                                                </Button>)
                                             :
                                             <Button className="btn btn-simple btn-round" color="primary" disabled>
                                                 <i className="tim-icons icon-spaceship"/>
@@ -366,20 +484,7 @@ export default class ShowStartup extends Component {
 
                                                 <Form onSubmit={this.onSubmitRevendiquer}>
 
-                                                    <FormGroup className="mb-3">
-                                                        <InputGroup>
-                                                            <TextField
-                                                                id="filled-email"
-                                                                label="Votre adresse E-mail"
-                                                                type="email"
-                                                                required
-                                                                fullWidth
-                                                                value={this.state.emailRevendication}
-                                                                onChange={this.onChangeEmail}
 
-                                                            />
-                                                        </InputGroup>
-                                                    </FormGroup>
                                                     <FormGroup>
                                                         <InputGroup>
                                                             <TextField
@@ -486,6 +591,23 @@ export default class ShowStartup extends Component {
 
                                                 <Form onSubmit={this.onSubmitModifier}>
 
+
+                                                    {/*<Button size="sm"
+                                                            style={{
+                                                                backgroundImage: "url('https://fabskill.com/assets/img/bus_cover/cropped/63_1565191317.webp')",
+                                                                backgroundRepeat: 'no-repeat',
+                                                                backgroundPosition: 'center',
+                                                                backgroundSize: '150px auto',
+                                                                height: '150px',
+                                                                width: '150px',
+                                                                paddingBottom:'100px',
+                                                                paddingLeft:'90px',
+                                                                backgroundColor:'rgb(0,0,0,0)',
+                                                                color:'rgb(0,0,0,1)',
+                                                                fontSize:'12px'
+                                                            }}>Parcourir</Button>*/}
+
+
                                                     <FormGroup>
                                                         <InputGroup>
                                                             <TextField
@@ -588,7 +710,7 @@ export default class ShowStartup extends Component {
                                                         <InputGroup>
                                                             <TextField
                                                                 id="filled-email"
-                                                                label="Profil Facebook de la startup"
+                                                                label="Profil Twitter de la startup"
                                                                 type="text"
                                                                 fullWidth
                                                                 value={this.state.twitter}

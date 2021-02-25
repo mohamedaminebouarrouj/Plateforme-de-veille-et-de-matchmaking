@@ -27,9 +27,28 @@ const useRowStyles = makeStyles({
 const Secteur= props =>(
 
     <TableRow>
-
+        {console.log(props.secteur.img)}
         <TableCell component="th" scope="row" width="30%">
-            {props.secteur.nom}
+            <div style={{
+                backgroundImage: `url(${props.secteur.img})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                height: '100px'
+            }}>
+
+                <h1 style={{
+                    position: 'relative',
+                    top: 5,
+                    width: 'auto',
+                    fontSize: '20px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+                }}>
+                    {props.secteur.nom}
+                </h1>
+
+
+            </div>
         </TableCell>
         <TableCell>{props.secteur.description}</TableCell>
         <TableCell>
@@ -62,7 +81,6 @@ export default class secteursList extends Component {
         .catch((error) => {
           console.log(error);
         })
-      console.log("open melowel",this.state.open)
   }
 
   onChangeOpen(e){

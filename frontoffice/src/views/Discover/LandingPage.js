@@ -23,7 +23,18 @@ import axios from 'axios';
 // core components
 import Footer from "components/Footer/Footer.js";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import {Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import {
+    Container,
+    Dropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+    Row,
+    Col,
+    CardBody,
+    Nav,
+    NavItem, TabContent, Card
+} from 'reactstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import GridList from '@material-ui/core/GridList';
@@ -36,6 +47,9 @@ import {Button} from "@material-ui/core";
 
 import Select from "react-select";
 import Particles from "react-particles-js";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import classnames from "classnames";
+import {Scrollbars} from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -99,13 +113,17 @@ function TitlebarGridList(props) {
     const classes = useStyles();
     return (
         <>
-            {props.sel === "startups" ?
+            {props.val.length > 0 ? (props.sel === "startups" ?
                 <>
                     <GridList cols={5} cellHeight={180}>
                         {props.val.map((tile) => (
                             <GridListTile key={tile.nom}>
                                 <NavLink tag={Link} to={'/' + props.sel + '/' + tile._id}>
-                                    <img src={tile.img ? tile.img : require("../../assets/logos/Startups/default.png")}
+                                    <img style={{
+                                        height: '150px', position: 'absolute', left: '50%', top: '50%',
+                                        transform: 'translate(-50%, -50%)'
+                                    }}
+                                         src={tile.logo ? require("../../assets/logos/Startups/" + tile.logo) : require("../../assets/logos/Startups/default.png")}
                                          alt={tile.nom}/>
                                 </NavLink>
 
@@ -142,10 +160,53 @@ function TitlebarGridList(props) {
                             />
                         </GridListTile>
                     ))}
-                </GridList>
-            }
+                </GridList>) : <>
+                <div style={{
+                    position: 'absolute', left: '50%', top: '50%',
+                    transform: 'translate(-50%, -50%)'
+                }}><CircularProgress/> Loading...
+                </div>
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            </>}
         </>
     );
+}
+
+function Filter(props) {
+    var categories = []
+    props.challenges.map(c => {
+        categories.push(c.categorie)
+    })
+    let op = [...new Set(categories)].map(e => ({value: e, label: e}))
+    op.unshift({value: 'All', label: 'All'})
+
+    return (
+            props.selected === "Secteurs" ? <div/> :
+                <Col md="3">
+                    <section className="section">
+                        <Card className="card-coin card-plain">
+                            <CardBody>
+                                <Nav
+                                    className="nav-tabs-primary justify-content-center"
+                                    tabs
+                                >
+                                    <NavItem>
+                                        Filtre
+                                    </NavItem>
+
+                                </Nav>
+                                <Select
+                                    styles={customStyles}
+                                    options={op}
+                                    isSearchable={false}
+                                    placeholder="Selectionnez le pays"
+                                />
+                            </CardBody>
+                        </Card>
+                    </section>
+
+                </Col>
+    )
 }
 
 function compare(a, b) {
@@ -175,6 +236,7 @@ export default class LandingPage extends React.Component {
         this.challengesList = this.challengesList.bind(this)
         this.startupsList = this.startupsList.bind(this)
         this.filterStartup = this.filterStartup.bind(this)
+        this.showFilter = this.showFilter.bind(this)
 
         this.onShow = this.onShow.bind(this)
         this.toggle = this.toggle.bind(this)
@@ -336,30 +398,148 @@ export default class LandingPage extends React.Component {
         }
     }
 
+    showFilter() {
+        return <Filter selected={this.state.selected} challenges={this.state.challenges} />
+    }
+
     render() {
         return (
             <>
                 <IndexNavbar/>
-
+                <Particles style={{position: 'absolute', top: '100px'}} params={
+                    {
+                        "particles": {
+                            "number": {
+                                "value": 100,
+                                "density": {
+                                    "enable": true,
+                                    "value_area": 800
+                                }
+                            },
+                            "color": {
+                                "value": "#ffffff"
+                            },
+                            "shape": {
+                                "type": "circle",
+                                "stroke": {
+                                    "width": 0,
+                                    "color": "#000000"
+                                },
+                                "polygon": {
+                                    "nb_sides": 5
+                                },
+                                "image": {
+                                    "src": "img/github.svg",
+                                    "width": 100,
+                                    "height": 100
+                                }
+                            },
+                            "opacity": {
+                                "value": 0.5,
+                                "random": false,
+                                "anim": {
+                                    "enable": false,
+                                    "speed": 1,
+                                    "opacity_min": 0.1,
+                                    "sync": false
+                                }
+                            },
+                            "size": {
+                                "value": 3,
+                                "random": true,
+                                "anim": {
+                                    "enable": false,
+                                    "speed": 40,
+                                    "size_min": 0.1,
+                                    "sync": false
+                                }
+                            },
+                            "line_linked": {
+                                "enable": true,
+                                "distance": 150,
+                                "color": "#ffffff",
+                                "opacity": 0.4,
+                                "width": 1
+                            },
+                            "move": {
+                                "enable": true,
+                                "speed": 1,
+                                "direction": "none",
+                                "random": true,
+                                "straight": false,
+                                "out_mode": "out",
+                                "bounce": false,
+                                "attract": {
+                                    "enable": false,
+                                    "rotateX": 600,
+                                    "rotateY": 1200
+                                }
+                            }
+                        },
+                        "interactivity": {
+                            "detect_on": "window",
+                            "events": {
+                                "onhover": {
+                                    "enable": false,
+                                    "mode": "repulse"
+                                },
+                                "onclick": {
+                                    "enable": false,
+                                    "mode": "push"
+                                },
+                                "resize": true
+                            },
+                            "modes": {
+                                "grab": {
+                                    "distance": 400,
+                                    "line_linked": {
+                                        "opacity": 1
+                                    }
+                                },
+                                "bubble": {
+                                    "distance": 400,
+                                    "size": 40,
+                                    "duration": 2,
+                                    "opacity": 8,
+                                    "speed": 1
+                                },
+                                "repulse": {
+                                    "distance": 200,
+                                    "duration": 0.4
+                                },
+                                "push": {
+                                    "particles_nb": 4
+                                },
+                                "remove": {
+                                    "particles_nb": 2
+                                }
+                            }
+                        },
+                        "retina_detect": true
+                    }}/>
                 <section className="section section-lg" id="main">
-                    <section className="section">
-                        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                            <DropdownToggle caret>
-                                {this.state.selected}
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem onClick={this.onSecteurs}>Secteurs
-                                    ({this.state.secteurs.length})</DropdownItem>
-                                {/*<DropdownItem onClick={this.onDomaines}>Domaines d'activité ({this.state.domaines.length})</DropdownItem>*/}
-                                <DropdownItem onClick={this.onChallenges}>Challenges
-                                    ({this.state.challenges.length})</DropdownItem>
-                                <DropdownItem onClick={this.onStartups}>Startups
-                                    ({this.state.startups.length})</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                        <br/>
-                        {this.onShow()}
-                    </section>
+                    <Row>
+                        <Col>
+                            <section className="section">
+                                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                                    <DropdownToggle caret>
+                                        {this.state.selected}
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem onClick={this.onSecteurs}>Secteurs
+                                            ({this.state.secteurs.length})</DropdownItem>
+                                        {/*<DropdownItem onClick={this.onDomaines}>Domaines d'activité ({this.state.domaines.length})</DropdownItem>*/}
+                                        <DropdownItem onClick={this.onChallenges}>Challenges
+                                            ({this.state.challenges.length})</DropdownItem>
+                                        <DropdownItem onClick={this.onStartups}>Startups
+                                            ({this.state.startups.length})</DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
+                                <br/>
+                                {this.onShow()}
+                            </section>
+                        </Col>
+                    </Row>
 
                     <Footer/>
                 </section>

@@ -123,14 +123,8 @@ export default class showRecherche extends React.Component {
                 <h3>Challenges</h3>
                 <TitlebarGridList data={this.state.challenges} sel="challenges"/>
                 <br/>
-                <h3>Secteurs</h3>
-                <TitlebarGridList data={this.state.secteurs} sel="secteurs"/>
-                <br/>
                 <h3>Startups</h3>
                 <TitlebarGridList data={this.state.startups} sel="startups"/>
-                <br/>
-                <h3>Domaines</h3>
-                <TitlebarGridList data={this.state.domaines} sel="domaines"/>
 
             </>)
     }

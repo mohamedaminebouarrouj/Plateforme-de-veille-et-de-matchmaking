@@ -283,7 +283,7 @@ exports.get_news_challenge = async (req,res) => {
                     sortBy: 'relevancy'
                 }).then(ress => {
                     ress.articles.map((currentArticle) => {
-                        if (['Lefigaro.fr', 'Frandroid', 'Le Monde', "L'Usine Nouvelle", "Clubic", "JDN",'Euronews','BBC News'].includes(currentArticle.source.name)) {
+                        if (['Lefigaro.fr', 'Le Monde', "L'Usine Nouvelle", "Clubic", "JDN",'Euronews','BBC News'].includes(currentArticle.source.name)) {
                             const titre = currentArticle.title
                             const contenu = currentArticle.content
                             const datePublication = currentArticle.publishedAt

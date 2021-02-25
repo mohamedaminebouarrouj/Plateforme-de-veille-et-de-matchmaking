@@ -31,12 +31,31 @@ function Row(props){
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
-                <TableCell component="th" scope="row" width='18%'>
-                    {props.challenge.nom}
+                {console.log(props.challenge)}
+                <TableCell component="th" scope="row" width='25%'>
+                    <div style={{
+                        backgroundImage: `url(${props.challenge.img})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                        height: '100px'
+                    }}>
+
+                        <h1 style={{
+                            position: 'relative',
+                            top: 5,
+                            width: 'auto',
+                            fontSize: '18px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.8)'
+                        }}>
+                            {props.challenge.nom}
+                        </h1>
+
+                    </div>
                 </TableCell>
                 <TableCell width='45%'>{props.challenge.description.split('.')[0]}</TableCell>
                 <TableCell width='20%'>{props.challenge.categorie}</TableCell>
-                <TableCell width='15%'>{props.challenge.secteursId.length}
+                <TableCell width='10%'>{props.challenge.secteursId.length}
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
@@ -60,7 +79,6 @@ function Row(props){
                                     <TableRow>
                                         <TableCell><b>Nom</b></TableCell>
                                         <TableCell><b>Description</b></TableCell>
-                                        <TableCell><b>Categorie</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -71,9 +89,6 @@ function Row(props){
                                             </TableCell>
                                             <TableCell>
                                                 {currentSect.description.split('.')[0]}
-                                            </TableCell>
-                                            <TableCell>
-                                                {currentSect.categorie}
                                             </TableCell>
                                         </TableRow>)}
                                 </TableBody>
@@ -97,9 +112,7 @@ export default class challengesList extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/challenges/',{headers: {
-        Authorization: localStorage.getItem('auth-token')
-        }})
+    axios.get('http://localhost:5000/challenges/')
         .then(response => {
           this.setState({challenges: response.data})
         })

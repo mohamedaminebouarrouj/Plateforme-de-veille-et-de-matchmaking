@@ -16,7 +16,7 @@ class SearchBox extends React.Component {
             <Fragment>
                 <div className={cx("search-wrapper", {
                     'active': this.state.activeSearch
-                })}>
+                })} style={{float:'right'}}>
                     <div className="input-holder">
                         <input type="text" className="search-input"/>
                         <button onClick={() => this.setState({activeSearch: !this.state.activeSearch})}

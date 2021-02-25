@@ -16,30 +16,40 @@ const userSchema = new Schema({
             required: true,
             allowNull: false,
         },
-        nom:{
+        nom: {
             type: String,
-            required:true,
+            required: true,
         },
-        prenom:{
-          type:String,
-          required:true,
+        prenom: {
+            type: String,
+            required: true,
         },
-        organisation:{
-            type:String
+        organisation: {
+            type: String
         },
-        avatar:{
-            type:String
+
+        role: {
+            type: String
         },
-        revendicationsId:[{type:Schema.ObjectId, ref: 'revendication'}]
+
+        avatar: {
+            type: String
+        },
+    //If user role==="Corporate"
+        secteurId: {
+            type: Schema.ObjectId, ref: 'secteur'
+        },
+    ///If user role==="Startup"
+        revendicationsId: [{type: Schema.ObjectId, ref: 'revendication'}]
 
     },
 
     {
-        timestamp:true,
+        timestamp: true,
     }
-    );
+);
 
-const User = mongoose.model('User',userSchema);
+const User = mongoose.model('User', userSchema);
 User.findByCredentials = async (email, password) => {
     const user = await User.findOne({email: email})
         .populate({
@@ -53,7 +63,7 @@ User.findByCredentials = async (email, password) => {
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-        throw new Error({ error: "Invalid password" });
+        throw new Error({error: "Invalid password"});
     }
     return user;
 }
@@ -62,7 +72,7 @@ process.env.JWT_KEY = undefined;
 User.generateAuthToken = (user) => {
     console.log(user)
     const token = jwt.sign(
-        { id: user._id, role: 1 },
+        {id: user._id, role: 1},
         process.env.JWT_KEY
     );
     return token;

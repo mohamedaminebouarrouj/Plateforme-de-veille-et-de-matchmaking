@@ -16,6 +16,23 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import AppComponent from "../../../components/Graph/AppComponent";
 import {Scrollbars} from "react-custom-scrollbars";
+import Particles from "react-particles-js";
+
+function compare(a, b) {
+    // Use toUpperCase() to ignore character casing
+    // const bandA = a.nom.toUpperCase().trim();
+    // const bandB = b.nom.toUpperCase().trim();
+
+    const bandA = a.datePublication;
+    const bandB = b.datePublication;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison*-1;
+}
 
 function Show(props){
     return (
@@ -47,13 +64,12 @@ function ShowStartup(props){
     return (
 
         <div>
-            <GridList cols={5} cellHeight={120}>
+            <GridList cols={5} cellHeight={200}>
                 {props.startup.map((tile) => (
-                    <GridListTile key={tile.nom}>
-                        <NavLink tag={Link} to={'/startups/'+tile._id}>
-                            <img style={{opacity:0.7}} src={require("../../../assets/logos/Startups/default.png")} />
-                            <p style={{fontSize:'12px',textAlignVertical: "center",
-                                textAlign: "center"}}>{tile.nom}</p>
+                    <GridListTile>
+                        <NavLink tag={Link} to={'/startups/' + tile._id}>
+                            <img style={{opacity: 0.7}} src={tile.logo?require("../../../assets/logos/Startups/"+tile.logo):require("../../../assets/logos/Startups/default.png")}/>
+                            <p className="text-center">{tile.nom}</p>
                         </NavLink>
                     </GridListTile>
                 ))}
@@ -110,15 +126,18 @@ export default class ShowDomaine extends Component {
         this.showList=this.showList.bind(this)
         this.showStartups=this.showStartups.bind(this)
         this.showSecteurs=this.showSecteurs.bind(this)
+        this.filterStartup = this.filterStartup.bind(this)
+
 
         this.state = {
             nom: '',
-            categorie:'',
             description: '',
             img: '',
             startups: [],
+            startupsAff:[],
             secteurs:[],
             tendances: [],
+            selectStartup:{value:"All",label:"All"},
             singleSelect:{ value: "fr", label: "Français" },
             tabs: 1
         }
@@ -131,9 +150,9 @@ export default class ShowDomaine extends Component {
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
-                    categorie: response.data.categorie,
                     description: response.data.description,
                     startups : response.data.startupsId,
+                    startupsAff:response.data.startupsId,
                     secteurs: response.data.secteursId,
                     img: response.data.img,
                     tendances: response.data.tendancesId
@@ -192,6 +211,9 @@ export default class ShowDomaine extends Component {
         })
     }
     showList(){
+
+        this.state.tendances.sort(compare)
+
         if(this.state.singleSelect.value==='fr'){
             return this.FrList()
         }
@@ -209,8 +231,46 @@ export default class ShowDomaine extends Component {
         })
     }
 
+    filterStartup(pays) {
+
+        if (pays.value !== "All") {
+            this.setState({
+                startupsAff: this.state.startups.filter(el => el.pays === pays.value),
+                selectStartup:pays
+            })
+        } else {
+            this.setState({
+                startupsAff: this.state.startups,
+                selectStartup:pays
+            })
+        }
+    }
+
     showStartups() {
-            return (<ShowStartup startup={this.state.startups}/>)
+
+
+        var options = ['All']
+        this.state.startups.map(s => {
+                    options.push(s.pays)
+            })
+
+        let op=[...new Set(options)].map(e=>({value:e,label:e}))
+
+        return (
+            <>
+                <div style={{width: '250px', float: 'right'}}>
+
+                    <Select
+                        styles={customStyles}
+                        options={op}
+                        value={this.state.selectStartup}
+                        onChange={this.filterStartup}
+                        isSearchable={false}
+                    > </Select>
+                </div>
+                <br/><br/><br/>
+                <ShowStartup startup={this.state.startupsAff}/>
+            </>)
 
     }
 
@@ -226,77 +286,209 @@ export default class ShowDomaine extends Component {
         return (
             <>
                 <IndexNavbar />
+                <Particles style={{position: 'absolute', top:'100px'}} params={
+                    {
+                        "particles": {
+                            "number": {
+                                "value": 100,
+                                "density": {
+                                    "enable": true,
+                                    "value_area": 800
+                                }
+                            },
+                            "color": {
+                                "value": "#ffffff"
+                            },
+                            "shape": {
+                                "type": "circle",
+                                "stroke": {
+                                    "width": 0,
+                                    "color": "#000000"
+                                },
+                                "polygon": {
+                                    "nb_sides": 5
+                                },
+                                "image": {
+                                    "src": "img/github.svg",
+                                    "width": 100,
+                                    "height": 100
+                                }
+                            },
+                            "opacity": {
+                                "value": 0.5,
+                                "random": false,
+                                "anim": {
+                                    "enable": false,
+                                    "speed": 1,
+                                    "opacity_min": 0.1,
+                                    "sync": false
+                                }
+                            },
+                            "size": {
+                                "value": 3,
+                                "random": true,
+                                "anim": {
+                                    "enable": false,
+                                    "speed": 40,
+                                    "size_min": 0.1,
+                                    "sync": false
+                                }
+                            },
+                            "line_linked": {
+                                "enable": true,
+                                "distance": 150,
+                                "color": "#ffffff",
+                                "opacity": 0.4,
+                                "width": 1
+                            },
+                            "move": {
+                                "enable": true,
+                                "speed": 1,
+                                "direction": "none",
+                                "random": true,
+                                "straight": false,
+                                "out_mode": "out",
+                                "bounce": false,
+                                "attract": {
+                                    "enable": false,
+                                    "rotateX": 600,
+                                    "rotateY": 1200
+                                }
+                            }
+                        },
+                        "interactivity": {
+                            "detect_on": "window",
+                            "events": {
+                                "onhover": {
+                                    "enable": false,
+                                    "mode": "repulse"
+                                },
+                                "onclick": {
+                                    "enable": false,
+                                    "mode": "push"
+                                },
+                                "resize": true
+                            },
+                            "modes": {
+                                "grab": {
+                                    "distance": 400,
+                                    "line_linked": {
+                                        "opacity": 1
+                                    }
+                                },
+                                "bubble": {
+                                    "distance": 400,
+                                    "size": 40,
+                                    "duration": 2,
+                                    "opacity": 8,
+                                    "speed": 1
+                                },
+                                "repulse": {
+                                    "distance": 200,
+                                    "duration": 0.4
+                                },
+                                "push": {
+                                    "particles_nb": 4
+                                },
+                                "remove": {
+                                    "particles_nb": 2
+                                }
+                            }
+                        },
+                        "retina_detect": true
+                    }}/>
                 <section className="section section-lg" id="main">
 
-                <section className="section">
-                            <Row>
-                                <Col lg="1">
-                                        {/*<AppComponent id={this.props.match.params.id} history={this.props.history}/>*/}
-                                </Col>
+                    <section className="section">
+                        <Row>
+                            <Col lg="1"></Col>
+                            <Col lg="6">
+                                <div style={{
+                                    backgroundImage: `url(${this.state.img})`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center',
+                                    backgroundSize: 'cover',
+                                    height: '250px'
+                                }}>
+                                    <h1 style={{
+                                        position: 'absolute',
+                                        top: 5,
+                                        width: 'auto',
+                                        fontSize: '36px',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.6)'
+                                    }}>
+                                        {this.state.nom}
+                                    </h1>
 
-                                <Col lg="6">
-                                    <div style={{backgroundImage: `url(${this.state.img})`, backgroundRepeat: 'no-repeat',backgroundPosition:'center',backgroundSize:'cover', height: '200px'}}>
-                                        <h1 style={{position: 'absolute', top:5,width:'auto',fontSize:'36px',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>
-                                            {this.state.nom}
-                                        </h1>
-                                        {/*<p style={{position: 'absolute',top:50,width:'auto',backgroundColor:'rgba(0, 0, 0, 0.8)'}}>*/}
-                                        {/*    Catégorie: <a href="#" rel="noopener noreferrer">{this.state.categorie}</a> &nbsp;*/}
-                                        {/*</p>*/}
+                                </div>
+                                <br/>
+                                <p style={{position: 'relative',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+                                    {this.state.description}
+                                </p>
 
-                                    </div>
-                                    <br/>
-                                    <p style={{position:'relative'}}>
-                                        {this.state.description}
-                                    </p>
-                                </Col>
-                                    <Col lg="4">
-                                    <Card className="card-coin card-plain">
-                                        <CardBody>
-                                            <Nav
-                                                className="nav-tabs-primary justify-content-center"
-                                                tabs
-                                            >
-                                                <NavItem>
-                                                    <NavLink
-                                                        className={classnames({
-                                                            active: this.state.tabs === 1
-                                                        })}
-                                                        onClick={e => this.toggleTabs(e, "tabs", 1)}
-                                                        href=""
-                                                    >
-                                                        News
-                                                    </NavLink>
-                                                </NavItem>
-                                                <NavItem>
-                                                    <NavLink
-                                                        className={classnames({
-                                                            active: this.state.tabs === 2
-                                                        })}
-                                                        onClick={e => this.toggleTabs(e, "tabs", 2)}
-                                                        href=""
-                                                    >
-                                                        Startups ({this.state.startups.length})
-                                                    </NavLink>
-                                                </NavItem>
-                                                {/*<NavItem>*/}
-                                                {/*    <NavLink*/}
-                                                {/*        className={classnames({*/}
-                                                {/*            active: this.state.tabs === 3*/}
-                                                {/*        })}*/}
-                                                {/*        onClick={e => this.toggleTabs(e, "tabs", 3)}*/}
-                                                {/*        href=""*/}
-                                                {/*    >*/}
-                                                {/*        Secteurs ({this.state.secteurs.length})*/}
-                                                {/*    </NavLink>*/}
-                                                {/*</NavItem>*/}
+                                <Card className="card-coin card-plain">
+                                    <CardBody>
+                                        <Nav
+                                            className="nav-tabs-primary justify-content-center"
+                                            tabs
+                                        >
+                                            <NavItem>
+                                                <NavLink
+                                                    className={classnames({
+                                                        active: true
+                                                    })}
 
-                                            </Nav>
-                                            <TabContent
-                                                className="tab-subcategories"
-                                                activeTab={"tab" + this.state.tabs}
-                                            >
-                                                <TabPane tabId="tab1">
-                                                    <div style={{width:'250px',float:'right'}}>
+                                                >
+                                                    Startups
+                                                </NavLink>
+
+                                            </NavItem>
+
+                                        </Nav>
+                                        <TabContent
+                                            className="tab-subcategories"
+                                            activeTab={"tab" + this.state.tabs}
+                                        >
+                                            <div>
+                                                <Scrollbars
+                                                    autoHeight
+                                                    autoHeightMin={470}
+                                                    universal>
+                                                    {this.showStartups()}
+                                                </Scrollbars>
+                                            </div>
+
+                                        </TabContent>
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                            <Col lg="4">
+                                <Card className="card-coin card-plain">
+                                    <CardBody>
+                                        <Nav
+                                            className="nav-tabs-primary justify-content-center"
+                                            tabs
+                                        >
+                                            <NavItem>
+                                                <NavLink
+                                                    className={classnames({
+                                                        active: this.state.tabs === 1
+                                                    })}
+                                                    onClick={e => this.toggleTabs(e, "tabs", 1)}
+                                                    href=""
+                                                >
+                                                    News
+                                                </NavLink>
+                                            </NavItem>
+
+                                        </Nav>
+                                        <TabContent
+                                            className="tab-subcategories"
+                                            activeTab={"tab" + this.state.tabs}
+                                        >
+                                            <TabPane tabId="tab1">
+                                                <div style={{width: '250px', float: 'right'}}>
                                                     <Select
                                                         styles={customStyles}
                                                         value={this.state.singleSelect}
@@ -307,56 +499,33 @@ export default class ShowDomaine extends Component {
                                                                 value: "fr",
                                                                 label: "Français",
                                                             },
-                                                            { value: "en", label: "English" },
-                                                            { value: "ar", label: "عربيّة" }
+                                                            {value: "en", label: "English"},
+                                                            {value: "ar", label: "عربيّة"}
                                                         ]}
                                                         placeholder="Selectionnez la langue"
                                                     />
-                                                    </div>
-                                                    <br/> <br/> <br/>
+                                                </div>
+                                                <br/> <br/> <br/>
 
-                                                    <div>
-                                                        <Scrollbars
-                                                            autoHeight
-                                                            universal>
+                                                <div>
+                                                    <Scrollbars
+                                                        autoHeight
+                                                        autoHeightMin={800}
+                                                        universal>
                                                         {this.showList()}
-                                                        </Scrollbars>
-                                                    </div>
+                                                    </Scrollbars>
+                                                </div>
 
-                                                </TabPane>
-
-                                                <TabPane tabId="tab2">
-                                                    <div>
-                                                        <Scrollbars
-                                                            autoHeight
-                                                            autoHeightMin={300}
-                                                            universal>
-                                                        {this.showStartups()}
-                                                        </Scrollbars>
-                                                    </div>
-
-                                                </TabPane>
-
-                                                <TabPane tabId="tab3">
-                                                    <div>
-                                                        <Scrollbars
-                                                            autoHeight
-                                                            universal>
-                                                        {this.showSecteurs()}
-                                                        </Scrollbars>
-                                                    </div>
-
-                                                </TabPane>
-
-                                            </TabContent>
-                                        </CardBody>
-                                    </Card>
-                                </Col>
-                            </Row>
-
-
+                                            </TabPane>
+                                        </TabContent>
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        </Row>
                     </section>
-                    <Footer />
+
+
+                    <Footer/>
                 </section>
             </>
         )

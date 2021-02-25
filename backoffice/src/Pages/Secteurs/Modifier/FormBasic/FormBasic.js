@@ -28,7 +28,6 @@ export default class UpdateSecteur extends Component {
     }
 
     componentDidMount() {
-        console.log("props: " +this.props.id);
         axios.get('http://localhost:5000/secteurs/' + this.props.id)
             .then(response => {
                 this.setState({
@@ -69,13 +68,12 @@ export default class UpdateSecteur extends Component {
             categorie: this.state.categorie
         }
 
-        console.log(secteur);
-
         axios.post('http://localhost:5000/secteurs/update/' + this.props.id, secteur)
-            .then(res => console.log(res.data));
+            .then(res => {
+                console.log(res.data)
+                window.location.replace('#/secteurs/afficher');
+                window.location.reload(false);});
 
-        window.location.replace('#/secteurs/afficher');
-        window.location.reload(false);
     }
 
     render() {
@@ -108,22 +106,8 @@ export default class UpdateSecteur extends Component {
                                                 <Input type="textarea" name="description" id="description"
                                                        required
                                                        value={this.state.description}
-                                                       onChange={this.onChangeDescription}/>
-                                            </FormGroup>
-
-                                            <FormGroup>
-                                                <Label for="exampleCustomSelect"><b>Catégorie</b></Label>
-                                                <CustomInput type="select" id="categorie"
-                                                             name="categorie"
-                                                             value={this.state.categorie}
-                                                             onChange={this.onChangeCategorie}
-                                                required>
-                                                    <option>Selectionner une catégorie</option>
-                                                    <option value="Agriculture et pêche">Agriculture et pêche</option>
-                                                    <option value="Industrie">Industrie</option>
-                                                    <option value="Commerce">Commerce</option>
-                                                    <option value="Services">Services</option>
-                                                </CustomInput>
+                                                       onChange={this.onChangeDescription}
+                                                rows={5}/>
                                             </FormGroup>
                                             <Button color="primary" className="mt-1" type="submit">Submit</Button>
                                         </Form>

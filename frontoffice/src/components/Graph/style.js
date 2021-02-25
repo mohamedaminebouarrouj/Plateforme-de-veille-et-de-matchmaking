@@ -21,6 +21,7 @@ node {
 	width: 50;
 	height: 50;
 	font-size: 5;
+	shape:round-octagon;
 	font-family: "Poppins", sans-serif;
 	min-zoomed-font-size: 3;
 	label: data(name);

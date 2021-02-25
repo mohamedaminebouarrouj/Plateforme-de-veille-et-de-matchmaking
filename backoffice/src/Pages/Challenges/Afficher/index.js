@@ -8,6 +8,7 @@ import {
 
 import PageTitle from '../../../Layout/AppMain/PageTitle';
 import TableHover from './Examples/TableHover';
+import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
 
 
 const AffichageTable = (props) => {
@@ -17,6 +18,12 @@ const AffichageTable = (props) => {
                 heading="Challenges"
                 icon="pe-7s-target  icon-gradient bg-happy-itmeo"
             />
+            <Row>
+                <Col>
+                    <SearchBox/>
+                </Col>
+            </Row>
+            <br/>
             <ReactCSSTransitionGroup
                 component="div"
                 transitionName="TabsAnimation"

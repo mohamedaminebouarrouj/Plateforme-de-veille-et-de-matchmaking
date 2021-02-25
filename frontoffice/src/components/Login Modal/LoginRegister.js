@@ -1,56 +1,18 @@
-/*!
-
-=========================================================
-* BLK Design System React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/blk-design-system-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/blk-design-system-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React, {useState} from "react";
-import ReactDom from "react";
+import React from "react";
 import {Link} from "react-router-dom";
-
-// reactstrap components
+import axios from 'axios';
+// core components
 import {
-    Button,
-    Collapse,
-    NavbarBrand,
-    Navbar,
     NavItem,
-    NavLink,
-    Nav,
-    Container,
     Modal,
     Form,
-    FormGroup,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText,
-    Input,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem, UncontrolledDropdown,
-    Label
-} from "reactstrap";
+    FormGroup, InputGroup, InputGroupAddon, InputGroupText, Input, Label, NavLink
+} from 'reactstrap';
+import {Button} from "@material-ui/core";
 
-import classnames from "classnames";
-
-
-import axios from "axios";
-import GoogleBtn from '../GoogleBtn';
-
-import ShowRecherche from "../../views/Recherche/Afficher/showRecherche";
 import Select from "react-select";
-import Hamburger from 'hamburger-react';
+import GoogleBtn from "../GoogleBtn";
+import classnames from "classnames";
 
 const customStyles = {
 
@@ -89,16 +51,11 @@ const customStyles = {
     })
 };
 
-function MenuButton() {
-    const [isOpen, setOpen] = useState(false)
-    return (
-        <Hamburger toggled={isOpen} toggle={setOpen}/>
-    )
-}
 
-class ComponentsNavbar extends React.Component {
+export default class LoginRegister extends React.Component {
     constructor(props) {
         super(props);
+
         this.onChangeNom = this.onChangeNom.bind(this);
         this.onChangePrenom = this.onChangePrenom.bind(this);
         this.onChangeOrganisation = this.onChangeOrganisation.bind(this);
@@ -109,9 +66,6 @@ class ComponentsNavbar extends React.Component {
         this.onSubmitLogout = this.onSubmitLogout.bind(this)
         this.onChangeRole = this.onChangeRole.bind(this)
         this.onChangeSecteur = this.onChangeSecteur.bind(this)
-
-        this.onSearch = this.onSearch.bind(this)
-        this.showRecherche = this.showRecherche.bind(this)
 
         this.state = {
             nom: '',
@@ -131,6 +85,7 @@ class ComponentsNavbar extends React.Component {
             formModal: false,
             collapseOpen: false,
             color: "navbar-transparent"
+
         };
     }
 
@@ -138,66 +93,6 @@ class ComponentsNavbar extends React.Component {
         this.setState({
             [modalState]: !this.state[modalState]
         });
-    };
-
-    componentDidMount() {
-        axios.get('http://localhost:5000/users/user', {
-            headers: {
-                Authorization: localStorage.getItem('auth-token')
-            }
-        })
-            .then(response => {
-                this.setState({user: response.data.user})
-                localStorage.setItem('loggedUser', JSON.stringify(response.data.user))
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        window.addEventListener("scroll", this.changeColor);
-
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("scroll", this.changeColor);
-    }
-
-    changeColor = () => {
-        if (
-            document.documentElement.scrollTop > 29 ||
-            document.body.scrollTop > 29
-        ) {
-            this.setState({
-                color: "bg-default"
-            });
-        } else if (
-            document.documentElement.scrollTop < 30 ||
-            document.body.scrollTop < 30
-        ) {
-            this.setState({
-                color: "navbar-transparent"
-            });
-        }
-    };
-    toggleCollapse = () => {
-        document.documentElement.classList.toggle("nav-open");
-        this.setState({
-            collapseOpen: !this.state.collapseOpen
-        });
-    };
-    onCollapseExiting = () => {
-        this.setState({
-            collapseOut: "collapsing-out"
-        });
-    };
-    onCollapseExited = () => {
-        this.setState({
-            collapseOut: ""
-        });
-    };
-    scrollToDownload = () => {
-        document
-            .getElementById("download-section")
-            .scrollIntoView({behavior: "smooth"});
     };
 
     onRegister = () => {
@@ -248,34 +143,6 @@ class ComponentsNavbar extends React.Component {
         this.setState({
             sect: e.value
         })
-    }
-
-    onSearch(e) {
-        this.setState({
-            search: e.target.value,
-            modified: true
-        })
-
-    }
-
-    showRecherche() {
-        if (this.state.search.length > 0) {
-            document.getElementById("main").style.display = "none";
-            if (document.getElementById("particles"))
-                document.getElementById("particles").style.display = "none";
-
-
-            return (<ShowRecherche query={this.state.search}/>)
-
-
-        }
-
-        if (this.state.search.length === 0 && this.state.modified === true) {
-            document.getElementById("main").style.display = "initial";
-            if (document.getElementById("particles"))
-                document.getElementById("particles").style.display = "initial";
-
-        }
     }
 
     onChangeEmail(e) {
@@ -341,73 +208,16 @@ class ComponentsNavbar extends React.Component {
     }
 
     render() {
-        const styles = theme => ({
-            textField: {
-                width: '90%',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                paddingBottom: 0,
-                marginTop: 0,
-                fontWeight: 500
-            },
-            input: {
-                color: 'white'
-            }
-        });
-        const isLoggedIn = this.state.user;
-        let navitem;
-        if (isLoggedIn) {
-            navitem =
-                <Nav>
-                    <UncontrolledDropdown nav style={{top: '10px'}}>
-                        <DropdownToggle
-                            caret
-                            color="default"
-                            data-toggle="dropdown"
-                            href="#pablo"
-                            id="navbarDropdownMenuLink"
-                            nav
-                            onClick={e => e.preventDefault()}
-                        >
-                            <i className="tim-icons icon-single-02"/> {this.state.user.nom} &nbsp;
-                        </DropdownToggle>
-                        <DropdownMenu
-                            aria-labelledby="navbarDropdownMenuLink"
-                            right
-                        >
-                            <DropdownItem
-                                href="/profile-page"
-                                style={{color: "#000"}}
-                            >
-                                <i className="tim-icons icon-single-02"/> Mon compte
-                            </DropdownItem>
-                            <DropdownItem
-                                style={{color: "#000"}}
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}
-                            >
-                                <i className="tim-icons icon-key-25"/> Réinisialiser le mot de passe
-                            </DropdownItem>
-                            <DropdownItem
-                                style={{color: "#000"}}
-                                onClick={this.onSubmitLogout}
-                                to='/logout'
-                            >
-                                <i className="tim-icons icon-button-power"/> <b>Se déconnecter</b>
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </Nav>
-            ;
-        } else {
-            navitem = <NavItem>
-                <Button style={{top: '10px'}}
-                        className="btn-neutral"
-                        color="link"
-                        onClick={() => this.toggleModal("formModal")}>
-                    <i className="tim-icons icon-single-02"/>
-                    Se Connecter/S'inscrire
-                </Button>
+        return (
+            <NavItem>
+                <NavItem className="active"
+                >
+                    <NavLink tag={Link} onClick={() => this.toggleModal("formModal")} style={{top: '10px'}}>
+                        <i className="tim-icons icon-single-02"/>
+                        Se Connecter/S'inscrire
+
+                    </NavLink>
+                </NavItem>
 
                 {/* Start Form Modal */}
                 <Modal
@@ -719,132 +529,11 @@ class ComponentsNavbar extends React.Component {
                                     S'inscrire
                                 </Button>
                             </div>
-                            <div className="text-center mb-4 mt-4">
-                                <span> Vous avez déjà un compte? </span>
-                                <a
-                                    rel="noopener noreferrer"
-                                    className="btn btn-default btn-round"
-                                    onClick={() => {
-                                        this.toggleModal("registerModal")
-                                        this.toggleModal("formModal")
-                                    }}> Se Connecter
-                                </a>
-                            </div>
                         </Form>
                     </div>
                 </Modal>
 
-            </NavItem>;
-        }
-        return (
-
-            <>
-                <Navbar
-                    className={"fixed-top " + this.state.color}
-                    color-on-scroll="100"
-                    expand="lg"
-                >
-                    <Container>
-                        <div className="navbar-translate">
-                            <NavbarBrand
-                                to="/"
-                                tag={Link}
-                                id="navbar-brand"
-                            >
-                            <span style={{fontSize: '25px'}}><span style={{color: '#FFDB00'}}>I</span>nno<span
-                                style={{color: '#FFDB00'}}>S</span>eer• </span>
-                            </NavbarBrand>
-                        </div>
-                        <Collapse
-                            className={"justify-content-end " + this.state.collapseOut}
-                            navbar
-                            isOpen={this.state.collapseOpen}
-                            onExiting={this.onCollapseExiting}
-                            onExited={this.onCollapseExited}
-                        >
-                            {/*<Autocomplete*/}
-                            {/*    freeSolo*/}
-                            {/*    fullWidth*/}
-                            {/*    options={this.state.allData.map((option) => option.nom)}*/}
-                            {/*    renderInput={(params) => (*/}
-                            {/*        <TextField {...params}  margin="normal" variant="outlined"*/}
-                            {/*        />*/}
-                            {/*    )}*/}
-                            {/*    onChange={(e)=>console.log(e.target)}*/}
-                            {/*/>*/}
-
-                            <Nav navbar>
-                                <NavItem>
-                                    <div className="form-control-lg input-group">
-                                        <input placeholder="Recherche..." type="text" className="form-control"
-                                               onChange={this.onSearch}/>
-                                        <div className="input-group-append">
-                                <span className="input-group-text">
-                                <i className="tim-icons icon-zoom-split"></i>
-                                </span>
-                                        </div>
-                                    </div>
-                                </NavItem>
-
-                                {navitem}
-                                <NavItem className="active">
-                                    <Nav>
-                                        <UncontrolledDropdown nav>
-                                            <DropdownToggle
-                                                nav
-                                                onClick={e => e.preventDefault()}
-                                                style={{top: '-6px'}}
-                                            >
-
-                                                <MenuButton/>
-                                            </DropdownToggle>
-                                            <DropdownMenu
-                                                aria-labelledby="navbarDropdownMenuLink"
-                                                style={{width: "250px", height: '270px', left: '25px'}}
-                                            >
-                                                <DropdownItem
-                                                    href="/secteurs"
-                                                    style={{color: "#000"}}
-                                                >
-                                                    <i className="tim-icons icon-chart-pie-36"/> Secteurs
-                                                </DropdownItem>
-                                                <DropdownItem divider/>
-                                                <DropdownItem
-                                                    style={{color: "#000"}}
-                                                    href="/challenges"
-                                                    onClick={e => e.preventDefault()}
-                                                >
-                                                    <i className="tim-icons icon-bulb-63"/> Challenges
-                                                </DropdownItem>
-                                                <DropdownItem divider/>
-                                                <DropdownItem
-                                                    style={{color: "#000"}}
-                                                    href="/startups"
-                                                    onClick={e => e.preventDefault()}
-                                                >
-                                                    <i className="tim-icons icon-spaceship"/> Startups
-                                                </DropdownItem>
-                                                <DropdownItem divider/>
-                                                <div className="text-center mb-4 mt-4">
-                                                    <Button
-                                                        className="btn btn-simple btn-round" color="secondary"
-                                                        type="submit">
-                                                        Devenir Membre
-                                                    </Button>
-                                                </div>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
-                                    </Nav>
-                                </NavItem>
-                            </Nav>
-                        </Collapse>
-                    </Container>
-                </Navbar>
-
-                {this.showRecherche()}
-            </>
+            </NavItem>
         );
     }
 }
-
-export default ComponentsNavbar;

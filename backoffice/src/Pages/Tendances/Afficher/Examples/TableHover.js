@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import {Button} from 'reactstrap';
 import axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,6 +21,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Select from "react-select";
 import styled from "styled-components";
+import UnfoldLessIcon from "@material-ui/icons/UnfoldLess";
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
 
 const useRowStyles = makeStyles({
     root: {
@@ -30,22 +32,35 @@ const useRowStyles = makeStyles({
     },
 });
 
-function Row(props){
-    const [open,setOpen]=React.useState(false)
-    const classes= useRowStyles();
+function compare(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.datePublication;
+    const bandB = b.datePublication;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison*-1;
+}
+
+function Row(props) {
+    const [open, setOpen] = React.useState(false)
+    const classes = useRowStyles();
 
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
                 <TableCell component="th" scope="row">
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
-                  {props.val.nom}
+                    {props.val.nom}
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
@@ -56,36 +71,48 @@ function Row(props){
                                     <TableRow>
                                         <TableCell><b>Titre</b></TableCell>
                                         <TableCell><b>Resumé</b></TableCell>
-                                        <TableCell><b>Source</b></TableCell>
-                                        <TableCell><b>Date de publication</b></TableCell>
-                                        <TableCell><b>Langue</b></TableCell>
+                                        <TableCell>
+                                            <b>Date de publication</b>
+                                            <IconButton aria-label="expand row" size="small">
+                                                {false ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <b>Langue</b>
+                                            <IconButton aria-label="expand row" size="small">
+                                                {false ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
+                                            </IconButton>
+                                        </TableCell>
                                         <TableCell><b>Modifier</b></TableCell>
                                         <TableCell><b>Supprimer</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.val.tendancesId.map((currentTendance)=>
+                                    {props.listT.map((currentTendance) =>
                                         <TableRow>
                                             <TableCell>
-                                            {currentTendance.titre}
+                                                <a href={currentTendance.url}
+                                                   target="_blank"> {currentTendance.titre}</a>
                                             </TableCell>
                                             <TableCell>
                                                 {currentTendance.resume}
                                             </TableCell>
-                                            <TableCell>
-                                        <a href={currentTendance.url}  target="_blank"> {currentTendance.source}</a>
-                                            </TableCell>
-                                            <TableCell>
+                                            <TableCell width="20%">
                                                 {currentTendance.datePublication.split('T')[0]}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell width="15%">
                                                 {currentTendance.langage}
                                             </TableCell>
                                             <TableCell>
-                                                <Button outline className="mb-2 mr-2 btn-transition" color="info"><Link to={"/tendances/update/"+currentTendance._id}>Modifier</Link> </Button>
+                                                <Button outline className="mb-2 mr-2 btn-transition" color="info"><Link
+                                                    to={"/tendances/update/" + currentTendance._id}>Modifier</Link>
+                                                </Button>
                                             </TableCell>
                                             <TableCell>
-                                                <Button outline className="mb-2 mr-2 btn-transition" color="danger" onClick={() => { props.deleteTendance(currentTendance._id) }}>Supprimer</Button>
+                                                <Button outline className="mb-2 mr-2 btn-transition" color="danger"
+                                                        onClick={() => {
+                                                            props.deleteTendance(currentTendance._id)
+                                                        }}>Supprimer</Button>
                                             </TableCell>
                                         </TableRow>)}
                                 </TableBody>
@@ -99,7 +126,7 @@ function Row(props){
     );
 }
 
-function FormDialog(props){
+function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -109,11 +136,11 @@ function FormDialog(props){
     const handleClose = () => {
         setOpen(false);
     };
-    const options= props.domaines.map(currentDomaine =>  ({value: currentDomaine._id, label:currentDomaine.nom}))
+    const options = props.domaines.map(currentDomaine => ({value: currentDomaine._id, label: currentDomaine.nom}))
     const optionsLan = [
-        { value: 'fr', label: 'Français' },
-        { value: 'en', label: 'English' },
-        { value: 'ar', label: 'عربية' }
+        {value: 'fr', label: 'Français'},
+        {value: 'en', label: 'English'},
+        {value: 'ar', label: 'عربية'}
     ]
     return (
         <div>
@@ -124,20 +151,20 @@ function FormDialog(props){
                     onClose={handleClose}
                     maxWidth="sm"
                     fullWidth={true}
-                    >
+            >
                 <DialogTitle id="form-dialog-title">Ajouter Tendances autour des domaines</DialogTitle>
                 <DialogContent>
-                        <div>
-                            Selectionnez le(s) domaine(s)
-                            <br/> <br/>
-                            <Select
-                                closeMenuOnSelect={false}
-                                isMulti
-                                key="1"
-                                options={options}
-                                onChange={props.onChangeDomaine}
-                            > </Select>
-                        </div>
+                    <div>
+                        Selectionnez le(s) domaine(s)
+                        <br/> <br/>
+                        <Select
+                            closeMenuOnSelect={false}
+                            isMulti
+                            key="1"
+                            options={options}
+                            onChange={props.onChangeDomaine}
+                        > </Select>
+                    </div>
                     <br/><br/>
                     <div>
                         Selectionnez la(les) langue(s)
@@ -169,7 +196,7 @@ function FormDialog(props){
     );
 }
 
-function FormDialogChall(props){
+function FormDialogChall(props) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -179,11 +206,11 @@ function FormDialogChall(props){
     const handleClose = () => {
         setOpen(false);
     };
-    const options= props.challenges.map(currentDomaine =>  ({value: currentDomaine._id, label:currentDomaine.nom}))
+    const options = props.challenges.map(currentDomaine => ({value: currentDomaine._id, label: currentDomaine.nom}))
     const optionsLan = [
-        { value: 'fr', label: 'Français' },
-        { value: 'en', label: 'English' },
-        { value: 'ar', label: 'عربية' }
+        {value: 'fr', label: 'Français'},
+        {value: 'en', label: 'English'},
+        {value: 'ar', label: 'عربية'}
     ]
     return (
         <div>
@@ -238,7 +265,7 @@ function FormDialogChall(props){
     );
 }
 
-function FormDialogSect(props){
+function FormDialogSect(props) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -248,11 +275,11 @@ function FormDialogSect(props){
     const handleClose = () => {
         setOpen(false);
     };
-    const options= props.secteurs.map(currentDomaine =>  ({value: currentDomaine._id, label:currentDomaine.nom}))
+    const options = props.secteurs.map(currentDomaine => ({value: currentDomaine._id, label: currentDomaine.nom}))
     const optionsLan = [
-        { value: 'fr', label: 'Français' },
-        { value: 'en', label: 'English' },
-        { value: 'ar', label: 'عربية' }
+        {value: 'fr', label: 'Français'},
+        {value: 'en', label: 'English'},
+        {value: 'ar', label: 'عربية'}
     ]
     return (
         <div>
@@ -313,31 +340,31 @@ export default class tendancesList extends Component {
 
         this.deleteTendance = this.deleteTendance.bind(this)
 
-        this.showDomaine =this.showDomaine.bind(this)
-        this.showChallenge=this.showChallenge.bind(this)
-        this.showSecteur=this.showSecteur.bind(this)
+        this.showDomaine = this.showDomaine.bind(this)
+        this.showChallenge = this.showChallenge.bind(this)
+        this.showSecteur = this.showSecteur.bind(this)
 
-        this.onChangeLangue=this.onChangeLangue.bind(this)
+        this.onChangeLangue = this.onChangeLangue.bind(this)
 
-        this.onChangeDomaine=this.onChangeDomaine.bind(this)
-        this.onSubmitDomaine=this.onSubmitDomaine.bind(this)
+        this.onChangeDomaine = this.onChangeDomaine.bind(this)
+        this.onSubmitDomaine = this.onSubmitDomaine.bind(this)
 
-        this.onSubmitSecteur=this.onSubmitSecteur.bind(this)
-        this.onChangeSecteur=this.onChangeSecteur.bind(this)
+        this.onSubmitSecteur = this.onSubmitSecteur.bind(this)
+        this.onChangeSecteur = this.onChangeSecteur.bind(this)
 
-        this.onSubmitChallenge=this.onSubmitChallenge.bind(this)
-        this.onChangeChallenge=this.onChangeChallenge.bind(this)
+        this.onSubmitChallenge = this.onSubmitChallenge.bind(this)
+        this.onChangeChallenge = this.onChangeChallenge.bind(this)
 
 
         this.state = {
             domaines: [],
-            dom:[],
-            challenges:[],
-            chal:[],
-            secteurs:[],
-            sect:[],
-            tendances:[],
-            langages:[]
+            dom: [],
+            challenges: [],
+            chal: [],
+            secteurs: [],
+            sect: [],
+            tendances: [],
+            langages: []
         };
     }
 
@@ -350,9 +377,11 @@ export default class tendancesList extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/challenges/',{headers: {
+        axios.get('http://localhost:5000/challenges/', {
+            headers: {
                 Authorization: localStorage.getItem('auth-token')
-            }})
+            }
+        })
             .then(response => {
                 this.setState({challenges: response.data})
             })
@@ -388,28 +417,28 @@ export default class tendancesList extends Component {
 
     domaineList() {
         return this.state.domaines.map(currentDomaine => {
-            return <Row val={currentDomaine} deleteTendance={this.deleteTendance} key={currentDomaine._id}/>;
+            return <Row val={currentDomaine} listT={currentDomaine.tendancesId.sort(compare)} deleteTendance={this.deleteTendance} key={currentDomaine._id}/>;
         })
     }
 
     challengeList() {
         return this.state.challenges.map(currentChallenge => {
-            return <Row val={currentChallenge} deleteTendance={this.deleteTendance} key={currentChallenge._id}/>;
+            return <Row val={currentChallenge} listT={currentChallenge.tendancesId.sort(compare)} deleteTendance={this.deleteTendance} key={currentChallenge._id}/>;
         })
     }
 
     secteurList() {
         return this.state.secteurs.map(currentSecteur => {
-            return <Row val={currentSecteur} deleteTendance={this.deleteTendance} key={currentSecteur._id}/>;
+            return <Row val={currentSecteur} listT={currentSecteur.tendancesId.sort(compare)}  deleteTendance={this.deleteTendance} key={currentSecteur._id}/>;
         })
     }
+
     onChangeDomaine(e) {
-        if (e!=null){
+        if (e != null) {
             this.setState({
-                dom: e.map((o)=>o.value)
+                dom: e.map((o) => o.value)
             })
-        }
-        else{
+        } else {
             this.setState({
                 dom: []
             })
@@ -417,12 +446,11 @@ export default class tendancesList extends Component {
     }
 
     onChangeLangue(e) {
-        if (e!=null){
+        if (e != null) {
             this.setState({
-                langages: e.map((o)=>o.value)
+                langages: e.map((o) => o.value)
             })
-        }
-        else{
+        } else {
             this.setState({
                 langages: []
             })
@@ -432,12 +460,11 @@ export default class tendancesList extends Component {
     }
 
 
-    onSubmitDomaine(e)
-    {
+    onSubmitDomaine(e) {
         e.preventDefault();
-        this.state.dom.map((currentD)=>{
-            this.state.langages.map((currentL)=>{
-                axios.get('http://localhost:5000/tendances/news_domaine/'+currentD+'/'+currentL)
+        this.state.dom.map((currentD) => {
+            this.state.langages.map((currentL) => {
+                axios.get('http://localhost:5000/tendances/news_domaine/' + currentD + '/' + currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
@@ -450,44 +477,45 @@ export default class tendancesList extends Component {
 
     }
 
-    showDomaine(){
+    showDomaine() {
 
-        return(
+        return (
             <Table hover className="mb-0">
-                        <TableHead>
-                                <TableCell width="95%"><b>Nom du Domaine</b></TableCell>
-                            <TableCell>
-                                <FormDialog domaines={this.state.domaines} onSubmit={this.onSubmitDomaine} onChangeLangue={this.onChangeLangue} onChangeDomaine={this.onChangeDomaine}/>
-                            </TableCell>
-                        </TableHead>
-                        <tbody>
-                        {this.domaineList()}
-                        </tbody>
-                    </Table>
+                <TableHead>
+                    <TableCell width="95%"><b>Nom du Domaine</b></TableCell>
+                    <TableCell>
+                        <FormDialog domaines={this.state.domaines} onSubmit={this.onSubmitDomaine}
+                                    onChangeLangue={this.onChangeLangue} onChangeDomaine={this.onChangeDomaine}/>
+                    </TableCell>
+                </TableHead>
+                <tbody>
+                {this.domaineList()}
+                </tbody>
+            </Table>
         )
     }
 
 
     onChangeChallenge(e) {
-        if (e!=null){
+        if (e != null) {
             this.setState({
-                chal: e.map((o)=>o.value)
+                chal: e.map((o) => o.value)
             })
-        }
-        else{
+        } else {
             this.setState({
                 chal: []
             })
         }
         console.log(this.state.chal)
     }
-    onSubmitChallenge(e){
+
+    onSubmitChallenge(e) {
         e.preventDefault();
 
-        this.state.chal.map((currentD)=>{
-            this.state.langages.map((currentL)=>{
-                axios.get('http://localhost:5000/tendances/news_challenge/'+currentD+'/'+currentL)
-                    .then(res =>{
+        this.state.chal.map((currentD) => {
+            this.state.langages.map((currentL) => {
+                axios.get('http://localhost:5000/tendances/news_challenge/' + currentD + '/' + currentL)
+                    .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
                         window.location.reload(false);
@@ -501,12 +529,13 @@ export default class tendancesList extends Component {
     }
 
 
-    showChallenge(){
+    showChallenge() {
         return <Table hover className="mb-0">
             <TableHead>
                 <TableCell width="95%"><b>Nom du Challenge</b></TableCell>
                 <TableCell>
-                    <FormDialogChall challenges={this.state.challenges} onSubmit={this.onSubmitChallenge} onChangeLangue={this.onChangeLangue} onChangeChallenge={this.onChangeChallenge}/>
+                    <FormDialogChall challenges={this.state.challenges} onSubmit={this.onSubmitChallenge}
+                                     onChangeLangue={this.onChangeLangue} onChangeChallenge={this.onChangeChallenge}/>
 
                 </TableCell>
             </TableHead>
@@ -518,13 +547,12 @@ export default class tendancesList extends Component {
 
     }
 
-    onChangeSecteur(e){
-        if (e!=null){
+    onChangeSecteur(e) {
+        if (e != null) {
             this.setState({
-                sect: e.map((o)=>o.value)
+                sect: e.map((o) => o.value)
             })
-        }
-        else{
+        } else {
             this.setState({
                 sect: []
             })
@@ -532,19 +560,19 @@ export default class tendancesList extends Component {
         console.log(this.state.sect)
 
     }
-    onSubmitSecteur(e)
-    {
+
+    onSubmitSecteur(e) {
         e.preventDefault()
-        this.state.sect.map((currentD)=>{
+        this.state.sect.map((currentD) => {
             console.log(currentD)
-            this.state.langages.map((currentL)=>{
+            this.state.langages.map((currentL) => {
                 console.log(currentL)
-                axios.get('http://localhost:5000/tendances/news_secteur/'+currentD+'/'+currentL)
-                    .then(res =>{
+                axios.get('http://localhost:5000/tendances/news_secteur/' + currentD + '/' + currentL)
+                    .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
                         window.location.reload(false);
-                        })
+                    })
                 window.location.replace('#/tendances/afficher');
                 window.location.reload(false);
             })
@@ -552,12 +580,13 @@ export default class tendancesList extends Component {
 
     }
 
-    showSecteur(){
+    showSecteur() {
         return <Table hover className="mb-0">
             <TableHead>
                 <TableCell width="95%"><b>Nom du Secteur</b></TableCell>
                 <TableCell>
-                    <FormDialogSect secteurs={this.state.secteurs} onSubmit={this.onSubmitSecteur} onChangeLangue={this.onChangeLangue} onChangeSecteur={this.onChangeSecteur}/>
+                    <FormDialogSect secteurs={this.state.secteurs} onSubmit={this.onSubmitSecteur}
+                                    onChangeLangue={this.onChangeLangue} onChangeSecteur={this.onChangeSecteur}/>
                 </TableCell>
             </TableHead>
             <tbody>
@@ -568,21 +597,22 @@ export default class tendancesList extends Component {
     }
 
 
-  render() {
-    return (
+    render() {
+        return (
             <Tabs>
-                <Tab key="dom" label={<span><i  className="nav-link-icon pe-7s-box2" /> Tendances par domaine</span>}>
+                <Tab key="dom" label={<span><i className="nav-link-icon pe-7s-box2"/> Tendances par domaine</span>}>
 
                     {this.showDomaine()}
                 </Tab>
-                <Tab key="chal" label={<span><i  className="nav-link-icon pe-7s-target" /> Tendances par challenge</span>}>
+                <Tab key="chal"
+                     label={<span><i className="nav-link-icon pe-7s-target"/> Tendances par challenge</span>}>
                     {this.showChallenge()}
                 </Tab>
-                <Tab key="sect"  label={<span><i  className="nav-link-icon pe-7s-helm" /> Tendances par secteur</span>}>
+                <Tab key="sect" label={<span><i className="nav-link-icon pe-7s-helm"/> Tendances par secteur</span>}>
                     {this.showSecteur()}
                 </Tab>
             </Tabs>
 
-    );
-  }
+        );
+    }
 }

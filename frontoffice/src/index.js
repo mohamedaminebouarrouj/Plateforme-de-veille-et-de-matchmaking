@@ -17,7 +17,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 
 import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.1.0";
@@ -34,42 +34,42 @@ import ShowRecherche from "./views/Recherche/Afficher/showRecherche";
 
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path="/index" render={props => <Index {...props} />} />
-      <Route
-        path="/discover"
-        render={props => <LandingPage {...props} />}
-      />
-      <Route
-        path="/profile-page"
-        render={props => <ProfilePage {...props} />}
-      />
+    <BrowserRouter>
+        <Switch>
+            <Route path="/index"
+                   render={props => <Index {...props} />}/>
+            <Route
+                path="/discover"
+                render={props => <LandingPage {...props} />}
+            />
+            <Route
+                path="/profile-page"
+                render={props => <ProfilePage {...props} />}
+            />
 
-      <Route
-        path="/secteurs/:id"
-        render={props => <ShowSecteur {...props} />} />
+            <Route
+                path="/secteurs/:id"
+                render={props => <ShowSecteur {...props} />}/>
 
-      <Route
-          path="/domaines/:id"
-          render={props => <ShowDomaine {...props} />} />
+            <Route
+                path="/domaines/:id"
+                render={props => <ShowDomaine {...props} />}/>
 
-      <Route
-          path="/challenges/:id"
-          render={props => <ShowChallenge {...props} />} />
+            <Route
+                path="/challenges/:id"
+                render={props => <ShowChallenge {...props} />}/>
 
-      <Route
-          path="/startups/:id"
-          render={props => <ShowStartup {...props} />} />
+            <Route
+                path="/startups/:id"
+                render={props => <ShowStartup {...props} />}/>
 
-      <Route
-          path="/search/:query"
-          render={props => <ShowRecherche {...props} />} />
+            <Route
+                path="/search/:query"
+                render={props => <ShowRecherche {...props} />}/>
 
 
-
-      <Redirect from="/" to="/index" />
-    </Switch>
-  </BrowserRouter>,
-  document.getElementById("root")
+            <Redirect from="/" to="/index"/>
+        </Switch>
+    </BrowserRouter>,
+    document.getElementById("root")
 );

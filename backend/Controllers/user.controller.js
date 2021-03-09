@@ -77,6 +77,7 @@ exports.register = async (req, res) => {
                     password,
                     nom,
                     prenom,
+                    organisation,
                     role
                 }
             )
@@ -85,7 +86,6 @@ exports.register = async (req, res) => {
                 message: "user added",
             })
         } catch (error) {
-            console.log(error)
             return res.json({
                 message: "error",
                 error: error.message
@@ -95,3 +95,42 @@ exports.register = async (req, res) => {
 
 
 }
+
+exports.changePassword = async (req, res) => {
+    try {
+        const {email, password} = req.body
+        let user = await User.findByCredentials(email, password)
+        if (user) {
+            let newPassword = await bcrypt.hash(req.body.newPassword, 10);
+            user.password = newPassword
+
+            user.save()
+                .then(() => res.json('Password updated!'))
+                .catch(err => res.status(400).json('Error: ' + err));
+        } else if (!user) {
+            return res.status(401).send(false)
+        }
+    } catch (error) {
+        res.status(400).send(false)
+    }
+
+}
+
+exports.user_update_post = function (req, res) {
+    User.findById(req.params.id)
+        .then(user => {
+            user.nom = req.body.nom;
+            user.prenom = req.body.prenom;
+            user.organisation = req.body.organisation;
+
+            if (user.role === "Corporate") {
+                user.secteurId = req.body.secteurId
+            }
+
+            user.save()
+                .then(() => res.json('User updated!'))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+}
+

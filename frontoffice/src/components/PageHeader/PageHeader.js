@@ -231,7 +231,7 @@ class PageHeader extends React.Component {
                             <Col lg="4">
                                 <div className="text-center">
                                     <div className="icon icon-primary">
-                                        <i className="tim-icons icon-spaceship" style={{fontSize:'36px'}}/>
+                                        <i className="tim-icons icon-spaceship" style={{fontSize:'50px'}}/>
                                     </div>
                                     <h4 className="info-title">Startups</h4>
                                     <hr className="line-primary" style={{margin: 'auto'}}/>
@@ -248,7 +248,7 @@ class PageHeader extends React.Component {
                             <Col lg="4">
                                 <div className="text-center">
                                     <div className="icon icon-primary">
-                                        <i className="tim-icons icon-bank" style={{fontSize:'36px'}}/>
+                                        <i className="tim-icons icon-bank" style={{fontSize:'50px'}}/>
                                     </div>
                                     <h4 className="info-title">Corporate</h4>
                                     <hr className="line-primary" style={{margin: 'auto'}}/>

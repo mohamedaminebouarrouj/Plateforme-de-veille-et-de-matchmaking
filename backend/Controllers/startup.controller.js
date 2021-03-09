@@ -162,6 +162,19 @@ exports.startup_find = function (req, res) {
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
+exports.startup_list_pagination = function (req,res) {
+    const pagination = req.body.pagination ? parseInt(req.body.pagination) : 10;
+    //PageNumber From which Page to Start
+    const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
+    Startups.find()
+        .sort({"nom" : 1})
+        .skip((pageNumber - 1) * pagination)
+        //limit is number of Records we want to display
+        .limit(pagination)
+        .then(startup => res.json(startup))
+        .catch(err => res.status(400).json('Error: '+err));
+};
+
 exports.startup_delete = function (req, res) {
     Startups.findByIdAndDelete(req.params.id)
         .then((startup) => {

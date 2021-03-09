@@ -17,5 +17,6 @@ router.get('/:id',startupController.startup_find);
 
 router.post('/upload',startupController.upload_logo);
 
+router.post('/find',startupController.startup_list_pagination);
 
 module.exports =router;

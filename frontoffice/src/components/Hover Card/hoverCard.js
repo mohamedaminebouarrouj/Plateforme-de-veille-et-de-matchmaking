@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import {
     Grid,
 } from '@material-ui/core/'
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const DisplayOver = styled.div({
     height: "100%",
@@ -44,6 +45,13 @@ const CTA = styled.a({
     left: "20px",
 });
 const Background = styled.div({
+
+    backgroundColor: 'rgb(0,0,0,0.5)',
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    position: "relative",
+    height: "350px",
+    cursor: "pointer",
     // Other background code
     [`:hover ${DisplayOver}`]: {
         backgroundColor: "rgba(38,49,72,.8)",
@@ -54,7 +62,14 @@ const Background = styled.div({
     [`:hover ${Hover}`]: {
         opacity: 1,
     },
+
 });
+
+const Picture = styled.img({
+    height: '350px',
+    objectFit: 'cover',
+    opacity: 0.8,
+})
 
 export default class HoverCard extends Component {
     constructor(props) {
@@ -72,31 +87,40 @@ export default class HoverCard extends Component {
                     justify="flex-start"
                     alignItems="flex-start"
                 >
-                    {this.props.val.map(v =>
-                        (
-                            <Grid item xs={12} sm={6} md={3} key={v.nom}>
-                                <Background style={{
-                                    backgroundColor: 'rgb(0,0,0,1)',
-                                    backgroundImage: `url(${v.img})`,
-                                    backgroundSize: "cover",
-                                    backgroundRepeat: "no-repeat",
-                                    position: "relative",
-                                    height: "350px",
-                                    cursor: "pointer",
-                                }}>
-                                    <DisplayOver>
-                                        <BigTitle>{v.nom}</BigTitle>
-                                        <Hover>
-                                            <SubTitle>{v.categorie}</SubTitle>
-                                            <Paragraph>
-                                                {v.description.slice(0, 100) + '...'}
-                                            </Paragraph>
-                                            <CTA href={'/challenges/' + v._id}>Consulter +</CTA>
-                                        </Hover>
-                                    </DisplayOver>
-                                </Background>
-                            </Grid>
-                        ))}
+                    {this.props.val.length > 0 ? this.props.val.map(v =>
+                            (
+                                <Grid item xs={12} sm={6} md={3} key={v.nom}>
+                                    <Background>
+                                        {this.props.sel === "startups" ? <img
+                                            style={{
+                                                height: '120px', position: 'absolute', left: '50%', top: '50%',
+                                                transform: 'translate(-50%, -50%)'
+                                            }}
+                                            src={v.logo ? require("../../assets/logos/Startups/" + v.logo) : require("../../assets/logos/Startups/default.png")}
+                                        /> : <Picture src={v.img}/>}
+                                        <DisplayOver>
+                                            <BigTitle>{v.nom}</BigTitle>
+                                            <Hover>
+                                                <SubTitle>{v.categorie}</SubTitle>
+                                                <Paragraph>
+                                                    {v.description.slice(0, 100) + '...'}
+                                                </Paragraph>
+                                                <CTA href={'/' + this.props.sel + '/' + v._id}>Consulter +</CTA>
+                                            </Hover>
+                                        </DisplayOver>
+                                    </Background>
+                                </Grid>
+                            )) :
+                        <>
+                            <br/><br/>
+                            <div style={{
+                                position: 'absolute', left: '50%', top: '50%',
+                                transform: 'translate(-50%, -50%)'
+                            }}><CircularProgress/> Loading...
+                            </div>
+                            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        </>
+                    }
                 </Grid>
             </>
         );

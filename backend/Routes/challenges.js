@@ -18,4 +18,6 @@ router.get('/findUpdate/:id',challengeController.challenge_findUpdate);
 
 router.post('/update_image',challengeController.challenge_add_picture);
 
+router.post('/find',challengeController.challenge_list_pagination);
+
 module.exports =router;

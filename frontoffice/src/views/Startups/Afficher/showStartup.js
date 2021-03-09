@@ -373,25 +373,24 @@ export default class ShowStartup extends Component {
                         <Row>
                             <Col lg="1">
                             </Col>
-                            <Col md="6">
+                            <Col style={{left: '65px'}}>
                                 <Row>
-                                    <Col md="3">
+                                    <Col style={{left: '-50px'}}>
                                         <img
                                             style={{
                                                 height: '120px', position: 'absolute', left: '50%', top: '50%',
-                                                transform: 'translate(-50%, -50%)'
+                                                transform: 'translate(-50%, -50%)',backgroundColor:'rgb(255,255,255,0.5)'
                                             }}
                                             src={this.state.logo ? require("../../../assets/logos/Startups/" + this.state.logo) : require("../../../assets/logos/Startups/default.png")}
                                         />
                                     </Col>
-                                    <Col>
+                                    <Col style={{top: '20px', left: '-100px'}}>
                                         <p className="font-weight-bold font-size-35">{this.state.nom}
                                             {this.state.verifiedStartup ?
                                                 <CheckCircleIcon
-                                                    style={{color: "#FFDB00", fontSize: "40px"}}/> : <div></div>}</p>
-                                        <a>
-                                            Depuis
-                                            : {this.state.dateCreation ? this.state.dateCreation.split('-')[1] + "/" + this.state.dateCreation.split('-')[0] : ''}</a>
+                                                    style={{color: "#FFDB00", fontSize: "30px"}}/> : <div></div>}</p>
+                                        {this.state.dateCreation ?
+                                            <a> Depuis: {this.state.dateCreation.split('-')[1] + "/" + this.state.dateCreation.split('-')[0]} </a> :<a/>}
                                         <p>{this.state.pays}</p>
                                         <br/>
                                         {/*<Button className="btn btn-default btn-round">*/}
@@ -739,6 +738,7 @@ export default class ShowStartup extends Component {
                                     </Col>
 
                                 </Row>
+                                <br/><br/>
                                 <h4 className="font-weight-bold">Description:</h4>
                                 <p>{this.state.description}</p>
                                 <h4 className="font-weight-bold">Fondateurs: </h4>
@@ -756,8 +756,8 @@ export default class ShowStartup extends Component {
                                     return (<a href={"/challenges/" + d._id}>  &nbsp;{d.nom}</a>)
                                 })}
                             </Col>
-                            <Col lg="1"></Col>
-                            <Col>
+                            <Col lg="2"></Col>
+                            <Col style={{left: '150px'}}>
                                 <h2 className="font-weight-bold">Contact</h2>
                                 <h4 className="font-weight-bold">Adresse:</h4>
                                 <p>{this.state.adresse}</p>

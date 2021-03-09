@@ -182,3 +182,16 @@ exports.challenge_add_picture = async (req, res) => {
         })
         .catch();
 }
+
+exports.challenge_list_pagination = function (req,res) {
+    const pagination = req.body.pagination ? parseInt(req.body.pagination) : 10;
+    //PageNumber From which Page to Start
+    const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
+    Challenges.find()
+        .sort({"nom" : 1})
+        .skip((pageNumber - 1) * pagination)
+        //limit is number of Records we want to display
+        .limit(pagination)
+        .then(challenge => res.json(challenge))
+        .catch(err => res.status(400).json('Error: '+err));
+};

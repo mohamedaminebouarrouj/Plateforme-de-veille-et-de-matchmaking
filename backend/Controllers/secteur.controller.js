@@ -108,7 +108,7 @@ exports.secteur_delete = function (req, res) {
 
 exports.img = async (req, res) => {
     let url = ""
-    unsplash.search.photos('Government', 1, 10, {orientation: "landscape"})
+    unsplash.search.photos('Artificial Intelligence', 1, 10, {orientation: "landscape"})
         .then(toJson)
         .then(json => {
                 res.json(json)

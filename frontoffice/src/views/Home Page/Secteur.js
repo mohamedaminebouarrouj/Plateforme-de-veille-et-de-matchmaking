@@ -33,6 +33,18 @@ import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import AppComponent from "../../components/Graph/AppComponent";
 import InfoIcon from '@material-ui/icons/Info';
+import {
+    Grid,
+    Card,
+    CardContent,
+    Typography,
+    CardHeader,
+    CardActions,
+    CardActionArea,
+    CardMedia,
+} from '@material-ui/core/'
+
+import {Button} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -105,38 +117,57 @@ const customStyles = {
     })
 };
 
-function Trends(props) {
+function TitlebarGridList2(props) {
+    const classes = useStyles();
     return (
         <>
-            {props.val.length > 0 ?
-                props.val.map((tile) => (
-                    <Col lg="3">
-                        <div className="card-blog card-plain card">
-                            <div className="card-image">
-                                <a href={tile.url} target="_blank">
-                                    <img alt="..." className="img rounded" src={tile.urlToImage}/>
+            <Grid
+                container
+                spacing={1}
+                direction="row"
+                justify="flex-start"
+                alignItems="flex-start"
+            >
+                {props.val.map(elem => (
+                    <Grid item xs={12} sm={6} md={3} key={elem.titre}>
+                        <Card style={{height: "430px"}}>
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                className={classes.media}
+                                image={elem.urlToImage}
+                                title={elem.titre}
+                                alt={elem.titre}
+                            />
+                            <CardContent>
+                                <Typography gutterBottom style={{color: '#344675'}} variant="h5" component="h2">
+                                    {elem.titre.slice(0,30)+'...'}
+                                </Typography>
+                                <p style={{color: 'rgb(0,0,0,0.5)'}}>
+                                    {elem.resume.slice(0, 100) + '...'}
+                                </p>
+                                <a>
+                                    <b style={{color: '#344675'}}>Source</b> : {elem.source}
                                 </a>
-                            </div>
-                            <div className="card-body">
-                                <h4 className="card-title"><a href={tile.url} target="_blank">{tile.titre}</a></h4>
-                                <p className="card-description">{tile.resume}</p>
-                                <div>
-                                    {tile.source}
-                                </div>
-                                <div>
-                                    {tile.datePublication.split('T')[0]}
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
-                ))
-                : <div style={{
-                    position: 'absolute', left: '50%', top: '100%',
-                    transform: 'translate(-50%, -50%)'
-                }}><CircularProgress/> Loading...</div>}
+                                <br/>
+                                <a>
+                                    {elem.datePublication.split('T')[0]}
+                                </a>
+                            </CardContent>
+                            <CardActions style={{float: 'right'}}>
+                                <Button size="large" className="btn btn-simple btn-round" color="default"
+                                        href={elem.url} target="_blank" rel="noreferrer">
+                                    Lire sur le site
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
         </>
     )
 }
+
 
 function TitlebarGridList(props) {
     const classes = useStyles();
@@ -191,7 +222,7 @@ function compare(a, b) {
     const tendB = b.langage;
 
     let comparison = 0;
-    let comparaison2=0;
+    let comparaison2 = 0;
 
     if (bandA > bandB) {
         comparison = 1;
@@ -261,30 +292,34 @@ export default class Secteur extends React.Component {
 
     tendancesList() {
 
-        let t=this.state.tendances.sort(compare)
-        let tendances=[]
-        t.map(ten=>{
-            if(ten.langage==="Français")
-            {
+        let t = this.state.tendances.sort(compare)
+        let tendances = []
+        t.map(ten => {
+            if (ten.langage === "Français") {
                 tendances.push(ten)
             }
         })
 
-        return (<Row>
-            <Trends val={tendances.slice(0, 4)}/>
-        </Row>)
+        return (
+            <TitlebarGridList2 val={tendances.slice(0, 4)}/>
+        )
     }
 
     render() {
         return (
             <>
-                <h1>À la une</h1>
 
-                <section className="section" style={{top: '-50px', left: '10px'}}>
-                    {this.tendancesList()}
+
+                <section className="section">
+                    <h1 className="text-center">À la une</h1>
+                    <Row>
+                        <Col lg="1"></Col>
+                        <Col>{this.tendancesList()}</Col>
+                        <Col lg="1"></Col>
+                    </Row>
+                    <br/><br/><br/>
+                    <h1 className="text-center">Map des challenges</h1>
                 </section>
-                <h1>Map des challenges</h1>
-
                 <section className="section" style={{position: 'relative', height: '680px'}}>
                     <AppComponent id={this.state.loggedUserSecteur} history={this.props.history}/>
 

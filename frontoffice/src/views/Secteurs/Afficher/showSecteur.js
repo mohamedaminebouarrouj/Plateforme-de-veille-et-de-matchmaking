@@ -13,30 +13,22 @@ import Select from "react-select";
 import AppComponent from "../../../components/Graph/AppComponent";
 import {Scrollbars} from 'react-custom-scrollbars';
 import Particles from "react-particles-js";
+import TendanceGridList from "../../../components/Tendance Card/TendanceGridList";
 
-function Show(props) {
-    return (
-        <React.Fragment>
-            <Row>
-            <Col lg="4">
-                <img src={props.tendance.urlToImage} alt='•'/>
-            </Col>
-            <Col>
-                <p style={{fontSize: '12px'}}>
-                    <a target='_blank' rel="noopener noreferrer" href={props.tendance.url}>{props.tendance.titre}</a>
-                    <p style={{
-                        fontSize: '10px'
-                    }}>{props.tendance.resume}</p>
-                    <p style={{
-                        fontSize: '10px',
-                        opacity: '0.7'
-                    }}>{props.tendance.source} @ {props.tendance.datePublication.split('T')[0]} </p>
-                </p>
-            </Col>
-            </Row>
-            <hr/>
-        </React.Fragment>
-    );
+function compare(a, b) {
+    // Use toUpperCase() to ignore character casing
+    // const bandA = a.nom.toUpperCase().trim();
+    // const bandB = b.nom.toUpperCase().trim();
+
+    const bandA = a.datePublication;
+    const bandB = b.datePublication;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison * -1;
 }
 
 const customStyles = {
@@ -85,7 +77,6 @@ export default class ShowSecteur extends Component {
         this.ArList = this.ArList.bind(this)
         this.onChangeLangage = this.onChangeLangage.bind(this)
         this.showList = this.showList.bind(this)
-        this.showChallenges = this.showChallenges.bind(this)
 
         this.state = {
             nom: '',
@@ -108,7 +99,7 @@ export default class ShowSecteur extends Component {
                     nom: response.data.nom,
                     categorie: response.data.categorie,
                     description: response.data.description,
-                    challenges : response.data.challengesId,
+                    challenges: response.data.challengesId,
                     img: response.data.img,
                     tendances: response.data.tendancesId
                 })
@@ -130,39 +121,48 @@ export default class ShowSecteur extends Component {
     };
 
     FrList() {
-        return this.state.tendances.map(currentTendance => {
-            if (currentTendance.langage === "Français") {
-                return <Show tendance={currentTendance} key={currentTendance._id}/>;
-            }
-            return null
+        var tendancesAff = []
+        this.state.tendances.map(currentTendance => {
+            if (currentTendance.langage === "Français")
+                tendancesAff.push(currentTendance)
 
         })
+        return (
+            <>
+                <TendanceGridList val={tendancesAff}/>
+            </>
+        )
+
+
     }
 
     EnList() {
-        return this.state.tendances.map(currentTendance => {
-            if (currentTendance.langage === "Anglais") {
-                return <Show tendance={currentTendance} key={currentTendance._id}/>;
-            }
-            return null
-
+        var tendancesAff = []
+        this.state.tendances.map(currentTendance => {
+            if (currentTendance.langage === "Anglais")
+                tendancesAff.push(currentTendance)
 
         })
+        return (
+            <TendanceGridList val={tendancesAff}/>
+        )
     }
 
     ArList() {
-        return this.state.tendances.map(currentTendance => {
-            if (currentTendance.langage === "Arabe") {
-                return <Show tendance={currentTendance} key={currentTendance._id}/>;
-            }
-
-            return null
-
+        var tendancesAff = []
+        this.state.tendances.map(currentTendance => {
+            if (currentTendance.langage === "Arabe")
+                tendancesAff.push(currentTendance)
 
         })
+        return (
+            <TendanceGridList val={tendancesAff}/>
+        )
     }
 
     showList() {
+
+        this.state.tendances.sort(compare)
         if (this.state.singleSelect.value === 'fr') {
             return this.FrList()
         } else if (this.state.singleSelect.value === 'en') {
@@ -179,16 +179,6 @@ export default class ShowSecteur extends Component {
         })
     }
 
-    showChallenges() {
-        return this.state.challenges.map(currentChallenge => {
-            return (<Button key={currentChallenge._id} className="btn-link" color="primary"
-                            onClick={() => this.props.history.replace({pathname: `/challenges/${currentChallenge._id}`})}>
-                    {currentChallenge.nom}
-                </Button>
-            )
-        })
-    }
-
     render() {
         return (
             <>
@@ -196,351 +186,76 @@ export default class ShowSecteur extends Component {
 
 
                 <section className="section section-lg" id="main">
-                    <Particles style={{position: 'absolute'}} params={
-                        {
-                            "particles": {
-                                "number": {
-                                    "value": 50,
-                                    "density": {
-                                        "enable": true,
-                                        "value_area": 800
-                                    }
-                                },
-                                "color": {
-                                    "value": "#ffffff"
-                                },
-                                "shape": {
-                                    "type": "circle",
-                                    "stroke": {
-                                        "width": 0,
-                                        "color": "#000000"
-                                    },
-                                    "polygon": {
-                                        "nb_sides": 5
-                                    },
-                                    "image": {
-                                        "src": "img/github.svg",
-                                        "width": 100,
-                                        "height": 100
-                                    }
-                                },
-                                "opacity": {
-                                    "value": 0.5,
-                                    "random": false,
-                                    "anim": {
-                                        "enable": false,
-                                        "speed": 1,
-                                        "opacity_min": 0.1,
-                                        "sync": false
-                                    }
-                                },
-                                "size": {
-                                    "value": 3,
-                                    "random": true,
-                                    "anim": {
-                                        "enable": false,
-                                        "speed": 40,
-                                        "size_min": 0.1,
-                                        "sync": false
-                                    }
-                                },
-                                "line_linked": {
-                                    "enable": true,
-                                    "distance": 150,
-                                    "color": "#ffffff",
-                                    "opacity": 0.4,
-                                    "width": 1
-                                },
-                                "move": {
-                                    "enable": true,
-                                    "speed": 1,
-                                    "direction": "none",
-                                    "random": true,
-                                    "straight": false,
-                                    "out_mode": "out",
-                                    "bounce": false,
-                                    "attract": {
-                                        "enable": false,
-                                        "rotateX": 600,
-                                        "rotateY": 1200
-                                    }
-                                }
-                            },
-                            "interactivity": {
-                                "detect_on": "window",
-                                "events": {
-                                    "onhover": {
-                                        "enable": false,
-                                        "mode": "repulse"
-                                    },
-                                    "onclick": {
-                                        "enable": false,
-                                        "mode": "push"
-                                    },
-                                    "resize": true
-                                },
-                                "modes": {
-                                    "grab": {
-                                        "distance": 400,
-                                        "line_linked": {
-                                            "opacity": 1
-                                        }
-                                    },
-                                    "bubble": {
-                                        "distance": 400,
-                                        "size": 40,
-                                        "duration": 2,
-                                        "opacity": 8,
-                                        "speed": 1
-                                    },
-                                    "repulse": {
-                                        "distance": 200,
-                                        "duration": 0.4
-                                    },
-                                    "push": {
-                                        "particles_nb": 4
-                                    },
-                                    "remove": {
-                                        "particles_nb": 2
-                                    }
-                                }
-                            },
-                            "retina_detect": true
-                        }}/>
                     <section className="section">
                         <Row>
-                            <Col lg="1"></Col>
-                            <Col lg="6">
+                            <Col style={{left:'20px'}}>
                                 <div style={{
                                     backgroundImage: `url(${this.state.img})`,
                                     backgroundRepeat: 'no-repeat',
                                     backgroundPosition: 'center',
                                     backgroundSize: 'cover',
-                                    height: '200px'
+                                    height: '350px'
                                 }}>
-
                                     <h1 style={{
                                         position: 'absolute',
                                         top: 5,
                                         width: 'auto',
-                                        fontSize: '36px',
-                                        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                                        fontSize: '40px',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.6)'
                                     }}>
                                         {this.state.nom}
                                     </h1>
-
                                 </div>
                                 <br/>
-                                <p>
+                            </Col>
+                            <Col>
+                                <p style={{
+                                    position: 'relative',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.2)'
+                                }}>
                                     {this.state.description}
                                 </p>
-
-
                             </Col>
-                            <Col lg="4">
-                                <Card className="card-coin card-plain">
-                                    <CardBody>
-                                        <Nav
-                                            className="nav-tabs-primary justify-content-center"
-                                            tabs
-                                        >
-                                            <NavItem>
-                                                <NavLink
-                                                    className={classnames({
-                                                        active: this.state.tabs === 1
-                                                    })}
-                                                    onClick={e => this.toggleTabs(e, "tabs", 1)}
-                                                    href=""
-                                                >
-                                                    News
-                                                </NavLink>
-                                            </NavItem>
-                                            {/*<NavItem>*/}
-                                            {/*    <NavLink*/}
-                                            {/*        className={classnames({*/}
-                                            {/*            active: this.state.tabs === 2*/}
-                                            {/*        })}*/}
-                                            {/*        onClick={e => this.toggleTabs(e, "tabs", 2)}*/}
-                                            {/*        href=""*/}
-                                            {/*    >*/}
-                                            {/*        Challenges reliés ({this.state.challenges.length})*/}
-                                            {/*    </NavLink>*/}
-                                            {/*</NavItem>*/}
-
-                                        </Nav>
-                                        <TabContent
-                                            className="tab-subcategories"
-                                            activeTab={"tab" + this.state.tabs}
-                                        >
-                                            <TabPane tabId="tab1">
-                                                <div style={{width: '200px', float: 'right'}}>
-                                                    <Select
-                                                        styles={customStyles}
-                                                        value={this.state.singleSelect}
-                                                        onChange={this.onChangeLangage}
-                                                        isSearchable={false}
-                                                        options={[
-                                                            {
-                                                                value: "fr",
-                                                                label: "Français",
-                                                            },
-                                                            {value: "en", label: "English"},
-                                                            {value: "ar", label: "عربيّة"}
-                                                        ]}
-                                                        placeholder="Selectionnez la langue"
-                                                    />
-                                                </div>
-                                                <br/> <br/> <br/>
-
-                                                <Scrollbars
-                                                    autoHeight
-                                                    autoHeightMin={300}
-                                                    autoHeightMax={300}
-                                                    autoHide
-                                                    universal>
-                                                    <div>
-
-                                                        {this.showList()}
-
-                                                    </div>
-                                                </Scrollbars>
-                                            </TabPane>
-
-                                            <TabPane tabId="tab2">
-                                                <div>
-
-                                                    <Scrollbars
-                                                        autoHeight
-                                                        autoHeightMin={400}
-                                                        autoHeightMax={400}
-                                                        universal>
-                                                        {this.showChallenges()}
-                                                    </Scrollbars>
-                                                </div>
-
-                                            </TabPane>
-
-                                        </TabContent>
-                                    </CardBody>
-                                </Card>
-                            </Col>
+                            <Col lg="1"></Col>
                         </Row>
 
-
+                        <div className="text-center">
+                            <h2>Actualités</h2>
+                        </div>
+                        <Row>
+                            <Col lg="1"></Col>
+                            <Col>
+                                <div style={{width: '250px', float: 'right'}}>
+                                    <Select
+                                        styles={customStyles}
+                                        value={this.state.singleSelect}
+                                        onChange={this.onChangeLangage}
+                                        isSearchable={false}
+                                        options={[
+                                            {
+                                                value: "fr",
+                                                label: "Français",
+                                            },
+                                            {value: "en", label: "English"},
+                                            {value: "ar", label: "عربيّة"}
+                                        ]}
+                                        placeholder="Selectionnez la langue"
+                                    />
+                                </div>
+                            </Col>
+                            <Col lg="1"></Col>
+                        </Row>
+                        <br/><br/><br/>
+                        <Row>
+                            <Col>
+                                {this.showList()}
+                            </Col>
+                            <Col lg="1"></Col>
+                        </Row>
+                        <br/><br/>
                     </section>
-
-                    <Particles style={{position: 'absolute', top:'100px'}} params={
-                        {
-                            "particles": {
-                                "number": {
-                                    "value": 50,
-                                    "density": {
-                                        "enable": true,
-                                        "value_area": 800
-                                    }
-                                },
-                                "color": {
-                                    "value": "#ffffff"
-                                },
-                                "shape": {
-                                    "type": "circle",
-                                    "stroke": {
-                                        "width": 0,
-                                        "color": "#000000"
-                                    },
-                                    "polygon": {
-                                        "nb_sides": 5
-                                    },
-                                    "image": {
-                                        "src": "img/github.svg",
-                                        "width": 100,
-                                        "height": 100
-                                    }
-                                },
-                                "opacity": {
-                                    "value": 0.5,
-                                    "random": false,
-                                    "anim": {
-                                        "enable": false,
-                                        "speed": 1,
-                                        "opacity_min": 0.1,
-                                        "sync": false
-                                    }
-                                },
-                                "size": {
-                                    "value": 3,
-                                    "random": true,
-                                    "anim": {
-                                        "enable": false,
-                                        "speed": 40,
-                                        "size_min": 0.1,
-                                        "sync": false
-                                    }
-                                },
-                                "line_linked": {
-                                    "enable": true,
-                                    "distance": 150,
-                                    "color": "#ffffff",
-                                    "opacity": 0.4,
-                                    "width": 1
-                                },
-                                "move": {
-                                    "enable": true,
-                                    "speed": 1,
-                                    "direction": "none",
-                                    "random": true,
-                                    "straight": false,
-                                    "out_mode": "out",
-                                    "bounce": false,
-                                    "attract": {
-                                        "enable": false,
-                                        "rotateX": 600,
-                                        "rotateY": 1200
-                                    }
-                                }
-                            },
-                            "interactivity": {
-                                "detect_on": "window",
-                                "events": {
-                                    "onhover": {
-                                        "enable": false,
-                                        "mode": "repulse"
-                                    },
-                                    "onclick": {
-                                        "enable": false,
-                                        "mode": "push"
-                                    },
-                                    "resize": true
-                                },
-                                "modes": {
-                                    "grab": {
-                                        "distance": 400,
-                                        "line_linked": {
-                                            "opacity": 1
-                                        }
-                                    },
-                                    "bubble": {
-                                        "distance": 400,
-                                        "size": 40,
-                                        "duration": 2,
-                                        "opacity": 8,
-                                        "speed": 1
-                                    },
-                                    "repulse": {
-                                        "distance": 200,
-                                        "duration": 0.4
-                                    },
-                                    "push": {
-                                        "particles_nb": 4
-                                    },
-                                    "remove": {
-                                        "particles_nb": 2
-                                    }
-                                }
-                            },
-                            "retina_detect": true
-                        }}/>
-                    <section className="section" style={{position:'relative',  height: '700px'}}>
+                    <div className="text-center"><h2>Map des challenges</h2></div>
+                    <section className="section" style={{position: 'relative', height: '700px'}}>
                         <AppComponent id={this.props.match.params.id} history={this.props.history}/>
 
                     </section>

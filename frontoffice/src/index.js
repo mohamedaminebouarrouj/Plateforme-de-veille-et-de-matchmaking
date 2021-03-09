@@ -31,6 +31,9 @@ import ShowDomaine from "./views/Domaines/Afficher/showDomaine";
 import ShowStartup from "./views/Startups/Afficher/showStartup";
 import ShowChallenge from "./views/Challenges/Afficher/showChallenge";
 import ShowRecherche from "./views/Recherche/Afficher/showRecherche";
+import ChallengesPage from "./views/Menu/ChallengesPage";
+import SecteursPage from "./views/Menu/SecteursPage";
+import StartupsPage from "./views/Menu/StartupsPage";
 
 
 ReactDOM.render(
@@ -66,6 +69,18 @@ ReactDOM.render(
             <Route
                 path="/search/:query"
                 render={props => <ShowRecherche {...props} />}/>
+
+            <Route
+                path="/challenges"
+                render={props => <ChallengesPage {...props} />}/>
+
+            <Route
+                path="/secteurs"
+                render={props => <SecteursPage {...props} />}/>
+            <Route
+                path="/startups"
+                render={props => <StartupsPage {...props} />}/>
+
 
 
             <Redirect from="/" to="/index"/>

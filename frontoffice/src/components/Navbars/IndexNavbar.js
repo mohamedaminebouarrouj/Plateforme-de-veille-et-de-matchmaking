@@ -16,17 +16,13 @@
 
 */
 import React, {useState} from "react";
-import ReactDom from "react";
 import {Link} from "react-router-dom";
-
-// reactstrap components
 import {
     Button,
     Collapse,
     NavbarBrand,
     Navbar,
     NavItem,
-    NavLink,
     Nav,
     Container,
     Modal,
@@ -51,7 +47,7 @@ import GoogleBtn from '../GoogleBtn';
 import ShowRecherche from "../../views/Recherche/Afficher/showRecherche";
 import Select from "react-select";
 import Hamburger from 'hamburger-react';
-import ChangePassword from "../ChangePassword Modal/ChangePassword";
+import {apiConfig} from "../../config";
 
 const customStyles = {
 
@@ -174,7 +170,7 @@ class ComponentsNavbar extends React.Component {
     };
 
     componentDidMount() {
-        axios.get('http://localhost:5000/users/user', {
+        axios.get(apiConfig.baseUrl+'/users/user', {
             headers: {
                 Authorization: localStorage.getItem('auth-token')
             }
@@ -188,7 +184,7 @@ class ComponentsNavbar extends React.Component {
             })
         if (localStorage.getItem('loggedUser')) {
             if (JSON.parse(localStorage.getItem('loggedUser')).role === "Corporate") {
-                axios.get('http://localhost:5000/secteurs').then(response => this.setState({secteur: response.data}))
+                axios.get(apiConfig.baseUrl+'/secteurs').then(response => this.setState({secteur: response.data}))
             }
         }
 
@@ -245,7 +241,7 @@ class ComponentsNavbar extends React.Component {
             formModal: !this.state.formModal
         })
 
-        axios.get('http://localhost:5000/secteurs').then(response => this.setState({secteur: response.data}))
+        axios.get(apiConfig.baseUrl+'/secteurs').then(response => this.setState({secteur: response.data}))
     }
 
     onChangeNom(e) {
@@ -333,7 +329,7 @@ class ComponentsNavbar extends React.Component {
             password: this.state.password
         }
 
-        axios.post('http://localhost:5000/users/login', user)
+        axios.post(apiConfig.baseUrl+'/users/login', user)
             .then(res => {
                 if (res.data.user) {
                     localStorage.setItem('auth-token', res.data.token)
@@ -366,7 +362,7 @@ class ComponentsNavbar extends React.Component {
             secteurId: this.state.sect
         }
 
-        axios.post('http://localhost:5000/users/register', user)
+        axios.post(apiConfig.baseUrl+'/users/register', user)
             .then(res => {
                 window.location.replace('/');
             }).catch(() => {
@@ -404,7 +400,7 @@ class ComponentsNavbar extends React.Component {
             newPassword: this.state.newPassword
         }
 
-        axios.post('http://localhost:5000/users/changePass', user)
+        axios.post(apiConfig.baseUrl+'/users/changePass', user)
             .then(res => {
                 this.setState({
                     valModModal: true,
@@ -464,7 +460,7 @@ class ComponentsNavbar extends React.Component {
                 organisation: this.state.organisationProfil,
             }
         }
-        axios.post('http://localhost:5000/users/update/' + JSON.parse(localStorage.getItem('loggedUser'))._id, user)
+        axios.post(apiConfig.baseUrl+'/users/update/' + JSON.parse(localStorage.getItem('loggedUser'))._id, user)
             .then(res => {
                 this.setState({
                     valModProfilModal: true

@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import "react-datepicker/dist/react-datepicker.css";
-
+import {apiConfig} from "../../../../config/config";
 import {
     Button, Form,
     FormGroup, Label,
@@ -46,7 +46,7 @@ export default class CreateStartup extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/domaines/')
+        axios.get(apiConfig.baseUrl+'/domaines/')
             .then(response => {
                 this.setState({dom: response.data})
             })
@@ -136,7 +136,7 @@ export default class CreateStartup extends Component {
         const formData = new FormData()
         formData.append('multi-files', selectedFile)
 
-        axios.post('http://localhost:5000/startups/upload', formData)
+        axios.post(apiConfig.baseUrl+'/startups/upload', formData)
             .then(response => {
                 this.setState({logo: response.data.file[0].filename})
             })
@@ -163,7 +163,7 @@ export default class CreateStartup extends Component {
 
         console.log(startup);
 
-        axios.post('http://localhost:5000/startups/add', startup)
+        axios.post(apiConfig.baseUrl+'/startups/add', startup)
             .then(res => console.log(res.data));
 
         window.location.replace('#/startups/afficher');

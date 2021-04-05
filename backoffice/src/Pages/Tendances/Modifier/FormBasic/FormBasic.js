@@ -10,7 +10,7 @@ import {
     Card, CardBody,
     CardTitle, CustomInput,
 } from 'reactstrap';
-
+import {apiConfig} from "../../../../config/config";
 export default class UpdateTendance extends Component {
     constructor(props) {
         super(props);
@@ -27,7 +27,7 @@ export default class UpdateTendance extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/tendances/' + this.props.id)
+        axios.get(apiConfig.baseUrl+'/tendances/' + this.props.id)
             .then(response => {
                 this.setState({
                     titre: response.data.titre,
@@ -64,7 +64,7 @@ export default class UpdateTendance extends Component {
 
         console.log(tendance);
 
-        axios.post('http://localhost:5000/tendances/update/' + this.props.id, tendance)
+        axios.post(apiConfig.baseUrl+'/tendances/update/' + this.props.id, tendance)
             .then(res => console.log(res.data));
 
         window.location.replace('#/tendances/afficher');

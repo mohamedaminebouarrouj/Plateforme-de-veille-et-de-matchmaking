@@ -15,7 +15,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-
+import {apiConfig} from "../../../../config/config";
 const useRowStyles = makeStyles({
   root: {
     '& > *': {
@@ -50,7 +50,7 @@ export default class TableHover extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/users/')
+    axios.get(apiConfig.baseUrl+'/users/')
         .then(response => {
           this.setState({users: response.data})
         })

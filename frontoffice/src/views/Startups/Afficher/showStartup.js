@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {DialogContentText} from "@material-ui/core";
 import Particles from "react-particles-js";
+import {apiConfig} from "../../../config";
 
 
 export default class ShowStartup extends Component {
@@ -88,13 +89,12 @@ export default class ShowStartup extends Component {
                 }
             })
         }
-        axios.get('http://localhost:5000/revendications/')
+        axios.get(apiConfig.baseUrl+'/revendications/')
             .then(response => {
                 response.data.map(r => {
 
                     if (r.startupId._id === this.props.match.params.id) {
                         if (r.verified) {
-                            console.log("verified")
                             this.setState({
                                 verifiedStartup: true
                             })
@@ -107,7 +107,7 @@ export default class ShowStartup extends Component {
             })
 
 
-        axios.get('http://localhost:5000/startups/' + this.props.match.params.id)
+        axios.get(apiConfig.baseUrl+'/startups/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
@@ -213,7 +213,7 @@ export default class ShowStartup extends Component {
         }
 
 
-        axios.post('http://localhost:5000/startups/updateUser/' + this.props.match.params.id, startup)
+        axios.post(apiConfig.baseUrl+'/startups/updateUser/' + this.props.match.params.id, startup)
             .then(res => {
                 console.log(res.data)
                 window.location.reload(false)
@@ -235,7 +235,7 @@ export default class ShowStartup extends Component {
 
         console.log(revendication);
 
-        axios.post('http://localhost:5000/revendications/add', revendication)
+        axios.post(apiConfig.baseUrl+'/revendications/add', revendication)
             .then(res => {
                 console.log(res.data)
             });

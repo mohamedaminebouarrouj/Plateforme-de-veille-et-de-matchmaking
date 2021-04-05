@@ -14,6 +14,7 @@ import AppComponent from "../../../components/Graph/AppComponent";
 import {Scrollbars} from 'react-custom-scrollbars';
 import Particles from "react-particles-js";
 import TendanceGridList from "../../../components/Tendance Card/TendanceGridList";
+import {apiConfig} from "../../../config";
 
 function compare(a, b) {
     // Use toUpperCase() to ignore character casing
@@ -93,7 +94,7 @@ export default class ShowSecteur extends Component {
 
     componentDidMount() {
         document.body.classList.toggle("landing-page");
-        axios.get('http://localhost:5000/secteurs/' + this.props.match.params.id)
+        axios.get(apiConfig.baseUrl+'/secteurs/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,

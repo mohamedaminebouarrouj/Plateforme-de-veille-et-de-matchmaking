@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import axios from 'axios';
 import Select from "react-select";
-
+import {apiConfig} from "../../../../config/config";
 import {
     Button, Form,
     FormGroup, Label,
@@ -30,7 +30,7 @@ export default class UpdateRevendication extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/revendications/' + this.props.id)
+        axios.get(apiConfig.baseUrl+'/revendications/' + this.props.id)
             .then(response => {
                 this.setState({
                     email: response.data.email,
@@ -67,7 +67,7 @@ export default class UpdateRevendication extends Component {
             traited: this.state.traited
         }
 
-        axios.post('http://localhost:5000/revendications/update/' + this.props.id, revendication)
+        axios.post(apiConfig.baseUrl+'/revendications/update/' + this.props.id, revendication)
             .then(res => {
                 console.log(res.data)
                 window.location.replace('#/revendications/afficher');

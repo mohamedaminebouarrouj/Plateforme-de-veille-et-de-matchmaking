@@ -16,7 +16,8 @@ const APP_ACCESS_KEY = 'w4cwJK1-Trq5L4sDHOraWA-1LgFjp88Plis7ShcHrgE'
 
 const unsplash = new Unsplash({accessKey: APP_ACCESS_KEY});
 
-exports.secteur_create_post = function (req, res) {
+
+exports.secteur_create_post = async (req, res) => {
     const nom = req.body.nom;
     const description = req.body.description;
     var img = ''
@@ -25,7 +26,9 @@ exports.secteur_create_post = function (req, res) {
             unsplash.search.photos(r.text, 1, 10, {orientation: "landscape"})
                 .then(toJson)
                 .then(json => {
-                    img = json.results[0].urls.regular
+                    var img = ''
+                    if (json.results[0])
+                        img = json.results[0].urls.regular
                     const newSecteur = new Secteurs({
                         nom,
                         description,
@@ -33,7 +36,9 @@ exports.secteur_create_post = function (req, res) {
                     });
 
                     Secteurs.create(newSecteur)
-                        .then(() => res.json('Secteur ajouté!'))
+                        .then(() =>
+
+                            res.json(newSecteur._id))
                         .catch(err => res.status(400).json('Error: ' + err))
                 })
         })

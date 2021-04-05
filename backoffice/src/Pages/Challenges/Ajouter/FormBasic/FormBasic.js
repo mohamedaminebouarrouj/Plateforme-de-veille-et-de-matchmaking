@@ -3,7 +3,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-
+import {apiConfig} from "../../../../config/config";
 import {
     Button, Form,
     FormGroup, Label,
@@ -38,7 +38,7 @@ export default class CreateChallenge extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/secteurs/')
+        axios.get(apiConfig.baseUrl+'/secteurs/')
             .then(response => {
                 this.setState({sect: response.data})
             })
@@ -107,7 +107,7 @@ export default class CreateChallenge extends Component {
             secteursId: this.state.secteurs
         }
 
-        axios.post('http://localhost:5000/challenges/add', challenge)
+        axios.post(apiConfig.baseUrl+'/challenges/add', challenge)
             .then(res =>{
                 console.log(res.data)
                 window.location.replace('#/challenges/afficher');

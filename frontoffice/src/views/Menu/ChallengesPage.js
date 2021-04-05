@@ -1,23 +1,5 @@
-/*!
-
-=========================================================
-* BLK Design System React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/blk-design-system-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/blk-design-system-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import axios from 'axios';
-// core components
 import Footer from "components/Footer/Footer.js";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import {
@@ -26,67 +8,10 @@ import {
     Pagination, PaginationItem, PaginationLink
 } from 'reactstrap';
 
-import {makeStyles} from '@material-ui/core/styles';
 import Particles from "react-particles-js";
 import HoverCard from "../../components/Hover Card/hoverCard";
+import {apiConfig} from "../../config";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-    },
-    gridList: {
-        flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
-    },
-    title: {
-        color: theme.palette.primary.light,
-    },
-    titleBar: {
-        background:
-            'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-    },
-}));
-
-const customStyles = {
-
-    control: (base, state) => ({
-        ...base,
-        color: 'white',
-        // match with the menu
-        borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
-        // Overwrittes the different states of border
-        borderColor: state.isFocused ? "#344675" : "#344675",
-        // Removes weird border around container
-        boxShadow: state.isFocused ? "#344675" : "#344675",
-        "&:hover": {
-            // Overwrittes the different states of border
-            borderColor: state.isFocused ? "#344675" : "#344675"
-        }
-    }),
-    singleValue: (base) => ({
-        ...base,
-        color: '#344675'
-    }),
-    menu: base => ({
-        ...base,
-        // override border radius to match the box
-        borderRadius: 0,
-        // kill the gap
-        marginTop: 0,
-        color: '#ffe600'
-    }),
-    menuList: base => ({
-        ...base,
-        // kill the white space on first and last option
-        padding: 0,
-        color: '#344675'
-    })
-};
 
 function compare(a, b) {
     // Use toUpperCase() to ignore character casing
@@ -124,7 +49,7 @@ export default class ChallengesPage extends React.Component {
 
     componentDidMount() {
         document.body.classList.toggle("landing-page");
-        axios.get('http://localhost:5000/challenges/')
+        axios.get(apiConfig.baseUrl+'/challenges/')
             .then(r => {
                this.setState({
                    numChallenges:r.data.length,
@@ -133,7 +58,7 @@ export default class ChallengesPage extends React.Component {
             })
 
 
-        axios.post('http://localhost:5000/challenges/find', {
+        axios.post(apiConfig.baseUrl+'/challenges/find', {
             pagination: 12,
             page: this.state.page
         })
@@ -149,7 +74,7 @@ export default class ChallengesPage extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.page !== this.state.page) {
-            axios.post('http://localhost:5000/challenges/find', {
+            axios.post(apiConfig.baseUrl+'/challenges/find', {
                 pagination: 12,
                 page: this.state.page
             })

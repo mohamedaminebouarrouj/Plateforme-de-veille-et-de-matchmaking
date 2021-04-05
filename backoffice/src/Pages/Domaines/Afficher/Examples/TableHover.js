@@ -14,7 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-
+import {apiConfig} from "../../../../config/config";
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -56,7 +56,7 @@ export default class domainesList extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/domaines/')
+    axios.get(apiConfig.baseUrl+'/domaines/')
         .then(response => {
           this.setState({domaines: response.data})
         })
@@ -66,7 +66,7 @@ export default class domainesList extends Component {
   }
 
   deleteDomaine(id) {
-    axios.delete('http://localhost:5000/domaines/' + id)
+    axios.delete(apiConfig.baseUrl+'/domaines/' + id)
         .then(response => {
           console.log(response.data)
         });

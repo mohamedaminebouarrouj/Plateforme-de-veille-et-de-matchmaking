@@ -16,16 +16,9 @@
 
 */
 import React from "react";
-import {Link} from "react-router-dom";
 import axios from 'axios';
-
-
-// core components
-import Footer from "components/Footer/Footer.js";
-import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import {Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Col, Row} from 'reactstrap';
+import {Col, Row} from 'reactstrap';
 import {makeStyles} from '@material-ui/core/styles';
-
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -45,6 +38,8 @@ import {
 } from '@material-ui/core/'
 
 import {Button} from "@material-ui/core";
+import {apiConfig} from "../../config";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -271,7 +266,7 @@ export default class Secteur extends React.Component {
         this.setState({
             loggedUserSecteur: JSON.parse(localStorage.getItem('loggedUser')).secteurId
         })
-        axios.get('http://localhost:5000/secteurs/' + JSON.parse(localStorage.getItem('loggedUser')).secteurId)
+        axios.get(apiConfig.baseUrl+'/secteurs/' + JSON.parse(localStorage.getItem('loggedUser')).secteurId)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,

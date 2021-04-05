@@ -53,7 +53,7 @@ export default class LogComponent extends Component {
 
         console.log(user);
 
-        axios.post('http://localhost:5000/users/login', user)
+        axios.post(apiConfig.baseUrl+'/users/login', user)
             .then(res => {
                 if(res.data.user) {
                     localStorage.setItem('auth-token', res.data.token)

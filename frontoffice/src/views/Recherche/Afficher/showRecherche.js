@@ -31,6 +31,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import {NavLink} from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {apiConfig} from "../../../config";
 
 
 function TitlebarGridList(props) {
@@ -76,7 +77,7 @@ export default class showRecherche extends React.Component {
 
     componentDidMount() {
 
-        axios.get('http://localhost:5000/secteurs/search/' + this.props.query)
+        axios.get(apiConfig.baseUrl+'/secteurs/search/' + this.props.query)
             .then(response => {
                 this.setState({
                     challenges: response.data.challenges,
@@ -95,7 +96,7 @@ export default class showRecherche extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.query !== this.props.query) {
-            axios.get('http://localhost:5000/secteurs/search/' + this.props.query)
+            axios.get(apiConfig.baseUrl+'/secteurs/search/' + this.props.query)
                 .then(response => {
                     this.setState({
                         challenges: response.data.challenges,

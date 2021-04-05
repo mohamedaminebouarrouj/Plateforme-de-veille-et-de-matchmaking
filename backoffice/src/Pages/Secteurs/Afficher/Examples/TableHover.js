@@ -15,7 +15,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-
+import {apiConfig} from "../../../../config/config";
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -74,7 +74,7 @@ export default class secteursList extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/secteurs/')
+    axios.get(apiConfig.baseUrl+'/secteurs/')
         .then(response => {
           this.setState({secteurs: response.data})
         })
@@ -89,7 +89,7 @@ export default class secteursList extends Component {
       })
   }
   deleteSecteur(id) {
-    axios.delete('http://localhost:5000/secteurs/' + id)
+    axios.delete(apiConfig.baseUrl+'/secteurs/' + id)
         .then(response => {
           console.log(response.data)
         });

@@ -12,12 +12,24 @@ app.use(express.json());
 
 
 const uri = process.env.ATLAS_URI;
+const uri_test = process.env.ATLAS_URI_TEST;
 
-mongoose.connect(uri,{useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology: true });
-const connection = mongoose.connection;
-connection.once('open',()=>{
-    console.log("MongoDB database connection established successfully");
-});
+if (process.env.NODE_ENV !== 'test') {
+    mongoose.connect(uri,{useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology: true });
+    const connection = mongoose.connection;
+    connection.once('open',()=>{
+        console.log("MongoDB database connection established successfully");
+    });
+}
+// else {
+//     mongoose.connect(uri_test,{useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology: true });
+//     const connection = mongoose.connection;
+//     connection.once('open',()=>{
+//         console.log("MongoDB database connection established successfully");
+//     });
+// }
+
+
 
 //Route
 const secteursRouter = require('./Routes/secteurs');
@@ -38,12 +50,9 @@ app.use('/tendances',tendanceRouter);
 app.use('/revendications',revendicationRouter);
 
 
-
-
-
-//
 app.listen(port, ()=> {
     console.log(`Server is running on port: ${port}`);
-    });
+});
 
 
+module.exports = app;

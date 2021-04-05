@@ -1,4 +1,4 @@
-
+import {apiConfig} from "../../config";
 const axios = require('axios');
 
 
@@ -11,7 +11,7 @@ async function getData() {
     let axis_x = 4491.9853515625
     let axis_y = 4520.1904296875
     let edge_id = 1700
-    let p = await axios.get('http://localhost:5000/secteurs/');
+    let p = await axios.get(apiConfig.baseUrl+'/secteurs/');
     p.data.forEach(element => {
 
         //axis_x += 25

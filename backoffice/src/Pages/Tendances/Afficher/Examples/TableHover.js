@@ -23,7 +23,7 @@ import Select from "react-select";
 import styled from "styled-components";
 import UnfoldLessIcon from "@material-ui/icons/UnfoldLess";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
-
+import {apiConfig} from "../../../../config/config";
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -369,7 +369,7 @@ export default class tendancesList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/domaines/')
+        axios.get(apiConfig.baseUrl+'/domaines/')
             .then(response => {
                 this.setState({domaines: response.data})
             })
@@ -377,7 +377,7 @@ export default class tendancesList extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/challenges/', {
+        axios.get(apiConfig.baseUrl+'/challenges/', {
             headers: {
                 Authorization: localStorage.getItem('auth-token')
             }
@@ -389,14 +389,14 @@ export default class tendancesList extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/secteurs')
+        axios.get(apiConfig.baseUrl+'/secteurs')
             .then(response => {
                 this.setState({secteurs: response.data})
             })
             .catch((error) => {
                 console.log(error);
             })
-        axios.get('http://localhost:5000/tendances')
+        axios.get(apiConfig.baseUrl+'/tendances')
             .then(response => {
                 this.setState({tendances: response.data})
             })
@@ -406,7 +406,7 @@ export default class tendancesList extends Component {
     }
 
     deleteTendance(id) {
-        axios.delete('http://localhost:5000/tendances/' + id)
+        axios.delete(apiConfig.baseUrl+'/tendances/' + id)
 
         this.setState({
             tendances: this.state.tendances.filter(el => el._id !== id)
@@ -464,7 +464,7 @@ export default class tendancesList extends Component {
         e.preventDefault();
         this.state.dom.map((currentD) => {
             this.state.langages.map((currentL) => {
-                axios.get('http://localhost:5000/tendances/news_domaine/' + currentD + '/' + currentL)
+                axios.get(apiConfig.baseUrl+'/tendances/news_domaine/' + currentD + '/' + currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
@@ -514,7 +514,7 @@ export default class tendancesList extends Component {
 
         this.state.chal.map((currentD) => {
             this.state.langages.map((currentL) => {
-                axios.get('http://localhost:5000/tendances/news_challenge/' + currentD + '/' + currentL)
+                axios.get(apiConfig.baseUrl+'/tendances/news_challenge/' + currentD + '/' + currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
@@ -567,7 +567,7 @@ export default class tendancesList extends Component {
             console.log(currentD)
             this.state.langages.map((currentL) => {
                 console.log(currentL)
-                axios.get('http://localhost:5000/tendances/news_secteur/' + currentD + '/' + currentL)
+                axios.get(apiConfig.baseUrl+'/tendances/news_secteur/' + currentD + '/' + currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');

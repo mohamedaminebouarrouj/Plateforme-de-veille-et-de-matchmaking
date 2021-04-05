@@ -2,7 +2,7 @@ import React, { Component , Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import axios from 'axios';
 import Select from "react-select";
-
+import {apiConfig} from "../../../../config/config";
 import {
     Button, Form,
     FormGroup, Label,
@@ -39,7 +39,7 @@ export default class UpdateStartup extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/startups/' + this.props.id)
+        axios.get(apiConfig.baseUrl+'/startups/' + this.props.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
@@ -53,7 +53,7 @@ export default class UpdateStartup extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/domaines/')
+        axios.get(apiConfig.baseUrl+'/domaines/')
             .then(response => {
                 this.setState({dom: response.data})
             })
@@ -61,7 +61,7 @@ export default class UpdateStartup extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/challenges/')
+        axios.get(apiConfig.baseUrl+'/challenges/')
             .then(response => {
                 this.setState({chall: response.data})
             })
@@ -166,7 +166,7 @@ export default class UpdateStartup extends Component {
 
         console.log(startup);
 
-        axios.post('http://localhost:5000/startups/update/' + this.props.id, startup)
+        axios.post(apiConfig.baseUrl+'/startups/update/' + this.props.id, startup)
             .then(res => console.log(res.data));
 
         window.location.replace('#/startups/afficher');

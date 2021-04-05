@@ -4,7 +4,6 @@ var User= require('../Models/user.model');
 const auth = async(req, res, next) => {
     const token = req.header('Authorization')
     const data = jwt.verify(token, process.env.JWT_KEY)
-    console.log('middleware',data)
     let user;
     try {
         if (data.role == 1) {

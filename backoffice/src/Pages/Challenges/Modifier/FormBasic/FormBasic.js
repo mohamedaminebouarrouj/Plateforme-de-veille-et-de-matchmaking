@@ -13,7 +13,7 @@ import {
 } from 'reactstrap';
 
 import makeAnimated from "react-select/animated/dist/react-select.esm";
-
+import {apiConfig} from "../../../../config/config";
 const animatedComponents = makeAnimated();
 
 export default class UpdateChallenge extends Component {
@@ -36,7 +36,7 @@ export default class UpdateChallenge extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/challenges/findUpdate/' + this.props.id)
+        axios.get(apiConfig.baseUrl+'/challenges/findUpdate/' + this.props.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
@@ -48,7 +48,7 @@ export default class UpdateChallenge extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/secteurs/')
+        axios.get(apiConfig.baseUrl+'/secteurs/')
             .then(response => {
                 this.setState({sect: response.data})
             })
@@ -125,7 +125,7 @@ export default class UpdateChallenge extends Component {
         }
 
 
-        axios.post('http://localhost:5000/challenges/update/' + this.props.id, challenge)
+        axios.post(apiConfig.baseUrl+'/challenges/update/' + this.props.id, challenge)
             .then(res => {
                 console.log(res.data)
                 window.location.replace('#/challenges/afficher');

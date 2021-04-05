@@ -24,11 +24,6 @@ import axios from 'axios';
 import Footer from "components/Footer/Footer.js";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import {
-    Container,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
     Row,
     Col,
     CardBody,
@@ -51,6 +46,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import classnames from "classnames";
 import {Scrollbars} from "react-custom-scrollbars";
 import HoverCard from "../../components/Hover Card/hoverCard";
+import {apiConfig} from "../../config";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -250,7 +246,7 @@ export default class StartupsPage extends React.Component {
     componentDidMount() {
         document.body.classList.toggle("landing-page");
 
-        axios.get('http://localhost:5000/startups/')
+        axios.get(apiConfig.baseUrl+'/startups/')
             .then(r => {
                 this.setState({
                     numStartups:r.data.length,
@@ -259,7 +255,7 @@ export default class StartupsPage extends React.Component {
                 })
             })
 
-        axios.post('http://localhost:5000/startups/find', {
+        axios.post(apiConfig.baseUrl+'/startups/find', {
             pagination: 12,
             page: this.state.page
         })
@@ -276,7 +272,7 @@ export default class StartupsPage extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.page !== this.state.page) {
-            axios.post('http://localhost:5000/startups/find', {
+            axios.post(apiConfig.baseUrl+'/startups/find', {
                 pagination: 12,
                 page: this.state.page
             })

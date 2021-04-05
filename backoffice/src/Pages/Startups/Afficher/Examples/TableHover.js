@@ -23,7 +23,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import {apiConfig} from "../../../../config/config";
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -151,7 +151,7 @@ export default class startupsList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/startups/')
+        axios.get(apiConfig.baseUrl+'/startups/')
             .then(response => {
                 this.setState({startups: response.data})
             })
@@ -163,7 +163,7 @@ export default class startupsList extends Component {
     }
 
     deleteStartup(id) {
-        axios.delete('http://localhost:5000/startups/' + id)
+        axios.delete(apiConfig.baseUrl+'/startups/' + id)
             .then(response => {
                 console.log(response.data)
             });
@@ -181,7 +181,7 @@ export default class startupsList extends Component {
 
     ajouterButton() {
         this.setState({loading: true}, () => {
-            axios.get('http://localhost:5000/startups/scraping/')
+            axios.get(apiConfig.baseUrl+'/startups/scraping/')
                 .then(res => {
                     console.log(res.data)
                     window.location.replace('#/startups/afficher');

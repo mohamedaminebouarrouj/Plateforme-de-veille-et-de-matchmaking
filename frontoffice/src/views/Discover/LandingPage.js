@@ -50,6 +50,7 @@ import Particles from "react-particles-js";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import classnames from "classnames";
 import {Scrollbars} from "react-custom-scrollbars";
+import {apiConfig} from "../../config";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -244,7 +245,6 @@ export default class LandingPage extends React.Component {
         this.state = {
             selected: 'Secteurs',
             secteurs: [],
-            domaines: [],
             challenges: [],
             startups: [],
             startupsAff: [],
@@ -255,7 +255,7 @@ export default class LandingPage extends React.Component {
     componentDidMount() {
         document.body.classList.toggle("landing-page");
 
-        axios.get('http://localhost:5000/secteurs/')
+        axios.get(apiConfig.baseUrl+'/secteurs/')
             .then(response => {
                 this.setState({secteurs: response.data})
             })
@@ -263,15 +263,7 @@ export default class LandingPage extends React.Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/domaines/')
-            .then(response => {
-                this.setState({domaines: response.data})
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
-        axios.get('http://localhost:5000/challenges/')
+        axios.get(apiConfig.baseUrl+'/challenges/')
             .then(response => {
                 this.setState({challenges: response.data})
             })
@@ -279,7 +271,7 @@ export default class LandingPage extends React.Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/startups/')
+        axios.get(apiConfig.baseUrl+'/startups/')
             .then(response => {
                 this.setState({
                     startups: response.data,

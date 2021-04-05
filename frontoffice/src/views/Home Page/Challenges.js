@@ -44,6 +44,7 @@ import {
 
 import HoverCard from "../../components/Hover Card/hoverCard";
 import styled from "@emotion/styled/macro";
+import {apiConfig} from "../../config";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -272,7 +273,7 @@ export default class Challenges extends React.Component {
 
     componentDidMount() {
         document.body.classList.toggle("landing-page");
-        axios.get('http://localhost:5000/challenges/')
+        axios.get(apiConfig.baseUrl+'/challenges/')
             .then(response => {
                 this.setState({challenges: response.data})
             })

@@ -10,7 +10,7 @@ import {
     Card, CardBody,
     CardTitle, CustomInput,
 } from 'reactstrap';
-
+import {apiConfig} from "../../../../config/config";
 export default class UpdateSecteur extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +28,7 @@ export default class UpdateSecteur extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/secteurs/' + this.props.id)
+        axios.get(apiConfig.baseUrl+'/secteurs/' + this.props.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
@@ -68,7 +68,7 @@ export default class UpdateSecteur extends Component {
             categorie: this.state.categorie
         }
 
-        axios.post('http://localhost:5000/secteurs/update/' + this.props.id, secteur)
+        axios.post(apiConfig.baseUrl+'/secteurs/update/' + this.props.id, secteur)
             .then(res => {
                 console.log(res.data)
                 window.location.replace('#/secteurs/afficher');

@@ -10,7 +10,7 @@ import {
     Card, CardBody,
     CardTitle, CustomInput,
 } from 'reactstrap';
-
+import {apiConfig} from "../../../../config/config";
 export default class CreateSecteur extends Component {
     constructor(props) {
         super(props);
@@ -47,7 +47,7 @@ export default class CreateSecteur extends Component {
         }
 
 
-        axios.post('http://localhost:5000/secteurs/add', secteur)
+        axios.post(apiConfig.baseUrl+'/secteurs/add', secteur)
             .then(res => {
                 console.log(res.data)
                 window.location.replace('#/secteurs/afficher')});

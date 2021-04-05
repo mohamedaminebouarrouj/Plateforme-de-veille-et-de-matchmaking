@@ -14,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import {apiConfig} from "../../../../config/config";
 
 const useRowStyles = makeStyles({
     root: {
@@ -112,7 +113,7 @@ export default class challengesList extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/challenges/')
+    axios.get(apiConfig.baseUrl+'/challenges/')
         .then(response => {
           this.setState({challenges: response.data})
         })
@@ -122,7 +123,7 @@ export default class challengesList extends Component {
   }
 
   deleteChallenge(id) {
-    axios.delete('http://localhost:5000/challenges/' + id)
+    axios.delete(apiConfig.baseUrl+'/challenges/' + id)
         .then(response => {
           console.log(response.data)
         });

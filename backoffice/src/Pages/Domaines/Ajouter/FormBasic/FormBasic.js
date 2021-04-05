@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-
+import {apiConfig} from "../../../../config/config";
 import {
     Button, Form,
     FormGroup, Label,
@@ -38,7 +38,7 @@ export default class CreateSecteur extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/secteurs/')
+        axios.get(apiConfig.baseUrl+'/secteurs/')
             .then(response => {
                 this.setState({sect: response.data})
             })
@@ -115,7 +115,7 @@ export default class CreateSecteur extends Component {
 
         console.log(domaine);
 
-        axios.post('http://localhost:5000/domaines/add', domaine)
+        axios.post(apiConfig.baseUrl+'/domaines/add', domaine)
             .then(res => console.log(res.data));
 
         window.location.replace('#/domaines/afficher');

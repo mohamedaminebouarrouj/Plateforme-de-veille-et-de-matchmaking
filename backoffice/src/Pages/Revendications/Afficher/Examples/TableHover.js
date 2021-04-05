@@ -7,7 +7,7 @@ import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
+import {apiConfig} from "../../../../config/config";
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -53,7 +53,7 @@ export default class domainesList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/revendications/')
+        axios.get(apiConfig.baseUrl+'/revendications/')
             .then(response => {
                 this.setState({revendications: response.data})
             })
@@ -63,7 +63,7 @@ export default class domainesList extends Component {
     }
 
     deleteRevendication(id) {
-        axios.delete('http://localhost:5000/revendications/' + id)
+        axios.delete(apiConfig.baseUrl+'/revendications/' + id)
             .then(response => {
                 console.log(response.data)
             });

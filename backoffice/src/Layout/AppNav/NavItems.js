@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import axios from "axios";
+import {apiConfig} from "../../config/config";
 
 
 export class Notification extends Component {
@@ -13,7 +14,7 @@ export class Notification extends Component {
 
 
     componentDidMount() {
-        axios.get('http://localhost:5000/revendications/')
+        axios.get(apiConfig.baseUrl+'/revendications/')
             .then(response => {
                 this.setState({
                     revendication:response.data

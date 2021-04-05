@@ -144,7 +144,7 @@ exports.domaine_add_picture = async (req, res) => {
                             .then(toJson)
                             .then(json => {
                                 var img = ''
-                                if (json.results[0].urls.regular)
+                                if (json.results[0])
                                     img = json.results[0].urls.regular
 
                                 Domaines.findByIdAndUpdate(currentDomaine._id,

@@ -12,6 +12,7 @@ import Select from "react-select";
 import Carousel from 'react-grid-carousel';
 import styled from "@emotion/styled/macro";
 import TendanceGridList from "../../../components/Tendance Card/TendanceGridList";
+import {apiConfig} from "../../../config";
 
 const DisplayOver = styled.div({
     height: "100%",
@@ -201,7 +202,7 @@ export default class ShowChallenge extends Component {
                 loggedUserRole: JSON.parse(localStorage.getItem('loggedUser')).role
             })
         }
-        axios.get('http://localhost:5000/challenges/' + this.props.match.params.id)
+        axios.get(apiConfig.baseUrl+'/challenges/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,

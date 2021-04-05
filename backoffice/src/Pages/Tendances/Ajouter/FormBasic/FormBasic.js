@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/animated';
 import axios from "axios";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 const animatedComponents = makeAnimated();
-
+import {apiConfig} from "../../../../config/config";
 const options = [
     { value: 'fr', label: 'Français' },
     { value: 'en', label: 'English' },
@@ -36,7 +36,7 @@ export default class tendanceAjouter extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/domaines/')
+        axios.get(apiConfig.baseUrl+'/domaines/')
             .then(response => {
                 this.setState({dom: response.data})
             })
@@ -103,7 +103,7 @@ export default class tendanceAjouter extends Component {
 
         this.state.domaines.map((currentD)=>{
             this.state.langages.map((currentL)=>{
-                axios.get('http://localhost:5000/tendances/news_domaine/'+currentD+'/'+currentL)
+                axios.get(apiConfig.baseUrl+'/tendances/news_domaine/'+currentD+'/'+currentL)
                     .then(res => console.log(res.data));
             })
         })

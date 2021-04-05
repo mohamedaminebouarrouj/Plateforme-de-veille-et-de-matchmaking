@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import axios from 'axios';
-
+import {apiConfig} from "../../../../config/config";
 import {
     Button, Form,
     FormGroup, Label,
@@ -35,7 +35,7 @@ export default class UpdateDomaine extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/domaines/findUpdate/' + this.props.id)
+        axios.get(apiConfig.baseUrl+'/domaines/findUpdate/' + this.props.id)
             .then(response => {
                 this.setState({
                     nom: response.data.nom,
@@ -48,7 +48,7 @@ export default class UpdateDomaine extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:5000/secteurs/')
+        axios.get(apiConfig.baseUrl+'/secteurs/')
             .then(response => {
                 this.setState({sect: response.data})
             })
@@ -137,7 +137,7 @@ export default class UpdateDomaine extends Component {
             secteursId: this.state.secteurs
         }
 
-        axios.post('http://localhost:5000/domaines/update/' + this.props.id, domaine)
+        axios.post(apiConfig.baseUrl+'/domaines/update/' + this.props.id, domaine)
             .then(res => {
                 console.log(res)
                 window.location.replace('#/domaines/afficher');

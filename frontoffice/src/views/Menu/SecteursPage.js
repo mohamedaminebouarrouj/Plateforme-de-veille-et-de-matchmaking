@@ -51,6 +51,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import classnames from "classnames";
 import {Scrollbars} from "react-custom-scrollbars";
 import HoverCard from "../../components/Hover Card/hoverCard";
+import {apiConfig} from "../../config";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -238,7 +239,7 @@ export default class SecteursPage extends React.Component {
     componentDidMount() {
         document.body.classList.toggle("landing-page");
 
-        axios.get('http://localhost:5000/secteurs/')
+        axios.get(apiConfig.baseUrl+'/secteurs/')
             .then(response => {
                 this.setState({secteurs: response.data})
             })

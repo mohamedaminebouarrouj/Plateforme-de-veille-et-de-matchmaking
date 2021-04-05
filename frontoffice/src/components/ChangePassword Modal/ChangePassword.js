@@ -3,6 +3,7 @@ import {Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupT
 import GoogleBtn from "../GoogleBtn";
 import classnames from "classnames";
 import axios from "axios";
+import {apiConfig} from "../../config";
 
 export default class ChangePassword extends React.Component {
     constructor(props) {
@@ -53,7 +54,7 @@ export default class ChangePassword extends React.Component {
             password: this.state.password,
             newPassword: this.state.newPassword
         }
-        axios.post('http://localhost:5000/users/changePass', user)
+        axios.post(apiConfig.baseUrl+'/users/changePass', user)
             .then(res => {
                 if (res) {
                     return (

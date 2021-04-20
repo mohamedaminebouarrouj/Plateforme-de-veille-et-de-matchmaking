@@ -174,7 +174,10 @@ def scrap_startups_act():
                 logo.append('default.png')
 
         for n in s.find_all('th',scope=""):
-            date_creation.append(re.sub('[^0-9,-]', "",changeDate(n.get_text())))
+            if(n.get_text()):
+                date_creation.append(re.sub('[^0-9,-]', "",changeDate(n.get_text())))
+            else:
+                date_creation.append(date_creation[-1])
             domainesId.append([])
             challengesId.append([])
             pays.append('Tunisie')

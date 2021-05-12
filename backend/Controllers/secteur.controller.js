@@ -21,9 +21,9 @@ exports.secteur_create_post = async (req, res) => {
     const nom = req.body.nom;
     const description = req.body.description;
     var img = ''
-    translate(nom, {to: 'en'})
-        .then(r => {
-            unsplash.search.photos(r.text, 1, 10, {orientation: "landscape"})
+    // translate(nom, {to: 'en'})
+    //     .then(r => {
+            unsplash.search.photos(nom, 1, 10, {orientation: "landscape"})
                 .then(toJson)
                 .then(json => {
                     var img = ''
@@ -41,7 +41,7 @@ exports.secteur_create_post = async (req, res) => {
                             res.json(newSecteur._id))
                         .catch(err => res.status(400).json('Error: ' + err))
                 })
-        })
+        // })
 
 
 };
@@ -113,7 +113,7 @@ exports.secteur_delete = function (req, res) {
 
 exports.img = async (req, res) => {
     let url = ""
-    unsplash.search.photos('Artificial Intelligence', 1, 10, {orientation: "landscape"})
+    unsplash.search.photos('Agricultural technology', 1, 10, {orientation: "landscape"})
         .then(toJson)
         .then(json => {
                 res.json(json)
@@ -143,12 +143,6 @@ exports.search = async (req, res) => {
     });
     Startups.find({'nom': new RegExp("^"+req.params.nom, 'i')}, function (err, docs) {
         Object.assign(result,{"startups":docs})
-    });
-    Domaines.find({'nom': new RegExp("^"+req.params.nom, 'i')}, function (err, docs) {
-        Object.assign(result,{"domaines":docs})
-    });
-    Secteurs.find({'nom': new RegExp("^"+req.params.nom, 'i')}, function (err, docs) {
-        Object.assign(result,{"secteurs":docs})
         res.json(result)
     });
 }

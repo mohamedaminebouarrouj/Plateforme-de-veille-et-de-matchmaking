@@ -11,18 +11,34 @@ import {
     CardTitle, CustomInput,
 } from 'reactstrap';
 import {apiConfig} from "../../../../config/config";
-export default class CreateSecteur extends Component {
+export default class UpdateUtilisteur extends Component {
     constructor(props) {
         super(props);
 
         this.onChangeNom = this.onChangeNom.bind(this);
-        this.onChangeDescription = this.onChangeDescription.bind(this);
+        this.onChangePrenom = this.onChangePrenom.bind(this);
+        this.onChangeOrganisation = this.onChangeOrganisation.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             nom: '',
-            description: ''
+            prenom: '',
+            organisation: '',
         }
+    }
+
+    componentDidMount() {
+        axios.get(apiConfig.baseUrl+'/users/' + this.props.id)
+            .then(response => {
+                this.setState({
+                    nom: response.data.nom,
+                    prenom:response.data.prenom,
+                    organisation:response.data.organisation
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
     }
 
     onChangeNom(e) {
@@ -31,26 +47,32 @@ export default class CreateSecteur extends Component {
         })
     }
 
-    onChangeDescription(e) {
+    onChangePrenom(e) {
         this.setState({
-            description: e.target.value
+            prenom: e.target.value
         })
     }
 
+    onChangeOrganisation(e) {
+        this.setState({
+            organisation: e.target.value
+        })
+    }
 
     onSubmit(e) {
         e.preventDefault();
 
-        const secteur = {
+        const user = {
             nom: this.state.nom,
-            description: this.state.description
+            prenom: this.state.prenom,
+            organisation: this.state.organisation
         }
 
-
-        axios.post(apiConfig.baseUrl+'/secteurs/add', secteur)
+        axios.post(apiConfig.baseUrl+'/users/admin/update/' + this.props.id, user)
             .then(res => {
-                window.location.replace('#/secteurs/afficher')});
-
+                console.log(res.data)
+                window.location.replace('#/utilisateurs/afficher');
+                window.location.reload(false);});
 
     }
 
@@ -69,7 +91,7 @@ export default class CreateSecteur extends Component {
                             <Col>
                                 <Card className="main-card mb-3">
                                     <CardBody>
-                                        <CardTitle>Ajouter Secteur</CardTitle>
+                                        <CardTitle>Modifier Secteur</CardTitle>
                                         <Form onSubmit={this.onSubmit}>
                                             <FormGroup>
                                                 <Label for="Nom"><b>Nom</b></Label>
@@ -80,11 +102,19 @@ export default class CreateSecteur extends Component {
                                             </FormGroup>
 
                                             <FormGroup>
-                                                <Label for="exampleText"><b>Description</b></Label>
-                                                <Input type="textarea" name="description" id="description"
+                                                <Label for="Nom"><b>Prénom</b></Label>
+                                                <Input type="text" name="prenom" id="prenom"
                                                        required
-                                                       value={this.state.description}
-                                                       onChange={this.onChangeDescription}/>
+                                                       value={this.state.prenom}
+                                                       onChange={this.onChangePrenom}/>
+                                            </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="Nom"><b>Organisation</b></Label>
+                                                <Input type="text" name="organisation" id="organisation"
+                                                       required
+                                                       value={this.state.organisation}
+                                                       onChange={this.onChangeOrganisation}/>
                                             </FormGroup>
 
                                             <Button color="primary" className="mt-1" type="submit">Submit</Button>

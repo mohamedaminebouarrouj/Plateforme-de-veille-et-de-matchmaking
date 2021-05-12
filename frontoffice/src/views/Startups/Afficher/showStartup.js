@@ -4,13 +4,12 @@ import IndexNavbar from "../../../components/Navbars/IndexNavbar";
 import Footer from "../../../components/Footer/Footer";
 
 import {
-    Button, Card, CardBody,
-    Col, Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Modal, Nav, NavItem, NavLink,
-    Row, TabContent, TabPane, Label, Input
+    Button,
+    Col, Form, FormGroup, InputGroup, Modal,
+    Row
 } from "reactstrap";
 import TextField from '@material-ui/core/TextField';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import {DialogContentText} from "@material-ui/core";
 import Particles from "react-particles-js";
 import {apiConfig} from "../../../config";
 
@@ -75,7 +74,7 @@ export default class ShowStartup extends Component {
             })
 
             JSON.parse(localStorage.getItem("loggedUser")).revendicationsId.map(r => {
-                if (r.startupId === this.props.match.params.id) {
+                if (r.startupId._id === this.props.match.params.id) {
                     if (r.verified === true) {
                         this.setState({
                             verifiedStartup: true,
@@ -376,7 +375,7 @@ export default class ShowStartup extends Component {
                             <Col style={{left: '65px'}}>
                                 <Row>
                                     <Col style={{left: '-50px'}}>
-                                        <img
+                                        <img alt=""
                                             style={{
                                                 height: '120px', position: 'absolute', left: '50%', top: '50%',
                                                 transform: 'translate(-50%, -50%)',backgroundColor:'rgb(255,255,255,0.5)'
@@ -398,7 +397,7 @@ export default class ShowStartup extends Component {
                                         {/*    <a> Ajouter au favoris</a>*/}
                                         {/*</Button>*/}
 
-                                        {localStorage.getItem('auth-token') !== "" ? this.state.loggedUserRole !== "Startup" ?
+                                        {localStorage.getItem('auth-token') !== null ? this.state.loggedUserRole !== "Startup" ?
                                             <div><br/><br/></div> :
                                             (this.state.userStartup ? (this.state.verifiedStartup ?
                                                 <Button className="btn btn-simple btn-round" color="primary"

@@ -4,9 +4,9 @@ import IndexNavbar from "../../../components/Navbars/IndexNavbar";
 import Footer from "../../../components/Footer/Footer";
 
 import {
-    Button, CardBody,
-    Col, Nav, NavItem, NavLink,
-    Row, TabContent, TabPane,
+    Button,
+    Col,
+    Row,
 } from "reactstrap";
 import Select from "react-select";
 import Carousel from 'react-grid-carousel';
@@ -82,7 +82,7 @@ function ShowStartup(props) {
                                 height: "300px",
                                 cursor: "pointer",
                             }}>
-                                <img
+                                <img alt=""
                                     style={{
                                         height: '120px', position: 'absolute', left: '50%', top: '50%',
                                         transform: 'translate(-50%, -50%)'
@@ -197,7 +197,7 @@ export default class ShowChallenge extends Component {
 
     componentDidMount() {
         document.body.classList.toggle("landing-page");
-        if (localStorage.getItem('auth-token') !== "") {
+        if (localStorage.getItem('auth-token')!==null) {
             this.setState({
                 loggedUserRole: JSON.parse(localStorage.getItem('loggedUser')).role
             })
@@ -308,6 +308,7 @@ export default class ShowChallenge extends Component {
     }
 
     showStartups() {
+        console.log(this.state.startups)
         return (
             <ShowStartup startup={this.state.startupsAff}/>)
 

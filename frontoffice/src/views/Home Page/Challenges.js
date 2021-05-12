@@ -21,14 +21,8 @@ import axios from 'axios';
 
 
 // core components
-import {Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Row, Col} from 'reactstrap';
+import { Row, Col} from 'reactstrap';
 import {makeStyles} from '@material-ui/core/styles';
-
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import {NavLink} from "react-router-dom";
-import {Button} from "@material-ui/core";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
@@ -36,13 +30,10 @@ import {
     Card,
     CardContent,
     Typography,
-    CardHeader,
     CardActions,
-    CardActionArea,
     CardMedia,
 } from '@material-ui/core/'
 
-import HoverCard from "../../components/Hover Card/hoverCard";
 import styled from "@emotion/styled/macro";
 import {apiConfig} from "../../config";
 
@@ -171,6 +162,7 @@ function HoverCardLocal(props) {
     );
 }
 
+/*
 function TitlebarGridList2(props) {
     const classes = useStyles();
     return (
@@ -215,7 +207,9 @@ function TitlebarGridList2(props) {
         </>
     )
 }
+*/
 
+/*
 function TitlebarGridList(props) {
     const classes = useStyles();
     return (
@@ -243,6 +237,7 @@ function TitlebarGridList(props) {
         </>
     );
 }
+*/
 
 function compare(a, b) {
     // Use toUpperCase() to ignore character casing

@@ -17,12 +17,11 @@ const AffichageTable = (props) => {
                 heading="Startups"
                 icon="pe-7s-star icon-gradient bg-happy-itmeo"
             />
-            <Row>
-                <Col>
-                    <SearchBox/>
-                </Col>
-            </Row>
-            <br/>
+            {/*<Row>*/}
+            {/*    <Col>*/}
+            {/*        <SearchBox sel="startup"/>*/}
+            {/*    </Col>*/}
+            {/*</Row>*/}
             <ReactCSSTransitionGroup
                 component="div"
                 transitionName="TabsAnimation"

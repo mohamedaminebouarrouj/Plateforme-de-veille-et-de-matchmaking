@@ -116,7 +116,7 @@ def scrap_startups_act():
             if(i==2):
                 domaines.append(n.get_text(separator=" ").strip()
                                 .replace('Industrie Robotique','Robotique')
-
+                                .replace('FoodTech & New Food','Foodtech & new food')
                                 .replace('HealthTech',"Health tech")
                                 .replace('Healthtech',"Health tech")
                                 .replace('Santé',"Health tech")
@@ -210,8 +210,8 @@ def create_domaines(data):
     img=[]
     __v=[]
     nom=[]
-    client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-    db = client['<dbname>']
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['dbInnoseer']
     colDomaines=db.domaines
     temp=[]
 
@@ -247,8 +247,8 @@ def create_challenges(data):
     __v=[]
     nom=[]
     dic=create_dict_categorieChall()
-    client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-    db = client['<dbname>']
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['dbInnoseer']
     colChallenges=db.challenges
     temp=[]
 
@@ -275,8 +275,8 @@ def create_challenges(data):
 
 if __name__ == "__main__":
     ####Connection to DB
-    client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-    db = client['<dbname>']
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['dbInnoseer']
     colDomaines=db.domaines
     colStartups=db.startups
     colChallenges=db.challenges

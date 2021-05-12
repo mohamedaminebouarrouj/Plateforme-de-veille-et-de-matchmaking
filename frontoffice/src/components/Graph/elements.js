@@ -11,7 +11,7 @@ async function getData() {
     let axis_x = 4491.9853515625
     let axis_y = 4520.1904296875
     let edge_id = 1700
-    let p = await axios.get(apiConfig.baseUrl+'/secteurs/');
+    const p = await axios.get(apiConfig.baseUrl+'/secteurs/');
     p.data.forEach(element => {
 
         //axis_x += 25
@@ -23,7 +23,7 @@ async function getData() {
                 NodeType: "secteur",
                 name: element.nom,
                 shared_name: element.nom,
-                img:element.img,
+                img:element.img?element.img:null,
             },position: {
                 x: axis_x,
                 y: axis_y
@@ -48,7 +48,7 @@ async function getData() {
                         NodeType: "challenge",
                         name: item.nom,
                         shared_name: item.nom,
-                        img:item.img,
+                        img:item.img?item.img:null,
 
                     },position: {
                         x: axis_x,
@@ -111,6 +111,7 @@ async function getData() {
         // zero width space after dashes to allow for line breaking
         data.name = data.name.replace(/[-]/g, '-\u200B');
     });
+
 
     return data
 }

@@ -21,16 +21,8 @@ import React from "react";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import PageHeader from "components/PageHeader/PageHeader.js";
 import Footer from "components/Footer/Footer.js";
-import Basics from "../IndexSections/Basics";
-import NucleoIcons from "../IndexSections/NucleoIcons";
-import JavaScript from "../IndexSections/JavaScript";
-import Particles from "react-particles-js";
-import LandingPage from "../Discover/LandingPage";
 import Challenges from "./Challenges";
 import Secteur from "./Secteur";
-
-import PaginationSection from "../IndexSections/Pagination";
-import Navbars from "../IndexSections/Navbars";
 
 class Index extends React.Component {
     componentDidMount() {
@@ -51,8 +43,7 @@ class Index extends React.Component {
                     <div className="main" id="main">
 
                         <PageHeader/>
-
-                        {localStorage.getItem('auth-token') !== "" ? (JSON.parse(localStorage.getItem("loggedUser")).role === "Corporate" ?
+                        {localStorage.getItem('auth-token') !==null ? (JSON.parse(localStorage.getItem("loggedUser")).role === "Corporate" ?
                             <Secteur history={this.props.history}/> :
                             <Challenges/>) :
                             <Challenges/>}

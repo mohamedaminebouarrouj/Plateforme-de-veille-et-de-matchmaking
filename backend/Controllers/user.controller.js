@@ -7,6 +7,7 @@ exports.getConnectedUser = async (req, res) => {
         let user = await User.findOne({_id: req.user._id}).populate({
             path: 'revendicationsId',
             model: 'Revendication',
+            populate: {path: 'startupId', model: 'Startup'}
 
         })
         if (user) {
@@ -126,6 +127,26 @@ exports.user_update_post = function (req, res) {
             if (user.role === "Corporate") {
                 user.secteurId = req.body.secteurId
             }
+
+            user.save()
+                .then(() => res.json('User updated!'))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+}
+
+exports.user_find = function (req, res) {
+    User.findById(req.params.id)
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json('Error: ' + err));
+}
+
+exports.admin_update_post = function (req,res){
+    User.findById(req.params.id)
+        .then(user => {
+            user.nom = req.body.nom;
+            user.prenom = req.body.prenom;
+            user.organisation = req.body.organisation;
 
             user.save()
                 .then(() => res.json('User updated!'))

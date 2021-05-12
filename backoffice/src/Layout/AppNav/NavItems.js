@@ -35,7 +35,7 @@ export class Notification extends Component {
     render() {
         return(
                 <a>
-                    Revendications {this.state.notif>0?<div className="ml-auto badge badge-pill badge-info">{this.state.notif}</div>:<div></div>}
+                    {this.props.sel} {this.state.notif>0?<div className="ml-auto badge badge-pill badge-info">{this.state.notif}</div>:<div></div>}
                 </a>
         )}
 }
@@ -115,14 +115,14 @@ export const MainNav = [
     },
     {
         icon: 'pe-7s-users',
-        label: 'Utilisateurs',
+        label: <Notification sel="Utilisateurs"/>,
         content: [
             {
                 label: 'Afficher les Utilisateurs',
                 to:'#/utilisateurs/afficher'
             },
             {
-                label: <Notification/>,
+                label: <Notification sel="Revendications"/>,
                 to:'#/revendications/afficher'
             },
 

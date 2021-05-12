@@ -24,6 +24,7 @@ import styled from "styled-components";
 import UnfoldLessIcon from "@material-ui/icons/UnfoldLess";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
 import {apiConfig} from "../../../../config/config";
+
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -32,7 +33,8 @@ const useRowStyles = makeStyles({
     },
 });
 
-function compare(a, b) {
+
+function compare_date(a, b) {
     // Use toUpperCase() to ignore character casing
     const bandA = a.datePublication;
     const bandB = b.datePublication;
@@ -42,7 +44,46 @@ function compare(a, b) {
     } else if (bandA < bandB) {
         comparison = -1;
     }
-    return comparison*-1;
+    return -comparison;
+}
+
+function compare_date2(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.datePublication;
+    const bandB = b.datePublication;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+function compare_Language(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.langage;
+    const bandB = b.langage;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+function compare_Language2(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.langage;
+    const bandB = b.langage;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return -comparison;
 }
 
 function Row(props) {
@@ -73,14 +114,39 @@ function Row(props) {
                                         <TableCell><b>Resumé</b></TableCell>
                                         <TableCell>
                                             <b>Date de publication</b>
-                                            <IconButton aria-label="expand row" size="small">
-                                                {false ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
+                                            {/*{props.sel === "Secteur" ? <IconButton aria-label="expand row" size="small"*/}
+                                            {/*                                       onClick={props.onOrderDateSecteur}>*/}
+                                            {/*    {props.ordredDateSecteur ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}*/}
+                                            {/*</IconButton> : props.sel === "Challenge" ?*/}
+                                            {/*    <IconButton aria-label="expand row" size="small"*/}
+                                            {/*                onClick={props.onOrderDateChallenge}>*/}
+                                            {/*        {props.ordredDateChallenge ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}*/}
+                                            {/*    </IconButton> : <div/>}*/}
+
+                                            <IconButton aria-label="expand row" size="small"
+                                                        onClick={() => {
+                                                            props.onOrderDate()
+                                                            if (props.orderedDate) {
+                                                                props.listT.sort(compare_date2)
+                                                            } else {
+                                                                props.listT.sort(compare_date)
+                                                            }
+                                                        }}>
+                                                {props.orderedDate ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
                                             </IconButton>
                                         </TableCell>
                                         <TableCell>
                                             <b>Langue</b>
-                                            <IconButton aria-label="expand row" size="small">
-                                                {false ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
+                                            <IconButton aria-label="expand row" size="small"
+                                                        onClick={() => {
+                                                            props.onOrderLanguage()
+                                                            if (props.orderedLanguage) {
+                                                                props.listT.sort(compare_Language2)
+                                                            } else {
+                                                                props.listT.sort(compare_Language)
+                                                            }
+                                                        }}>
+                                                {props.orderedLanguage ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
                                             </IconButton>
                                         </TableCell>
                                         <TableCell><b>Modifier</b></TableCell>
@@ -340,6 +406,16 @@ export default class tendancesList extends Component {
 
         this.deleteTendance = this.deleteTendance.bind(this)
 
+        this.onOrderLanguageSecteur = this.onOrderLanguageSecteur.bind(this)
+        this.onOrderDateSecteur = this.onOrderDateSecteur.bind(this)
+
+        this.onOrderLanguageChallenge = this.onOrderLanguageChallenge.bind(this)
+        this.onOrderDateChallenge = this.onOrderDateChallenge.bind(this)
+
+        this.onOrderLanguageDomaine = this.onOrderLanguageDomaine.bind(this)
+        this.onOrderDateDomaine = this.onOrderDateDomaine.bind(this)
+
+
         this.showDomaine = this.showDomaine.bind(this)
         this.showChallenge = this.showChallenge.bind(this)
         this.showSecteur = this.showSecteur.bind(this)
@@ -364,12 +440,18 @@ export default class tendancesList extends Component {
             secteurs: [],
             sect: [],
             tendances: [],
-            langages: []
+            langages: [],
+            ordredDateSecteur: false,
+            ordredLanguageSecteur: false,
+            ordredDateChallenge: false,
+            ordredLanguageChallenge: false,
+            ordredDateDomaine: false,
+            ordredLanguageDomaine: false,
         };
     }
 
     componentDidMount() {
-        axios.get(apiConfig.baseUrl+'/domaines/')
+        axios.get(apiConfig.baseUrl + '/domaines/')
             .then(response => {
                 this.setState({domaines: response.data})
             })
@@ -377,7 +459,7 @@ export default class tendancesList extends Component {
                 console.log(error);
             })
 
-        axios.get(apiConfig.baseUrl+'/challenges/', {
+        axios.get(apiConfig.baseUrl + '/challenges/', {
             headers: {
                 Authorization: localStorage.getItem('auth-token')
             }
@@ -389,14 +471,14 @@ export default class tendancesList extends Component {
                 console.log(error);
             })
 
-        axios.get(apiConfig.baseUrl+'/secteurs')
+        axios.get(apiConfig.baseUrl + '/secteurs')
             .then(response => {
                 this.setState({secteurs: response.data})
             })
             .catch((error) => {
                 console.log(error);
             })
-        axios.get(apiConfig.baseUrl+'/tendances')
+        axios.get(apiConfig.baseUrl + '/tendances')
             .then(response => {
                 this.setState({tendances: response.data})
             })
@@ -406,7 +488,7 @@ export default class tendancesList extends Component {
     }
 
     deleteTendance(id) {
-        axios.delete(apiConfig.baseUrl+'/tendances/' + id)
+        axios.delete(apiConfig.baseUrl + '/tendances/' + id)
 
         this.setState({
             tendances: this.state.tendances.filter(el => el._id !== id)
@@ -415,21 +497,77 @@ export default class tendancesList extends Component {
 
     }
 
+    onOrderDateSecteur() {
+        this.setState({
+                ordredDateSecteur: !this.state.ordredDateSecteur
+            }
+        )
+    }
+
+    onOrderLanguageSecteur() {
+        this.setState({
+                ordredLanguageSecteur: !this.state.ordredLanguageSecteur
+            }
+        )
+
+    }
+
+    onOrderDateChallenge() {
+        this.setState({
+                ordredDateChallenge: !this.state.ordredDateChallenge
+            }
+        )
+
+    }
+
+    onOrderLanguageChallenge() {
+        this.setState({
+                ordredLanguageChallenge: !this.state.ordredLanguageChallenge
+            }
+        )
+    }
+
+    onOrderDateDomaine() {
+        this.setState({
+                ordredDateDomaine: !this.state.ordredDateDomaine
+            }
+        )
+    }
+
+    onOrderLanguageDomaine() {
+        this.setState({
+                ordredLanguageDomaine: !this.state.ordredLanguageDomaine
+            }
+        )
+    }
+
     domaineList() {
         return this.state.domaines.map(currentDomaine => {
-            return <Row val={currentDomaine} listT={currentDomaine.tendancesId.sort(compare)} deleteTendance={this.deleteTendance} key={currentDomaine._id}/>;
+            return <Row sel="Domaine" onOrderDate={this.onOrderDateDomaine} orderedDate={this.state.ordredDateDomaine}
+                        onOrderLanguage={this.onOrderLanguageDomaine}
+                        orderedLanguage={this.state.ordredLanguageDomaine} val={currentDomaine}
+                        listT={currentDomaine.tendancesId} deleteTendance={this.deleteTendance}
+                        key={currentDomaine._id}/>;
         })
     }
 
     challengeList() {
         return this.state.challenges.map(currentChallenge => {
-            return <Row val={currentChallenge} listT={currentChallenge.tendancesId.sort(compare)} deleteTendance={this.deleteTendance} key={currentChallenge._id}/>;
+            return <Row sel="Challenge" onOrderDate={this.onOrderDateChallenge}
+                        orderedDate={this.state.ordredDateChallenge} onOrderLanguage={this.onOrderLanguageChallenge}
+                        orderedLanguage={this.state.ordredLanguageChallenge} val={currentChallenge}
+                        listT={currentChallenge.tendancesId} deleteTendance={this.deleteTendance}
+                        key={currentChallenge._id}/>;
         })
     }
 
     secteurList() {
         return this.state.secteurs.map(currentSecteur => {
-            return <Row val={currentSecteur} listT={currentSecteur.tendancesId.sort(compare)}  deleteTendance={this.deleteTendance} key={currentSecteur._id}/>;
+            return <Row sel="Secteur" onOrderDate={this.onOrderDateSecteur} orderedDate={this.state.ordredDateSecteur}
+                        onOrderLanguage={this.onOrderLanguageSecteur}
+                        orderedLanguage={this.state.ordredLanguageSecteur} val={currentSecteur}
+                        listT={currentSecteur.tendancesId} deleteTendance={this.deleteTendance}
+                        key={currentSecteur._id}/>;
         })
     }
 
@@ -464,7 +602,7 @@ export default class tendancesList extends Component {
         e.preventDefault();
         this.state.dom.map((currentD) => {
             this.state.langages.map((currentL) => {
-                axios.get(apiConfig.baseUrl+'/tendances/news_domaine/' + currentD + '/' + currentL)
+                axios.get(apiConfig.baseUrl + '/tendances/news_domaine/' + currentD + '/' + currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
@@ -514,7 +652,7 @@ export default class tendancesList extends Component {
 
         this.state.chal.map((currentD) => {
             this.state.langages.map((currentL) => {
-                axios.get(apiConfig.baseUrl+'/tendances/news_challenge/' + currentD + '/' + currentL)
+                axios.get(apiConfig.baseUrl + '/tendances/news_challenge/' + currentD + '/' + currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
@@ -567,7 +705,7 @@ export default class tendancesList extends Component {
             console.log(currentD)
             this.state.langages.map((currentL) => {
                 console.log(currentL)
-                axios.get(apiConfig.baseUrl+'/tendances/news_secteur/' + currentD + '/' + currentL)
+                axios.get(apiConfig.baseUrl + '/tendances/news_secteur/' + currentD + '/' + currentL)
                     .then(res => {
                         console.log(res.data)
                         window.location.replace('#/tendances/afficher');
@@ -600,16 +738,17 @@ export default class tendancesList extends Component {
     render() {
         return (
             <Tabs>
-                <Tab key="dom" label={<span><i className="nav-link-icon pe-7s-box2"/> Tendances par domaine</span>}>
 
-                    {this.showDomaine()}
+                <Tab key="sect" label={<span><i className="nav-link-icon pe-7s-helm"/> Tendances par secteur</span>}>
+                    {this.showSecteur()}
                 </Tab>
                 <Tab key="chal"
                      label={<span><i className="nav-link-icon pe-7s-target"/> Tendances par challenge</span>}>
                     {this.showChallenge()}
                 </Tab>
-                <Tab key="sect" label={<span><i className="nav-link-icon pe-7s-helm"/> Tendances par secteur</span>}>
-                    {this.showSecteur()}
+                <Tab key="dom" label={<span><i className="nav-link-icon pe-7s-box2"/> Tendances par domaine</span>}>
+
+                    {this.showDomaine()}
                 </Tab>
             </Tabs>
 

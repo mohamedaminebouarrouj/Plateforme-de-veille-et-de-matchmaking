@@ -72,10 +72,6 @@ const Picture = styled.img({
 })
 
 export default class HoverCard extends Component {
-    constructor(props) {
-        super(props);
-    }
-
 
     render() {
         return (

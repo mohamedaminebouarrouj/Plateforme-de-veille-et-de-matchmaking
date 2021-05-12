@@ -157,7 +157,6 @@ exports.domaine_add_picture = async (req, res) => {
                     })
                     .catch(err => res.status(401).json('Error: ' + err));
             })
-            res.json('Updated')
         })
         .catch();
 }

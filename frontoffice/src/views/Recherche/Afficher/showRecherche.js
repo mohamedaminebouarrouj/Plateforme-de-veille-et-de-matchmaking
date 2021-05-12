@@ -19,13 +19,6 @@ import React from "react";
 import {Link} from "react-router-dom";
 import axios from 'axios';
 
-
-// core components
-import Footer from "components/Footer/Footer.js";
-import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import {Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
-import {makeStyles} from '@material-ui/core/styles';
-
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -38,11 +31,13 @@ function TitlebarGridList(props) {
     return (
         <>
 
-            {props.data?<GridList cols={5} cellHeight={180}>
+            {props.data ? <GridList cols={5} cellHeight={180}>
                 {props.data.length > 0 ? props.data.map((tile) => (
                     <GridListTile key={tile.nom}>
-                        <NavLink tag={Link} to={'/'+props.sel+"/"+ tile._id}>
-                            <img src={tile.img ? tile.img : require("../../../assets/logos/Startups/default.png")}
+                        <NavLink tag={Link} to={'/' + props.sel + "/" + tile._id}>
+                            <img src={props.sel === "startups" ?
+                                tile.logo ? require("../../../assets/logos/Startups/" + tile.logo) : require("../../../assets/logos/Startups/default.png") :
+                                tile.img}
                                  alt={tile.nom}/>
                         </NavLink>
 
@@ -53,7 +48,7 @@ function TitlebarGridList(props) {
                 )) : <div><CircularProgress/> Loading...</div>}
 
 
-            </GridList>: <div><CircularProgress/> Loading...</div>}
+            </GridList> : <div><CircularProgress/> Loading...</div>}
 
         </>
     );
@@ -77,13 +72,11 @@ export default class showRecherche extends React.Component {
 
     componentDidMount() {
 
-        axios.get(apiConfig.baseUrl+'/secteurs/search/' + this.props.query)
+        axios.get(apiConfig.baseUrl + '/secteurs/search/' + this.props.query)
             .then(response => {
                 this.setState({
                     challenges: response.data.challenges,
                     startups: response.data.startups,
-                    secteurs: response.data.secteurs,
-                    domaines: response.data.domaines
 
 
                 })
@@ -96,13 +89,11 @@ export default class showRecherche extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.query !== this.props.query) {
-            axios.get(apiConfig.baseUrl+'/secteurs/search/' + this.props.query)
+            axios.get(apiConfig.baseUrl + '/secteurs/search/' + this.props.query)
                 .then(response => {
                     this.setState({
                         challenges: response.data.challenges,
                         startups: response.data.startups,
-                        secteurs: response.data.secteurs,
-                        domaines: response.data.domaines
                     })
                 })
                 .catch((error) => {

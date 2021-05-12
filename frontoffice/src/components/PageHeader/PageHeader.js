@@ -16,7 +16,7 @@ class PageHeader extends React.Component {
     }
 
     componentDidMount() {
-        if (localStorage.getItem('auth-token') !== "") {
+        if (localStorage.getItem('auth-token') !== null) {
             this.setState({
                 loggedUser: JSON.parse(localStorage.getItem('loggedUser')).role
             })
@@ -146,7 +146,7 @@ class PageHeader extends React.Component {
                                 Une plateforme d'innovation pour les devins.
                             </h4>
                             <br/><br/>
-                            {localStorage.getItem('auth-token') !== "" ? (this.state.loggedUser === "Corporate" ?
+                            {localStorage.getItem('auth-token') !== null ? (this.state.loggedUser === "Corporate" ?
                                 <h5 className="text-center"><a className="btn-simple btn-round btn btn-primary"
                                                                onClick={() => window.scroll({
                                                                    behavior: 'smooth',
@@ -193,9 +193,7 @@ class PageHeader extends React.Component {
                         className="path"
                         src={require("assets/img/path1.png")}
                     />
-                    {localStorage.getItem('auth-token') !== "" ? (this.state.loggedUser === "Corporate" ?
-                            <div/> : <div/>
-                    ) : <Container>
+                    {localStorage.getItem('auth-token') !== null ?  <div/> : <Container>
                         <h1 className="text-center">Cette plateforme est faite pour vous !</h1>
                         <br/><br/><br/>
                         <Row className="row-grid justify-content-center">

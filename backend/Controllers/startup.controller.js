@@ -16,16 +16,20 @@ exports.startup_create_post = function (req, res) {
     const dateCreation = Date.parse(req.body.dateCreation);
     const logo = req.body.logo;
     const domainesId = req.body.domainesId;
-    const challengesId=req.body.challengesId
+    const challengesId = req.body.challengesId
+    const siteWeb = req.body.siteWeb
+    const pays= req.body.pays
 
     const newStartup = new Startups({
         nom,
         description,
         fondateurs,
         dateCreation,
+        pays,
         logo,
         domainesId,
-        challengesId
+        challengesId,
+        siteWeb
     })
 
     Startups.create(newStartup)
@@ -162,17 +166,26 @@ exports.startup_find = function (req, res) {
         .catch(err => res.status(400).json('Error: ' + err));
 }
 
-exports.startup_list_pagination = function (req,res) {
+exports.startup_list_pagination = function (req, res) {
     const pagination = req.body.pagination ? parseInt(req.body.pagination) : 10;
     //PageNumber From which Page to Start
     const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
     Startups.find()
-        .sort({"nom" : 1})
+        .sort({"nom": 1})
         .skip((pageNumber - 1) * pagination)
         //limit is number of Records we want to display
         .limit(pagination)
+        .populate({
+            path: 'domainesId',
+            model: 'Domaine',
+        })
+        .populate({
+            path: 'challengesId',
+            model: 'Challenge',
+        })
+        .exec()
         .then(startup => res.json(startup))
-        .catch(err => res.status(400).json('Error: '+err));
+        .catch(err => res.status(400).json('Error: ' + err));
 };
 
 exports.startup_delete = function (req, res) {
@@ -217,6 +230,12 @@ exports.upload_logo = async (req, res) => {
         }
         return res.send(`Error when trying upload many files: ${error}`);
     }
+}
+
+exports.startup_find_name = async (req, res) => {
+    Startups.find({'nom': new RegExp("^" + req.params.nom, 'i')}, function (err, docs) {
+        res.json(docs)
+    });
 }
 
 exports.startup_scraping = async (req, res) => {

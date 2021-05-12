@@ -192,6 +192,11 @@ exports.challenge_list_pagination = function (req,res) {
         .skip((pageNumber - 1) * pagination)
         //limit is number of Records we want to display
         .limit(pagination)
+        .populate ({
+            path:'secteursId',
+            model: 'Secteur'
+        })
+        .exec()
         .then(challenge => res.json(challenge))
         .catch(err => res.status(400).json('Error: '+err));
 };

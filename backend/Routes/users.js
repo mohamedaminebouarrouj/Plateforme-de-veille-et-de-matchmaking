@@ -19,4 +19,9 @@ router.get('/user',[auth],userController.getConnectedUser);
 
 router.route('/changePass').post(userController.changePassword);
 
+router.get('/:id',userController.user_find);
+
+router.post('/admin/update/:id',userController.admin_update_post)
+
+
 module.exports =router;

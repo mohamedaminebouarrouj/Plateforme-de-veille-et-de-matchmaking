@@ -70,9 +70,8 @@ def scrap_startups_act():
 
 if __name__ == "__main__":
     data = scrap_startups_act()
-    client = pymongo.MongoClient("mongodb://dbUser:MAB220795@cluster0-shard-00-00.xyzsj.gcp.mongodb.net:27017,cluster0-shard-00-01.xyzsj.gcp.mongodb.net:27017,cluster0-shard-00-02.xyzsj.gcp.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-7r83k8-shard-0&authSource=admin&retryWrites=true&w=majority")
-    #client = pymongo.MongoClient("mongodb+srv://dbUser:MAB220795@cluster0.xyzsj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-    db = client['<dbname>']
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['dbInnoseer']
     col=db.startups
     col.create_index([('nom', pymongo.ASCENDING)],unique=True)
 

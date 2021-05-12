@@ -24,94 +24,17 @@ import axios from 'axios';
 import Footer from "components/Footer/Footer.js";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import {
-    Container,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
     Row,
     Col,
-    CardBody,
-    Nav,
-    NavItem, TabContent, Card
 } from 'reactstrap';
-import {makeStyles} from '@material-ui/core/styles';
 
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import {NavLink} from "react-router-dom";
-import {Button} from "@material-ui/core";
-
-import Select from "react-select";
 import Particles from "react-particles-js";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import classnames from "classnames";
-import {Scrollbars} from "react-custom-scrollbars";
 import HoverCard from "../../components/Hover Card/hoverCard";
 import {apiConfig} from "../../config";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-    },
-    gridList: {
-        flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
-    },
-    title: {
-        color: theme.palette.primary.light,
-    },
-    titleBar: {
-        background:
-            'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-    },
-}));
 
-const customStyles = {
 
-    control: (base, state) => ({
-        ...base,
-        color: 'white',
-        // match with the menu
-        borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
-        // Overwrittes the different states of border
-        borderColor: state.isFocused ? "#344675" : "#344675",
-        // Removes weird border around container
-        boxShadow: state.isFocused ? "#344675" : "#344675",
-        "&:hover": {
-            // Overwrittes the different states of border
-            borderColor: state.isFocused ? "#344675" : "#344675"
-        }
-    }),
-    singleValue: (base) => ({
-        ...base,
-        color: '#344675'
-    }),
-    menu: base => ({
-        ...base,
-        // override border radius to match the box
-        borderRadius: 0,
-        // kill the gap
-        marginTop: 0,
-        color: '#ffe600'
-    }),
-    menuList: base => ({
-        ...base,
-        // kill the white space on first and last option
-        padding: 0,
-        color: '#344675'
-    })
-};
-
-function TitlebarGridList(props) {
+/*function TitlebarGridList(props) {
     const classes = useStyles();
     return (
         <>
@@ -209,7 +132,7 @@ function Filter(props) {
 
             </Col>
     )
-}
+}*/
 
 function compare(a, b) {
     // Use toUpperCase() to ignore character casing

@@ -14,7 +14,6 @@ import {Link} from "react-router-dom";
 
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import AppComponent from "../../../components/Graph/AppComponent";
 import {Scrollbars} from "react-custom-scrollbars";
 import Particles from "react-particles-js";
 import {apiConfig} from "../../../config";
@@ -69,7 +68,7 @@ function ShowStartup(props){
                 {props.startup.map((tile) => (
                     <GridListTile>
                         <NavLink tag={Link} to={'/startups/' + tile._id}>
-                            <img style={{opacity: 0.7}} src={tile.logo?require("../../../assets/logos/Startups/"+tile.logo):require("../../../assets/logos/Startups/default.png")}/>
+                            <img alt="" style={{opacity: 0.7}} src={tile.logo?require("../../../assets/logos/Startups/"+tile.logo):require("../../../assets/logos/Startups/default.png")}/>
                             <p className="text-center">{tile.nom}</p>
                         </NavLink>
                     </GridListTile>

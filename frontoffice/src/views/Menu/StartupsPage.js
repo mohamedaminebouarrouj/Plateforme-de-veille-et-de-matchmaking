@@ -28,47 +28,15 @@ import {
     Col,
     CardBody,
     Nav,
-    NavItem, TabContent, Card, Pagination, PaginationItem, PaginationLink
+    NavItem, Card, Pagination, PaginationItem, PaginationLink
 } from 'reactstrap';
-import {makeStyles} from '@material-ui/core/styles';
 
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import {NavLink} from "react-router-dom";
-import {Button} from "@material-ui/core";
 
 import Select from "react-select";
 import Particles from "react-particles-js";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import classnames from "classnames";
-import {Scrollbars} from "react-custom-scrollbars";
 import HoverCard from "../../components/Hover Card/hoverCard";
 import {apiConfig} from "../../config";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-    },
-    gridList: {
-        flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
-    },
-    title: {
-        color: theme.palette.primary.light,
-    },
-    titleBar: {
-        background:
-            'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-    },
-}));
 
 const customStyles = {
 
@@ -106,7 +74,7 @@ const customStyles = {
     })
 };
 
-function TitlebarGridList(props) {
+/*function TitlebarGridList(props) {
     const classes = useStyles();
     return (
         <>
@@ -167,7 +135,7 @@ function TitlebarGridList(props) {
             </>}
         </>
     );
-}
+}*/
 
 function Filter(props) {
     var categories = []
@@ -249,8 +217,6 @@ export default class StartupsPage extends React.Component {
         axios.get(apiConfig.baseUrl+'/startups/')
             .then(r => {
                 this.setState({
-                    numStartups:r.data.length,
-                    numPages:Math.ceil(r.data.length / 12),
                     startups:r.data
                 })
             })
@@ -271,7 +237,7 @@ export default class StartupsPage extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.page !== this.state.page) {
+        if (prevState.page !== this.state.page) {
             axios.post(apiConfig.baseUrl+'/startups/find', {
                 pagination: 12,
                 page: this.state.page
@@ -291,12 +257,12 @@ export default class StartupsPage extends React.Component {
     }
 
     startupsList() {
-
         return (
                 <HoverCard val={this.state.startupsAff} sel={'startups'}/>)
     }
 
     filterStartup(pays) {
+        console.log(pays)
         if (pays.value !== "All") {
             this.setState({
                 startupsAff: this.state.startups.filter(el => el.pays === pays.value)
@@ -324,7 +290,7 @@ export default class StartupsPage extends React.Component {
         })
         document.getElementById('prev').hidden = false
         document.getElementById('first').hidden = false
-        if (this.state.page === 5) {
+        if (this.state.page === 43) {
             document.getElementById('next').hidden = true
             document.getElementById('last').hidden = true
         }
@@ -340,14 +306,16 @@ export default class StartupsPage extends React.Component {
             document.getElementById('first').hidden = true
             document.getElementById('prev').hidden = true
         }
-        if (this.state.page === 6) {
+        if (this.state.page === 43) {
             document.getElementById('next').hidden = false
             document.getElementById('last').hidden = false
         }
     }
 
     onFirst() {
-        this.state.page = 1
+        this.setState({
+            page:1
+        })
         document.getElementById('prev').hidden = true
         document.getElementById('first').hidden = true
 
@@ -356,7 +324,9 @@ export default class StartupsPage extends React.Component {
     }
 
     onLast() {
-        this.state.page = 6
+        this.setState({
+            page:44
+        })
         document.getElementById('prev').hidden = false
         document.getElementById('first').hidden = false
 

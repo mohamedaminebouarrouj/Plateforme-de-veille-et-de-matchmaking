@@ -35,7 +35,7 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem, UncontrolledDropdown,
-    Label
+    Label, NavLink
 } from "reactstrap";
 
 import classnames from "classnames";
@@ -170,7 +170,7 @@ class ComponentsNavbar extends React.Component {
     };
 
     componentDidMount() {
-        axios.get(apiConfig.baseUrl+'/users/user', {
+        axios.get(apiConfig.baseUrl + '/users/user', {
             headers: {
                 Authorization: localStorage.getItem('auth-token')
             }
@@ -184,7 +184,7 @@ class ComponentsNavbar extends React.Component {
             })
         if (localStorage.getItem('loggedUser')) {
             if (JSON.parse(localStorage.getItem('loggedUser')).role === "Corporate") {
-                axios.get(apiConfig.baseUrl+'/secteurs').then(response => this.setState({secteur: response.data}))
+                axios.get(apiConfig.baseUrl + '/secteurs').then(response => this.setState({secteur: response.data}))
             }
         }
 
@@ -241,7 +241,7 @@ class ComponentsNavbar extends React.Component {
             formModal: !this.state.formModal
         })
 
-        axios.get(apiConfig.baseUrl+'/secteurs').then(response => this.setState({secteur: response.data}))
+        axios.get(apiConfig.baseUrl + '/secteurs').then(response => this.setState({secteur: response.data}))
     }
 
     onChangeNom(e) {
@@ -329,7 +329,7 @@ class ComponentsNavbar extends React.Component {
             password: this.state.password
         }
 
-        axios.post(apiConfig.baseUrl+'/users/login', user)
+        axios.post(apiConfig.baseUrl + '/users/login', user)
             .then(res => {
                 if (res.data.user) {
                     localStorage.setItem('auth-token', res.data.token)
@@ -345,8 +345,8 @@ class ComponentsNavbar extends React.Component {
     }
 
     onSubmitLogout() {
-        localStorage.setItem('auth-token', '')
-        localStorage.setItem('loggedUser', '')
+        localStorage.removeItem('auth-token')
+        localStorage.removeItem('loggedUser')
         window.location.reload(false);
     }
 
@@ -362,7 +362,7 @@ class ComponentsNavbar extends React.Component {
             secteurId: this.state.sect
         }
 
-        axios.post(apiConfig.baseUrl+'/users/register', user)
+        axios.post(apiConfig.baseUrl + '/users/register', user)
             .then(res => {
                 window.location.replace('/');
             }).catch(() => {
@@ -400,7 +400,7 @@ class ComponentsNavbar extends React.Component {
             newPassword: this.state.newPassword
         }
 
-        axios.post(apiConfig.baseUrl+'/users/changePass', user)
+        axios.post(apiConfig.baseUrl + '/users/changePass', user)
             .then(res => {
                 this.setState({
                     valModModal: true,
@@ -460,7 +460,7 @@ class ComponentsNavbar extends React.Component {
                 organisation: this.state.organisationProfil,
             }
         }
-        axios.post(apiConfig.baseUrl+'/users/update/' + JSON.parse(localStorage.getItem('loggedUser'))._id, user)
+        axios.post(apiConfig.baseUrl + '/users/update/' + JSON.parse(localStorage.getItem('loggedUser'))._id, user)
             .then(res => {
                 this.setState({
                     valModProfilModal: true
@@ -812,6 +812,12 @@ class ComponentsNavbar extends React.Component {
                             </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
+
+                    {this.state.user.role === "Startup" && this.state.user.revendicationsId[0] ?
+                        this.state.user.revendicationsId[0].verified?
+                        <NavItem>
+                            <NavLink style={{top: '10px'}} href={"/startups/"+this.state.user.revendicationsId[0].startupId._id}><i className="tim-icons icon-spaceship"/>{this.state.user.revendicationsId[0].startupId.nom}</NavLink>
+                        </NavItem> :<div/>:<div/>}
                 </Nav>
             ;
         } else {

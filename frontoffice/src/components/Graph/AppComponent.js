@@ -23,7 +23,6 @@ class AppComponent extends Component {
         cy.nodes().panify().ungrabify();
 
         const controller = new Controller({ cy });
-        const bus = controller.bus;
 
         this.state = { controller, cy };
     }

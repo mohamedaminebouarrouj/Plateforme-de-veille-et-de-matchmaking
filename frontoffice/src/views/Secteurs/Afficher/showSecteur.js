@@ -4,15 +4,11 @@ import IndexNavbar from "../../../components/Navbars/IndexNavbar";
 import Footer from "../../../components/Footer/Footer";
 
 import {
-    Button, Card, CardBody,
-    Col, Nav, NavItem, NavLink,
-    Row, TabContent, TabPane,
+    Col,
+    Row,
 } from "reactstrap";
-import classnames from "classnames";
 import Select from "react-select";
 import AppComponent from "../../../components/Graph/AppComponent";
-import {Scrollbars} from 'react-custom-scrollbars';
-import Particles from "react-particles-js";
 import TendanceGridList from "../../../components/Tendance Card/TendanceGridList";
 import {apiConfig} from "../../../config";
 

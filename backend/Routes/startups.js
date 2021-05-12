@@ -19,4 +19,6 @@ router.post('/upload',startupController.upload_logo);
 
 router.post('/find',startupController.startup_list_pagination);
 
+router.get('/search/:nom',startupController.startup_find_name);
+
 module.exports =router;

@@ -6,8 +6,9 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from "axios";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-const animatedComponents = makeAnimated();
-import {apiConfig} from "../../../../config/config";
+import {apiConfig} from "../../../../config/config"
+
+const animatedComponents = makeAnimated();;
 const options = [
     { value: 'fr', label: 'Français' },
     { value: 'en', label: 'English' },

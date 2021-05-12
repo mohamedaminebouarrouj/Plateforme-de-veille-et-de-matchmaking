@@ -1,8 +1,7 @@
-import React, {Component,Fragment} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Link} from 'react-router-dom';
-import {Button, CardBody,Col,Row} from 'reactstrap';
+import {Button, Col, Row, Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import axios from 'axios';
-import {counter} from "@fortawesome/fontawesome-svg-core";
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -24,6 +23,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {apiConfig} from "../../../../config/config";
+
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -122,6 +122,7 @@ function LoadingSpinner() {
     return (
         <Dialog
             open={open}
+            disableBackdropClick
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -137,21 +138,86 @@ function LoadingSpinner() {
     )
 }
 
+function compare_name(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.nom.toUpperCase().trim();
+    const bandB = b.nom.toUpperCase().trim();
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return -comparison;
+}
+
+function compare_name2(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.nom.toUpperCase().trim();
+    const bandB = b.nom.toUpperCase().trim();
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+function compare_date(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.dateCreation;
+    const bandB = b.dateCreation;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return -comparison;
+}
+
+function compare_date2(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.dateCreation;
+    const bandB = b.dateCreation;
+    let comparison = 0;
+    if (bandA > bandB) {
+        comparison = 1;
+    } else if (bandA < bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
 
 export default class startupsList extends Component {
     constructor(props) {
         super(props);
         this.deleteStartup = this.deleteStartup.bind(this)
         this.ajouterButton = this.ajouterButton.bind(this)
+        this.onOrderName = this.onOrderName.bind(this)
+        this.onOrderDate = this.onOrderDate.bind(this)
+
+        this.onNext = this.onNext.bind(this)
+        this.onPrevious = this.onPrevious.bind(this)
+        this.onFirst = this.onFirst.bind(this)
+        this.onLast = this.onLast.bind(this)
 
         this.state = {
             startups: [],
             loading: false,
+            ordredName: false,
+            ordredDate: false,
+            page: 1,
         };
     }
 
     componentDidMount() {
-        axios.get(apiConfig.baseUrl+'/startups/')
+        axios.post(apiConfig.baseUrl + '/startups/find', {
+            pagination: 10,
+            page: this.state.page
+        })
             .then(response => {
                 this.setState({startups: response.data})
             })
@@ -162,8 +228,23 @@ export default class startupsList extends Component {
 
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.page !== this.state.page) {
+            axios.post(apiConfig.baseUrl + '/startups/find', {
+                pagination: 10,
+                page: this.state.page
+            })
+                .then(response => {
+                    this.setState({startups: response.data})
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+    }
+
     deleteStartup(id) {
-        axios.delete(apiConfig.baseUrl+'/startups/' + id)
+        axios.delete(apiConfig.baseUrl + '/startups/' + id)
             .then(response => {
                 console.log(response.data)
             });
@@ -181,7 +262,7 @@ export default class startupsList extends Component {
 
     ajouterButton() {
         this.setState({loading: true}, () => {
-            axios.get(apiConfig.baseUrl+'/startups/scraping/')
+            axios.get(apiConfig.baseUrl + '/startups/scraping/')
                 .then(res => {
                     console.log(res.data)
                     window.location.replace('#/startups/afficher');
@@ -191,60 +272,180 @@ export default class startupsList extends Component {
 
     }
 
+    onOrderName() {
+        this.setState({
+            ordredName: !this.state.ordredName,
+        })
+
+        if (this.state.ordredName) {
+            this.setState({
+                startups: this.state.startups.sort(compare_name2)
+            })
+        } else {
+            this.setState({
+                startups: this.state.startups.sort(compare_name)
+            })
+        }
+    }
+
+    onOrderDate() {
+        this.setState({
+                ordredDate: !this.state.ordredDate
+            }
+        )
+
+        if (this.state.ordredDate) {
+            this.setState({
+                startups: this.state.startups.sort(compare_date2)
+            })
+        } else {
+            this.setState({
+                startups: this.state.startups.sort(compare_date)
+            })
+        }
+    }
+
+    onNext() {
+        this.setState({
+            page: this.state.page + 1
+        })
+        document.getElementById('prev').hidden = false
+        document.getElementById('first').hidden = false
+        if (this.state.page === 52) {
+            document.getElementById('next').hidden = true
+            document.getElementById('last').hidden = true
+        }
+
+    }
+
+    onPrevious() {
+        this.setState({
+            page: this.state.page - 1
+        })
+
+        if (this.state.page === 2) {
+            document.getElementById('first').hidden = true
+            document.getElementById('prev').hidden = true
+        }
+        if (this.state.page === 53) {
+            document.getElementById('next').hidden = false
+            document.getElementById('last').hidden = false
+        }
+    }
+
+    onFirst() {
+        this.setState({
+                page: 1
+            }
+        )
+        document.getElementById('prev').hidden = true
+        document.getElementById('first').hidden = true
+
+        document.getElementById('next').hidden = false
+        document.getElementById('last').hidden = false
+    }
+
+    onLast() {
+        this.setState({
+                page: 53
+            }
+        )
+        document.getElementById('prev').hidden = false
+        document.getElementById('first').hidden = false
+
+
+        document.getElementById('next').hidden = true
+        document.getElementById('last').hidden = true
+
+    }
+
     render() {
         return (
-            <Fragment>
-                <Row>
-                    <Col>
-                        <Button onClick={this.ajouterButton}
-                                color="success" style={{float:'right'}}>+ Scraper les startups</Button>
-                        {this.state.loading ? <LoadingSpinner/> : null}
-                    </Col>
-                </Row>
-                <br/>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <Table hover className="mb-0">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            <b>Nom de la Startup</b>
-                                            <IconButton aria-label="expand row" size="small">
-                                                {false ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell>
-                                            <b>Description</b>
+            <div>
+                <Fragment>
+                    <Row>
+                        <Col>
+                            <Button onClick={this.ajouterButton}
+                                    color="success" style={{float: 'right'}}>+ Scraper les startups</Button>
+                            {this.state.loading ? <LoadingSpinner/> : null}
+                        </Col>
+                    </Row>
+                    <br/>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <Table hover className="mb-0">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>
+                                                <b>Nom de la Startup</b>
+                                                <IconButton aria-label="expand row" size="small"
+                                                            onClick={this.onOrderName}>
+                                                    {this.state.ordredName ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell>
+                                                <b>Description</b>
 
-                                        </TableCell>
-                                        <TableCell><b>Domaines Reliés</b></TableCell>
-                                        <TableCell><b>Challenges Reliés</b></TableCell>
-                                        <TableCell>
-                                            <b>Pays</b>
-                                            <IconButton aria-label="expand row" size="small">
-                                                {false ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell>
-                                            <b>Création</b>
-                                            <IconButton aria-label="expand row" size="small">
-                                                {false ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell><b>Modifier</b></TableCell>
-                                        <TableCell><b>Supprimer</b></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <tbody>
-                                {this.startupList()}
-                                </tbody>
-                            </Table>
-                        </TableRow>
-                    </TableHead>
+                                            </TableCell>
+                                            <TableCell><b>Domaines Reliés</b></TableCell>
+                                            <TableCell><b>Challenges Reliés</b></TableCell>
+                                            <TableCell>
+                                                <b>Pays</b>
+                                            </TableCell>
+                                            <TableCell>
+                                                <b>Création</b>
+                                                <IconButton aria-label="expand row" size="small"
+                                                            onClick={this.onOrderDate}>
+                                                    {this.state.ordredDate ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell><b>Modifier</b></TableCell>
+                                            <TableCell><b>Supprimer</b></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <tbody>
+                                    {this.startupList()}
+                                    </tbody>
+                                </Table>
+                            </TableRow>
+                        </TableHead>
 
-                </Table>
-            </Fragment>
+                    </Table>
+
+                    <div
+                        style={{
+                            position: 'relative', left: '50%', top: '50%',
+                        }}>
+                        <Pagination className="pagination-rounded" aria-label="Page navigation example">
+
+                            <PaginationItem>
+                                <PaginationLink hidden previous id="first" onClick={this.onFirst}
+                                                style={{position: 'absolute', left: '-10%'}}/>
+                            </PaginationItem>
+                            <PaginationItem hidden id="prev" style={{position: 'absolute', left: '-7.25%'}}>
+                                <PaginationLink onClick={this.onPrevious}>
+                                    Précedent
+                                </PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem disabled>
+                                <PaginationLink>
+                                    {this.state.page}
+                                </PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem id="next">
+                                <PaginationLink onClick={this.onNext}>
+                                    Suivant
+                                </PaginationLink>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <PaginationLink next id='last' onClick={this.onLast}/>
+                            </PaginationItem>
+                        </Pagination>
+                    </div>
+                </Fragment>
+
+            </div>
         );
     }
 }

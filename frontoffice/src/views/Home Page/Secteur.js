@@ -31,9 +31,7 @@ import {
     Card,
     CardContent,
     Typography,
-    CardHeader,
     CardActions,
-    CardActionArea,
     CardMedia,
 } from '@material-ui/core/'
 
@@ -74,43 +72,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-const customStyles = {
-
-    control: (base, state) => ({
-        ...base,
-        background: "transparent",
-        color: 'white',
-        // match with the menu
-        borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
-        // Overwrittes the different states of border
-        borderColor: state.isFocused ? "#344675" : "#344675",
-        // Removes weird border around container
-        boxShadow: state.isFocused ? "#344675" : "#344675",
-        "&:hover": {
-            // Overwrittes the different states of border
-            borderColor: state.isFocused ? "#344675" : "#344675"
-        }
-    }),
-    singleValue: (base) => ({
-        ...base,
-        color: 'white'
-    }),
-    menu: base => ({
-        ...base,
-        // override border radius to match the box
-        borderRadius: 0,
-        // kill the gap
-        marginTop: 0,
-        color: '#ffe600'
-    }),
-    menuList: base => ({
-        ...base,
-        // kill the white space on first and last option
-        padding: 0,
-        color: '#344675'
-    })
-};
 
 function TitlebarGridList2(props) {
     const classes = useStyles();
@@ -212,29 +173,6 @@ function compare(a, b) {
 
     const bandA = a.datePublication;
     const bandB = b.datePublication;
-
-    const tendA = a.langage;
-    const tendB = b.langage;
-
-    let comparison = 0;
-    let comparaison2 = 0;
-
-    if (bandA > bandB) {
-        comparison = 1;
-    } else if (bandA < bandB) {
-        comparison = -1;
-    }
-
-    return comparison * -1;
-}
-
-function compare2(a, b) {
-    // Use toUpperCase() to ignore character casing
-    // const bandA = a.nom.toUpperCase().trim();
-    // const bandB = b.nom.toUpperCase().trim();
-
-    const bandA = a.langage;
-    const bandB = b.langage;
 
 
     let comparison = 0;

@@ -16,6 +16,7 @@ import TableRow from '@material-ui/core/TableRow';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {apiConfig} from "../../../../config/config";
+import AfficherDataTable from "../../../../components/Datatable/Afficher";
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -27,7 +28,6 @@ const useRowStyles = makeStyles({
 const Secteur= props =>(
 
     <TableRow>
-        {console.log(props.secteur.img)}
         <TableCell component="th" scope="row" width="30%">
             <div style={{
                 backgroundImage: `url(${props.secteur.img})`,
@@ -107,6 +107,8 @@ export default class secteursList extends Component {
 
   render() {
     return (
+        <div>
+
         <TableContainer>
         <Table hover className="mb-0">
             <TableHead>
@@ -122,6 +124,7 @@ export default class secteursList extends Component {
             </TableBody>
         </Table>
         </TableContainer>
+        </div>
     );
   }
 }

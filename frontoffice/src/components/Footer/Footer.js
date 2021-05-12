@@ -38,38 +38,34 @@ class Footer extends React.Component {
             <Col md="3">
               <h1 className="title"><span style={{color:'#FFDB00'}} >I</span>nno<span style={{color: '#FFDB00'}}>S</span>eer•</h1>
             </Col>
-            <Col md="3">
+            <Col md="2">
               <Nav>
                 <NavItem>
                   <NavLink to="/" tag={Link}>
-                    Home
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/landing-page" tag={Link}>
-                    Découvrir
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/profile-page" tag={Link}>
-                    Votre Profil
+                    Accueil
                   </NavLink>
                 </NavItem>
               </Nav>
             </Col>
-            <Col md="3">
+            <Col md="2">
               <Nav>
                 <NavItem>
-                  <NavLink href="https://creative-tim.com/contact-us?ref=blkdsr-footer">
-                    Nous contacter
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="https://creative-tim.com/about-us?ref=blkdsr-footer">
+                  <NavLink href="#">
                     A propos
                   </NavLink>
                 </NavItem>
               </Nav>
+            </Col>
+            <Col md="2">
+              <Nav>
+
+                <NavItem>
+                  <NavLink href="#">
+                    Nous contacter
+                  </NavLink>
+                </NavItem>
+              </Nav>
+
             </Col>
             <Col md="3">
               <h3 className="title">Nous suivre:</h3>
@@ -77,11 +73,11 @@ class Footer extends React.Component {
                 <Button
                   className="btn-icon btn-neutral btn-round btn-simple"
                   color="default"
-                  href="https://twitter.com/creativetim"
                   id="tooltip622135962"
+                  href="https://www.linkedin.com/company/ernstandyoung"
                   target="_blank"
                 >
-                  <i className="fab fa-twitter" />
+                  <i className="fab fa-linkedin" />
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip622135962">
                   Follow us
@@ -89,7 +85,7 @@ class Footer extends React.Component {
                 <Button
                   className="btn-icon btn-neutral btn-round btn-simple"
                   color="default"
-                  href="https://www.facebook.com/creativetim"
+                  href="https://www.facebook.com/EYCareersTunisia"
                   id="tooltip230450801"
                   target="_blank"
                 >

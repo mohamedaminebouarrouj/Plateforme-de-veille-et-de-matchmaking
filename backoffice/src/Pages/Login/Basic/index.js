@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 
 import axios from "axios";
+import {apiConfig} from "../../../config";
 
 
 
@@ -51,13 +52,12 @@ export default class LogComponent extends Component {
             password: this.state.password
         }
 
-        console.log(user);
 
         axios.post(apiConfig.baseUrl+'/users/login', user)
             .then(res => {
                 if(res.data.user) {
-                    localStorage.setItem('auth-token', res.data.token)
-                    console.log(res.data)
+                    localStorage.setItem('auth-tokenAdmin', res.data.token)
+                    localStorage.setItem('loggedAdmin', JSON.stringify(res.data.user))
                     window.location.replace('#/dashboards/basic');
                 } else{
                     window.location.replace('#/login');
@@ -83,34 +83,35 @@ export default class LogComponent extends Component {
                     transitionAppearTimeout={0}
                     transitionEnter={false}
                     transitionLeave={false}>
-                    <div>
                         <Row>
-                            <Col md="12" lg="12">
-                                <Row>
+                            <Col md="2"/>
+                            <Col md="6" style={{backgroundColor:'#344675',color:'#fff',top:'100px'}}>
+                                <h1>Admin <span style={{color: '#ffe600'}}>I</span>nno<span
+                                    style={{color: '#ffe600'}}>S</span>eer•</h1>
                                     <Form onSubmit={this.onSubmit}>
-                                        <FormGroup>
-                                            <Label for="email"><b>Email</b></Label>
-                                            <Input type="email" name="email" id="email"
-                                                   required
-                                                   value={this.state.email}
-                                                   onChange={this.onChangeEmail}/>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label for="password"><b>Password</b></Label>
-                                            <Input type="password" name="password" id="password"
-                                                   required
-                                                   value={this.state.password}
-                                                   onChange={this.onChangePassword}/>
-                                        </FormGroup>
-                                        <Button color="primary" className="mt-1">Submit</Button>
+                                            <FormGroup>
+                                                <Label for="email"><b>Email</b></Label>
+                                                <Input type="email" name="email" id="email"
+                                                       required
+                                                       value={this.state.email}
+                                                       onChange={this.onChangeEmail}/>
+                                            </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="password"><b>Password</b></Label>
+                                                <Input type="password" name="password" id="password"
+                                                       required
+                                                       value={this.state.password}
+                                                       onChange={this.onChangePassword}/>
+                                            </FormGroup>
+                                            <button type="submit" color="primary" className="btn btn-primary btn-block">Submit</button>
 
                                     </Form>
-
-                                </Row>
+                                <br/>
                             </Col>
                         </Row>
-                    </div>
                 </ReactCSSTransitionGroup>
+
             </Fragment>
         )
     }
